@@ -2,21 +2,36 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
+var flag = false;
+var duration = 200;
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-});
+window.onload = function(){
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
+    $(document).scroll(function() {
+      if ($(document).scrollTop() > $(window).innerHeight()) {
+        $(".header").addClass("smallheader");
+        // $("#logo").resize(50);
+        if (flag){
+          $("#logo").animate({
+            width:50
+          },duration);
+        }
+        flag = false;
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
-});
+
+
+
+
+        // $("#logo").animate({width:"50"});
+      } else {
+        if (!flag){
+          $("#logo").animate({
+            width:80
+          },duration);
+        }
+        flag = true;
+
+      }
+    });
+
+}
