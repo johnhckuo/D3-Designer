@@ -3,36 +3,72 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-  {{> info}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<!--
+*************************
+*   Utility Functions   *
+*************************
+-->
+
+<template name="header">
+  <div id="rectangle">
+
+    <div class="navbar-fixed-top">
+      <div class="header flexbox">
+        <ul class="flexbox">
+          <li class="logo"><img id=logo src="/images/logo.png" width="80px" ></li>
+          <li class="b1"><a href="/aboutus">D3 Accelerator</a></li>
+          <li class="b2"><a href="/manage">Manage</a></li>
+          <li class="b3"><a href="/update">Update</a></li>
+          <li class="b4"><a href="/switch">Sleep</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="rectangle"></div>
+    </div>
+  </div>
 </template>
 
-<template name="login">
-  <input type="text" value="" placeholder="user account" />
-</template>
-
-<template name="bryant_test">
-  <input type="text" value="yo" />
-</template>
-
-<template name="bryant_test2">
-  <p>disrupt the bank !</p>
+<template name="footer">
+  <div class="">
+    Copyright (c) 2017 Copyright Holder All Rights Reserved.
+  </div>
 </template>
 
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+<!--
+***********************
+*        Pages        *
+***********************
+-->
+
+
+<template name="index">
+    {{> header}}
+  <div class="first_section flexbox layout">
+    <div id="video">
+      <iframe width="780" height="520" src="https://www.youtube.com/embed/TXce2zRL-Dc?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div id="slogan">
+      <h1 class="heading">A future-desgin accelerator<br class="hidden-xs"> and innovative space</h1>
+    </div>
+  </div>
+
+  <div class="second layout">
+
+  </div>
+
+  <div class="third layout">
+
+  </div>
+
+  <div class="fourth layout">
+
+  </div>
+  {{> footer}}
+</template>
+
+<template name="manage">
 </template>
