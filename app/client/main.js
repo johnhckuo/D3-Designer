@@ -16,6 +16,9 @@ window.onload = function(){
           $("#logo").animate({
             width:50
           },duration);
+          $("#logo_words").animate({
+            width:200
+          },duration);
         }
         flag = false;
 
@@ -25,10 +28,13 @@ window.onload = function(){
           $("#logo").animate({
             width:80
           },duration);
+          $("#logo_words").animate({
+            width:300
+          },duration);
         }
         flag = true;
-
       }
+      $("")
     });
 
 }
