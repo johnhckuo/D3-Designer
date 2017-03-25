@@ -20,7 +20,7 @@
           <li class="logo"><img id=logo src="/images/logo_thin.png" width="80px" ></li>
           <li class="b1"><img id=logo_words src="/images/logo_words thin.png" width="300px" ></li>
           <!-- <li class="b1"><a href="/aboutus">D3 Accelerator</a></li> -->
-          <li class="b2"><a href="/manage">Home</a></li>
+          <li class="b2"><a href="/">Home</a></li>
           <li class="b3"><a href="/update">Intro.</a></li>
           <li class="b4"><a href="/switch">Flow</a></li>
           <li class="b4"><a href="/empowerment">Empowerment</a></li>
@@ -47,7 +47,30 @@
 -->
 
 <template name="empowerment">
+  {{> header}}
+  <div class="empowerment">
+    <section class="empowermentContainer">
+        <div id="carousel">
+          <figure>1</figure>
+          <figure>2</figure>
+          <figure>3</figure>
+          <figure>4</figure>
+          <figure>5</figure>
+          <figure>6</figure>
+          <figure>7</figure>
+          <figure>8</figure>
+          <figure>9</figure>
+        </div>
+      </section>
 
+      <section id="options">
+        <p id="navigation">
+          <div id="previous">Previous</div>
+          <div id="next">Next</div>
+        </p>
+
+      </section>
+  </div>
 </template>
 
 <template name="flow">

@@ -2,11 +2,16 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
-import './empowerment.html';
+import './empowerment.js';
 var flag = false;
 var duration = 200;
 
 window.onload = function(){
+
+    $("#previous").on("click", function(){
+      console.log("init");
+
+    });
 
     $(document).scroll(function() {
       if ($(document).scrollTop() > $(window).innerHeight()) {
