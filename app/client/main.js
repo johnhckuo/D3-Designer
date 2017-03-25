@@ -17,11 +17,6 @@ window.onload = function(){
           },duration);
         }
         flag = false;
-
-
-
-
-
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){
