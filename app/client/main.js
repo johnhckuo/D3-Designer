@@ -31,8 +31,8 @@ window.onload = function(){
           },duration);
         }
         flag = true;
-
       }
+      $("")
     });
 
 }
