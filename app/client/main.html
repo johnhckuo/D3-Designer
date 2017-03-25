@@ -12,23 +12,24 @@
 -->
 
 <template name="header">
-  <div id="rectangle">
 
     <div class="navbar-fixed-top">
       <div class="header flexbox">
         <ul class="flexbox">
-          <li class="logo"><img id=logo src="/images/logo.png" width="80px" ></li>
-          <li class="b1"><a href="/aboutus">D3 Accelerator</a></li>
-          <li class="b2"><a href="/manage">Manage</a></li>
-          <li class="b3"><a href="/update">Update</a></li>
-          <li class="b4"><a href="/switch">Sleep</a></li>
+          <li class="logo"><img id=logo src="/images/logo_thin.png" width="80px" ></li>
+          <li class="b1"><img id=logo_words src="/images/logo_words thin.png" width="300px" ></li>
+          <!-- <li class="b1"><a href="/aboutus">D3 Accelerator</a></li> -->
+          <li class="b2"><a href="/manage">Home</a></li>
+          <li class="b3"><a href="/update">Intro.</a></li>
+          <li class="b4"><a href="/switch">Flow</a></li>
+          <li class="b5"><a href="/switch">About Us</a></li>
         </ul>
       </div>
     </div>
     <div>
-      <div class="rectangle"></div>
+      <div class="rectangle" id="rectangle"></div>
     </div>
-  </div>
+
 </template>
 
 <template name="footer">
@@ -49,15 +50,23 @@
     {{> header}}
   <div class="first_section flexbox layout">
     <div id="video">
-      <iframe width="780" height="520" src="https://www.youtube.com/embed/TXce2zRL-Dc?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+      <!-- <iframe width="780" height="520" src="https://www.youtube.com/embed/TXce2zRL-Dc?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe> -->
+      <img id=logo src="/images/video.png" width=700px >
     </div>
     <div id="slogan">
-      <h1 class="heading">A future-desgin accelerator<br class="hidden-xs"> and innovative space</h1>
+      <h1 class="heading">A Design Pattern for<br>Achieving<br class="hidden-xs">Destination of Digital Ecosystem</h1>
     </div>
   </div>
 
-  <div class="second layout">
+  <div class="rectangle" id="rectangle2"></div>
 
+  <div class="second layout flexbox">
+    <div>
+      <img id=logo src="/images/temp_second_left.png" height="500px">
+    </div>
+    <div>
+      <img id=logo src="/images/temp_second_right.png" height="500px">
+    </div>
   </div>
 
   <div class="third layout">
