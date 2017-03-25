@@ -34,6 +34,10 @@
 
 </template>
 
+<template name="figure">
+  <figure style={{style}}>{{value}}</figure>
+</template>
+
 <template name="footer">
   <div class="">
     Copyright (c) 2017 Copyright Holder All Rights Reserved.
@@ -51,15 +55,9 @@
   <div class="empowerment">
     <section class="empowermentContainer">
         <div id="carousel">
-          <figure>1</figure>
-          <figure>2</figure>
-          <figure>3</figure>
-          <figure>4</figure>
-          <figure>5</figure>
-          <figure>6</figure>
-          <figure>7</figure>
-          <figure>8</figure>
-          <figure>9</figure>
+          {{#each figures}}
+            {{> figure}}
+          {{/each}}
         </div>
       </section>
 
@@ -99,12 +97,39 @@
   <div class="rectangle" id="rectangle2"></div>
 
   <div class="second layout flexbox">
-    <div>
+
+
+      <section class="boxContainer">
+        <!-- <div id="cube" class="show-front panels-backface-invisible"> -->
+        <div id="cube" class="show-front">
+          <figure class="front">1</figure>
+          <figure class="back">2</figure>
+          <figure class="right">3</figure>
+          <figure class="left">4</figure>
+          <figure class="top">5</figure>
+          <figure class="bottom">6</figure>
+        </div>
+      </section>
+
+      <section id="options">
+
+        <p id="show-buttons">
+          <button class="show-front">Show 1</button>
+          <button class="show-back">Show 2</button>
+          <button class="show-right">Show 3</button>
+          <button class="show-left">Show 4</button>
+          <button class="show-top">Show 5</button>
+          <button class="show-bottom">Show 6</button>
+        </p>
+
+
+      </section>
+    <!-- <div>
       <img id=logo src="/images/temp_second_left.png" height="500px">
     </div>
     <div>
       <img id=logo src="/images/temp_second_right.png" height="500px">
-    </div>
+    </div> -->
   </div>
 
   <div class="third layout">
