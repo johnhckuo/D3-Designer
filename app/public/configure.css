@@ -24,13 +24,31 @@ div.interaction_container {
 }
 
 div.stakeholder_creater{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 35em;
+    height: 18em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
 	align-content:center; 
-	display:none;
+    background-color: #f3f3f3;
 }
 
 div.stakeholder_delete{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 35em;
+    height: 18em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
 	align-content:center; 
-	display:none;
+    background-color: #f3f3f3;
+}
+
+div.container_hidden{
+    display:none;
 }
 
 div.interaction_container_hidden{

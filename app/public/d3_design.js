@@ -8,7 +8,7 @@ var svg_clicked = false;
 var timer;
 var draw_mode;
 var clicked;
-var clicked_node = null, 
+var clicked_node = null,
     start_node = null,
     end_node = null;
 var clicked_link = null;
@@ -21,11 +21,11 @@ var consensus_level = 0,
     flow = 0;
 //#endregion 
 var svg_container = d3.select('#full_container').append('div')
-                                                .attr('id','svg_container')
+                                                .attr('id', 'svg_container')
                                                 .style({
                                                     'width': width + 'px',
                                                     'height': height + 'px',
-                                                    'position':'absolute'
+                                                    'position': 'absolute'
                                                 });
 
 var svg = d3.select('#svg_container').append('svg')
@@ -41,7 +41,7 @@ var flow_page = d3.select('#full_container').append('div')
        .style('margin-top', 0 + 'px')
        .style('display', 'none')
        .style('position', 'absolute');
-               
+
 //.style('margin-left', 520 + 'px');
 
 set_trend();
@@ -114,17 +114,17 @@ function tick() {
         return 'translate(' + d.x + ',' + d.y + ')';
     });
 }
-function do_changes() {      
+function do_changes() {
     //links
     activity = activity.data(links);
 
     activity.enter().append('svg:path')
             .attr('class', 'link')
             .on('mouseover', function (d) {
-                d3.select(this).style('stroke-width', '6px');
+                //d3.select(this).style('stroke-width', '6px');
             })
             .on('mouseout', function (d) {
-                d3.select(this).style('stroke-width', '4px');
+                //d3.select(this).style('stroke-width', '4px');
             })
             .on('click', function (d) {
                 if (clicked) {
@@ -164,7 +164,7 @@ function do_changes() {
                          .style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')).darker(1); })
                          .style('stroke-width', '2px');
       })
-      .on('mouseout', function(d){
+      .on('mouseout', function (d) {
           on_node = false;
           d3.select(this).attr('transform', '')
                          //.style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')); })
@@ -176,7 +176,7 @@ function do_changes() {
               //double_click();
               clicked = false;
               clicked_node = d;
-              add_stakeholder(d.id, d.x, d.y, 'edit');                     
+              add_stakeholder(d.id, d.x, d.y, 'edit');
               clearTimeout(timer);
               d3.event.stopPropagation();
           }
@@ -187,7 +187,7 @@ function do_changes() {
                   clicked = false;
                   //new line handle
                   clicked_node = d;
-                  if(start_node == null){
+                  if (start_node == null) {
                       start_node = clicked_node;
                       //show draw line
                       draw_line.classed('draw_line_hidden', false)
@@ -199,23 +199,23 @@ function do_changes() {
                       });
                       svg.on('mousemove', mousemove);
                   }
-                  else if (start_node == clicked_node){
+                  else if (start_node == clicked_node) {
                       reset_node();
                   }
-                  else{
+                  else {
                       end_node = clicked_node;
-                      var link = { source: start_node, target: end_node, interaction:[] };
+                      var link = { source: start_node, target: end_node, interaction: [] };
                       links.push(link);
                       draw_line.classed('draw_line_hidden', true);
                       clicked_link = link;
-                      interaction_edit(link);                            
+                      interaction_edit(link);
                       do_changes();
                   }
               }, 200);
               clicked = true;
           }
       });
-           
+
     g.append('svg:text')
         .attr("id", function (d) { return "text_" + d.id; })
         .attr("x", ".2em")
@@ -226,22 +226,23 @@ function do_changes() {
         .text(function (d) { return d.name; })
         .call(wrap, 100);
 
-    stakeholder.exit().remove();        
+    stakeholder.exit().remove();
     force.start();
-}   
+}
 
 function mousemove() {
     draw_line.attr('d', 'M' + start_node.x + ',' + start_node.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]);
 }
 
 function interaction_edit(d) {
-    cretae_interaction_container(d);        
+    cretae_interaction_container(d);
 }
 
 function cretae_interaction_container(link) {
     var container = d3.select('div.interaction_container');
     container.html('');
     container.classed('interaction_container_hidden', false);
+
     var table = container.append('table')
                          .attr('id', 'interaction_table')
                          .attr('class', 'interaction_container');
@@ -262,7 +263,7 @@ function cretae_interaction_container(link) {
     thead.append('th').text(link.source.name + "'s affect").style('width', '10%');
     thead.append('th').text(link.target.name).style('width', '30%');
     thead.append('th').text(link.target.name + "'s affect").style('width', '10%');
-            
+
     var tbody = table.append('tbody').attr('id', 'item');;
     for (i = 0; i < link.interaction.length; i++) {
         var tr = tbody.append('tr');
@@ -297,9 +298,9 @@ function flow_adjust() {
         'display': 'block',
     });
     flow_page.append('object')
-             .attr('type','text/html')
+             .attr('type', 'text/html')
              .attr('data', 'http://localhost:3000/')
-             .attr('width','1000px')
+             .attr('width', '1000px')
              .attr('height', '800px');
 
 }
@@ -343,8 +344,7 @@ function save_interaction(order) {
         }
         clicked_link.interaction = new_link;
         links.filter(function (d) {
-            if(d.target == clicked_link.target && d.source == clicked_link.source)
-            {
+            if (d.target == clicked_link.target && d.source == clicked_link.source) {
                 d = clicked_link;
             }
         });
@@ -352,7 +352,7 @@ function save_interaction(order) {
     }
     container.html('')
              .classed('interaction_container_hidden', true);
-            
+
     reset_node();
 }
 
@@ -391,35 +391,74 @@ function run_consensus() {
 }
 
 function stakeholder_delete() {
-    $(".stakeholder_delete").dialog({
-        resizable: false,
-        height: "auto",
-        width: 400,
-        modal: true,
-        buttons: {
-            "OK": function () {
-                nodes.filter(function (d, i) {
-                    if(d.id == clicked_node.id)
-                    {
-                        nodes.splice(i, 1);
-                        var toSplice = links.filter(function (l) {
-                            return (l.source === clicked_node || l.target === clicked_node);
-                        });
-                        toSplice.map(function (l) {
-                            links.splice(links.indexOf(l), 1);
-                        });
-                    }
-                });
-                reset_node();
-                do_changes();
-                $(".stakeholder_creater").dialog("close");
-                $(this).dialog("close");
-            },
-            Cancel: function () {
-                $(this).dialog("close");
-            }
+
+    var container = d3.select('.stakeholder_delete');
+    container.html('');
+    container.classed('container_hidden', false);
+    var table = container.append('table')
+                               .style('width', '500px');
+    tr = table.append('tr');
+    tr.append('td').html('The links will also be deleted!!');
+
+    tr = table.append('tr');
+    var td = tr.append('td')
+                            .style('text-align', 'center');
+    td.append('input')
+      .attr('type', 'button')
+      .attr('value', 'OK')
+      .attr('onclick', 'stakeholder_delete_checked();');
+
+    td.append('input')
+      .attr('type', 'button')
+      .attr('value', 'Cancel')
+      .attr('onclick', "d3.select('div.stakeholder_delete').classed('container_hidden', true);");
+
+    //$(".stakeholder_delete").dialog({
+    //    resizable: false,
+    //    height: "auto",
+    //    width: 400,
+    //    modal: true,
+    //    buttons: {
+    //        "OK": function () {
+    //            nodes.filter(function (d, i) {
+    //                if (d.id == clicked_node.id) {
+    //                    nodes.splice(i, 1);
+    //                    var toSplice = links.filter(function (l) {
+    //                        return (l.source === clicked_node || l.target === clicked_node);
+    //                    });
+    //                    toSplice.map(function (l) {
+    //                        links.splice(links.indexOf(l), 1);
+    //                    });
+    //                }
+    //            });
+    //            reset_node();
+    //            do_changes();
+    //            $(".stakeholder_creater").dialog("close");
+    //            $(this).dialog("close");
+    //        },
+    //        Cancel: function () {
+    //            $(this).dialog("close");
+    //        }
+    //    }
+    //});
+}
+
+function stakeholder_delete_checked() {
+    nodes.filter(function (d, i) {
+        if (d.id == clicked_node.id) {
+            nodes.splice(i, 1);
+            var toSplice = links.filter(function (l) {
+                return (l.source === clicked_node || l.target === clicked_node);
+            });
+            toSplice.map(function (l) {
+                links.splice(links.indexOf(l), 1);
+            });
         }
     });
+    reset_node();
+    do_changes();
+    d3.select('div.stakeholder_creater').classed('container_hidden', true);
+    d3.select('div.stakeholder_delete').classed('container_hidden', true);
 }
 
 function reset_node() {
@@ -457,11 +496,14 @@ function svgclick() {
 
 function add_stakeholder(_index, _x, _y, edit_type) {
     var benefit_score = 0;
-    var stakeholder_creater = d3.select('div.stakeholder_creater').html('');
-    var table = stakeholder_creater.append('table');
+    var stakeholder_creater = d3.select('div.stakeholder_creater')
+    stakeholder_creater.html('');
+    stakeholder_creater.classed('container_hidden', false);
+    var table = stakeholder_creater.append('table')
+                                   .style('width', '500px');
     var tr;
     tr = table.append('tr');
-    tr.append('td').html('Name¡G');
+    tr.append('td').html('Name:');
     var stackholder_name = tr.append('td')
                              .append('input')
                              .attr('type', 'text')
@@ -473,72 +515,132 @@ function add_stakeholder(_index, _x, _y, edit_type) {
                 benefit_score = d.benefit;
             }
         });
-        tr = table.append('tr');
         tr.append('td').html('Benefit score');
         tr.append('td').html(benefit_score);
-        tr = table.append('tr');
         tr.append('td').append('input')
-                       .attr('type','button')
+                       .attr('type', 'button')
                        .attr('value', 'delete')
-                       .attr('onclick', 'stakeholder_delete();');
-
+                       .attr('onclick', 'stakeholder_delete(' + _index + ');');
     }
-    $(".stakeholder_creater").dialog({
-        resizable: false,
-        height: "auto",
-        width: 400,
-        modal: true,
-        buttons: {
-            "OK": function () {
-                var _id = "stakeholder" + (_index + 1);
-                var _name = $('#stakeholder_name').val();
-                //false = not be used
-                var node_check = false;
-                nodes.filter(function (d, i) {
-                    if ((d.name == _name) && (edit_type =='add'))
-                        node_check = true;
-                });
-                if (node_check) {
-                    $('#stakeholder_name').focus();
-                    alert("This name" + _name + " has be used!");
-                }
-                else {
-                    if (_name != '') {
-                        if (edit_type == 'edit') {
-                            nodes.filter(function (d, i) {
-                                if (d.id == _index) {
-                                    d.name = _name;
-                                    var t = d3.selectAll('text')
-                                    t.each(function () {
-                                        if (d3.select(this)[0][0].id == 'text_' + _index) {
-                                            d3.select(this)[0][0].textContent = _name;
-                                        }
-                                    });
-                                    wrap(t, 100);
-                                }
-                            })
-                        }
-                        else {
-                            var node = { id: _id, name: _name, benefit: 0 };
-                            node.x = _x;
-                            node.y = _y;
-                            nodes.push(node);
-                        }
-                        $('#stakeholder_name').val('');
-                        $(this).dialog("close");
-                        do_changes();
-                    }
-                    else {
-                        $('#stackholder_name').focus();
-                        alert("Stakeholder's name cannot be empty!");
-                    }
-                }
-            },
-            Cancel: function () {
-                $(this).dialog("close");
-            }
-        }
+    tr = table.append('tr');
+    var td = tr.append('td').attr('colspan', 5)
+                            .style('text-align', 'center');
+    td.append('input')
+      .attr('type', 'button')
+      .attr('value', 'OK')
+      .attr('onclick', 'stakeholder_save(' + _index + ',  ' + _x + ',' + _y + ' ,"' + edit_type + '");');
+
+    td.append('input')
+      .attr('type', 'button')
+      .attr('value', 'Cancel')
+      .attr('onclick', "d3.select('div.stakeholder_creater').classed('container_hidden', true);");
+
+    
+
+    //$(".stakeholder_creater").dialog({
+    //    resizable: false,
+    //    height: "auto",
+    //    width: 400,
+    //    modal: true,
+    //    buttons: {
+    //        "OK": function () {
+                //var _id = "stakeholder" + (_index + 1);
+                //var _name = $('#stakeholder_name').val();
+                ////false = not be used
+                //var node_check = false;
+                //nodes.filter(function (d, i) {
+                //    if ((d.name == _name) && (edit_type =='add'))
+                //        node_check = true;
+                //});
+                //if (node_check) {
+                //    $('#stakeholder_name').focus();
+                //    alert("This name" + _name + " has be used!");
+                //}
+                //else {
+                //    if (_name != '') {
+                //        if (edit_type == 'edit') {
+                //            nodes.filter(function (d, i) {
+                //                if (d.id == _index) {
+                //                    d.name = _name;
+                //                    var t = d3.selectAll('text')
+                //                    t.each(function () {
+                //                        if (d3.select(this)[0][0].id == 'text_' + _index) {
+                //                            d3.select(this)[0][0].textContent = _name;
+                //                        }
+                //                    });
+                //                    wrap(t, 100);
+                //                }
+                //            })
+                //        }
+                //        else {
+                //            var node = { id: _id, name: _name, benefit: 0 };
+                //            node.x = _x;
+                //            node.y = _y;
+                //            nodes.push(node);
+                //        }
+                //        $('#stakeholder_name').val('');
+                //        $(this).dialog("close");
+                //        do_changes();
+                //    }
+                //    else {
+                //        $('#stackholder_name').focus();
+                //        alert("Stakeholder's name cannot be empty!");
+                //    }
+                //}
+    //        },
+    //        Cancel: function () {
+    //            $(this).dialog("close");
+    //        }
+    //    }
+    //});
+
+   
+}
+
+function stakeholder_save(_index, _x, _y, edit_type) {
+    var _id = "stakeholder" + (_index + 1);
+    var _name = $('#stakeholder_name').val();
+    //false = not be used
+    var node_check = false;
+    nodes.filter(function (d, i) {
+        if ((d.name == _name) && (edit_type == 'add'))
+            node_check = true;
     });
+    if (node_check) {
+        $('#stakeholder_name').focus();
+        alert("This name" + _name + " has be used!");
+    }
+    else {
+        if (_name != '') {
+            if (edit_type == 'edit') {
+                nodes.filter(function (d, i) {
+                    if (d.id == _index) {
+                        d.name = _name;
+                        var t = d3.selectAll('text')
+                        t.each(function () {
+                            if (d3.select(this)[0][0].id == 'text_' + _index) {
+                                d3.select(this)[0][0].textContent = _name;
+                            }
+                        });
+                        wrap(t, 100);
+                    }
+                })
+            }
+            else {
+                var node = { id: _id, name: _name, benefit: 0 };
+                node.x = _x;
+                node.y = _y;
+                nodes.push(node);
+            }
+            $('#stakeholder_name').val('');
+            d3.select('div.stakeholder_creater').classed('container_hidden', true);
+            do_changes();
+        }
+        else {
+            $('#stackholder_name').focus();
+            alert("Stakeholder's name cannot be empty!");
+        }
+    }
 }
 
 do_changes();
