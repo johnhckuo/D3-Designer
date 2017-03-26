@@ -84,7 +84,7 @@ startMatching = function(){
     var sortedList = [];
 
     for (var i = 0 ; i < empowerment_properties.length ; i++){
-        var owner = empowerment_properties[i].owner;
+        var owner = parseInt(empowerment_properties[i].owner);
         var averageRating = empowerment_properties[i].averageImportance;
         var self_Importance = empowerment_properties[i].rating[owner];
 
@@ -129,8 +129,8 @@ tradingMatch = function(visitNode){
     //console.log(goThroughList);
     for (var i = 0 ; i < empowerment_properties.length ; i++){
 
-        var newOwner = empowerment_properties[i].owner;
-        var currentOwner = empowerment_properties[visitNode].owner;
+        var newOwner = parseInt(empowerment_properties[i].owner);
+        var currentOwner = parseInt(empowerment_properties[visitNode].owner);
 
         if (i == visitNode || (newOwner == currentOwner && i != origin)){
             continue;
@@ -178,7 +178,7 @@ tradingMatch = function(visitNode){
 matchingAlgo = function(visitNode, i){
 
     //self diff
-    var owner = empowerment_properties[visitNode].owner;
+    var owner = parseInt(empowerment_properties[visitNode].owner);
     var self_Importance = empowerment_properties[visitNode].rating[owner];
 
     var currentRating = empowerment_properties[i].rating[owner];
@@ -336,7 +336,7 @@ if (Meteor.isClient) {
       //   return figureData;
       // },
 
-      empowerment_properties: function(){
+      properties: function(){
           var data = [];
           var detail = [];
           panelCount = empowerment_stakeholders.length;

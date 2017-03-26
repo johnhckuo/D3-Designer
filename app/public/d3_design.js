@@ -658,7 +658,7 @@ function add_property(_type) {
 }
 
 function stakeholder_save(_index, _x, _y, edit_type) {
-    var _id = "stakeholder" + (parseInt(_index, 10));
+    var _id = parseInt(_index, 10);
     var _name = $('#stakeholder_name').val();
     //false = not be used
     var node_check = false;
