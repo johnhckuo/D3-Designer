@@ -177,6 +177,8 @@ body{
      -moz-transition: -moz-transform 1s;
        -o-transition: -o-transform 1s;
           transition: transform 1s;
+  /*transform-origin: 70% 80%;*/
+
 
 }
 
@@ -274,7 +276,10 @@ body{
 }
 
 #carousel figure {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   width: 210px;
   height: 186px;
@@ -286,6 +291,56 @@ body{
   font-weight: bold;
   color: white;
   text-align: center;
+  padding:10px;
+
+}
+
+#carousel div {
+
+  display: block;
+  position: relative;
+  width: 80%;
+  height: 20px;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
+}
+
+#carousel span {
+
+  display: inline;
+  position: relative;
+  width: 10%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
+}
+
+#carousel input {
+
+  display: inline;
+  position: relative;
+  width: 80%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
 }
 
 #options div{
