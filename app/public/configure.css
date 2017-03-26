@@ -14,8 +14,8 @@ path.link.draw_line {
 div.interaction_container {
     position: fixed;
     top: 25%;
-    left: 20%;
-    width: 60%;
+    left: 15%;
+    width: 70%;
     height: 50%;
     background: -moz-linear-gradient( center top, #046874 5%,#0D5661 50%, #03353D 100% );
     background: -ms-linear-gradient( top, #046874 5%,#0D5661 50%, #03353D 100%  );

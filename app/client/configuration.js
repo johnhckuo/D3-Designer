@@ -14,7 +14,6 @@ Template.configuration.events({
             var json_index = target_id.substring(target_id.length - 1, target_id.length);
             _keyword = e.target.name;
             source = 'deeper';
-            alert(_keyword);
         }
         Meteor.call('get_trend', { keyword: _keyword }, function (err, res) {
             if (err)
@@ -40,7 +39,7 @@ Template.configuration.events({
                                    .attr('id', 'btn_deeper_' + i)
                                    .attr('type', 'button')
                                    .attr('value', 'deeper')
-                                   .attr('class', 'trend_button')
+                                   .attr('class', 'trend_button green_btn')
                                    .attr('name', trend_data[i].query);
                                    //.attr('onclick', 'search_trend("' + trend_data[i].query + '", "deeper");');
                 }

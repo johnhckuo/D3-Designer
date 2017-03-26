@@ -3,7 +3,8 @@
 var width = 500;
 var height = 600;
 var radius = 60;
-var colors = d3.scale.category10();
+//var colors = d3.scale.category10();
+var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7'];
 var svg_clicked = false;
 var timer;
 var draw_mode;
@@ -164,7 +165,10 @@ function do_changes() {
       .attr('height', 30)
       .attr('x', -15)
       .attr('y', -15)
-      .style('fill', function (d, i) { return colors(i); })
+      .style('fill', function (d, i) {
+          var color_index = i % colors.length;
+          return colors[color_index];
+      })
       .on('mouseover', function (d) {
           on_node = true;
           d3.select(this).attr('transform', 'scale(1.1)')
@@ -254,7 +258,7 @@ function cretae_interaction_container(link) {
                          .attr('id', 'interaction_table')
                          .attr('class', 'interaction_container');
     var thead = table.append('thead').append('tr');
-    var controller = thead.append('th')
+    var controller = thead.append('td')
                           .attr('colspan', 5)
                           .text('INTERACTION ' + link.source.name + ' & ' + link.target.name)
                           .attr('class', 'configuration_font')
@@ -262,8 +266,8 @@ function cretae_interaction_container(link) {
                           .style('text-align', 'left')
                           .style('width', '100%');
 
-    thead = table.append('thead').append('tr').style('height','25px');
-    controller = thead.append('th')
+    thead = table.append('thead').append('tr');
+    controller = thead.append('td')
                       .text('ACTIVITY')
                       .attr('class', 'configuration_font_white');
 
@@ -278,10 +282,10 @@ function cretae_interaction_container(link) {
     //                     .attr('class', 'green_btn')
     //                     .attr('onclick', 'flow_adjust()');
 
-    thead.append('th').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('th').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
-    thead.append('th').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('th').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
 
     var tbody = table.append('tbody').attr('id', 'item');;
     for (i = 0; i < link.interaction.length; i++) {

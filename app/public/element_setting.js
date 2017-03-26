@@ -15,8 +15,7 @@ function set_trend() {
     trend.append('input')
          .attr('type', 'button')
          .attr('value', 'SEARCH')
-         .attr('class', 'trend_button')
-         .attr('class', 'green_btn')
+         .attr('class', 'trend_button green_btn')
          .style('margin-left','5px')
          .attr('id', 'get_trend');
 
@@ -71,23 +70,28 @@ function add_interaction() {
     tr.append('td').append('input')
           .attr('type', 'text')
           .attr('id', 'interaction' + (i + 1))
+          .attr('class', 'line_input')
           .attr('value', '');
     tr.append('td').append('input')
                       .attr('type', 'text')
                       .attr('id', 'give' + (i + 1))
+                      .attr('class', 'line_input')
                       .attr('value', '');
     tr.append('td').append('input')
                       .attr('type', 'text')
                       .attr('id', 'source_affect' + (i + 1))
+                      .attr('class', 'line_input')
                       .attr('value', '')
                       .attr('size', 2);
     tr.append('td').append('input')
                       .attr('type', 'text')
                       .attr('id', 'receive' + (i + 1))
+                      .attr('class', 'line_input')
                       .attr('value', '');
     tr.append('td').append('input')
                       .attr('type', 'text')
                       .attr('id', 'target_affect' + (i + 1))
+                      .attr('class', 'line_input')
                       .attr('value', '')
                       .attr('size', '2');
 }
