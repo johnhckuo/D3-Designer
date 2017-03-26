@@ -70,8 +70,12 @@ if (Meteor.isClient) {
 ////////////////////
 
 window.onload = function(){
+
+
     updateAverageImportance();
     startMatching();
+
+
     $(document).scroll(function() {
       if ($(document).scrollTop() > $(window).innerHeight()) {
         $(".header").addClass("smallheader");

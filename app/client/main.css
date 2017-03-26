@@ -240,8 +240,85 @@ body{
           transform: translateZ( -100px ) translateX(-250px) translateY(250px) rotateX(   90deg );
 }
 
+
 /*  empowerment  */
 
+.empowerment{
+
+  width:30vw;
+  height:100vh;
+  float:right;
+}
+
+.empowerment h2{
+  color: #7D89DE;
+  font-size: xx-large;
+}
+
+.empowerment > div{
+  position: absolute;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width:30vw;
+  height:100%;
+  background: #0D5661;
+  color:#E7E6E6;
+  border: 1px solid black;
+
+}
+
+.empowerPanel{
+  transform: translateX(30vw);
+}
+
+/*.empower_transition{
+  transition: transform 1s;
+  transform: scale(0.8);
+
+}*/
+
+.empower_show{
+  transition: transform 1s;
+
+  transform: translateX(0vw);
+
+}
+
+
+.empowermentContent{
+  color: #7D89DE;
+  font-size: xx-large;
+}
+
+input[type="range"]{
+  -webkit-appearance: none;
+  border-radius:2px;
+  width:200px;
+  height:3px;
+  box-shadow:inset #ebb 0 0 5px;
+  outline : none;
+  transition:.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width:10px;
+  height:10px;
+  background:#f22;
+  border-radius:50%;
+  transition:.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover,
+input[type="range"]::-webkit-slider-thumb:active{
+  width:16px;
+  height:16px;
+}
+
+/*
 .empowerment{
   display:flex;
   justify-content: center;
@@ -348,4 +425,4 @@ body{
   height: 100px;
   width: 100px;
   background: #000;
-}
+}*/

@@ -44,6 +44,25 @@
   </div>
 </template>
 
+<template name="property">
+  <div class={{className}}>
+    <h2>{{stakeholder}}</h2>
+    <hr>
+    {{#each detail}}
+
+    <div class="empowerContent">
+      <div class="">
+          <input type="text" name="" value={{name}} size="6">
+          <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#f22 0%,#f22 {{value}}%,#fff {{value}}%, #fff 100%);">
+      </div>
+    </div>
+    {{/each}}
+    <button name="button" id="next">YO</button>
+
+  </div>
+
+</template>
+
 <!--
 *************************
 *        Modules        *
@@ -52,7 +71,7 @@
 
 <template name="empowerment">
   {{> header}}
-  <div class="empowerment">
+  <!-- <div class="empowerment">
     <section class="empowermentContainer">
         <div id="carousel">
           {{#each figures}}
@@ -68,7 +87,13 @@
         </p>
 
       </section>
-  </div>
+  </div> -->
+    <div class="empowerment">
+      {{#each properties}}
+        {{> property}}
+      {{/each}}
+
+    </div>
 </template>
 
 <template name="flow">

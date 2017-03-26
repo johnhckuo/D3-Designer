@@ -1,5 +1,6 @@
 var theta = 0, figureOffset, panelWidth = 210;
-var stakeholders = ["seller", "buyer"];
+var stakeholders = ["seller", "buyer", "dreamer"];
+var empowerScore, panelCount;
 var properties = [
   {name : "ss",
    rating: [2,5],
@@ -134,14 +135,23 @@ startMatching = function(){
     origin = priorityList[0].id;
 
     visitedCount = 0;
-    visitedProperty[visitedCount] = origin;
+    visitedProperty.push({id : origin, priority : 0})
+
     success = tradingMatch(origin);
-    console.log(visitedProperty);
+
+    var score = 0 ;
+    for (var i = 0 ; i<visitedProperty.length ; i++){
+        //console.log(visitedProperty[i].priority)
+        score += visitedProperty[i].priority;
+    }
+
+    empowerScore = score/(visitedProperty.length-1);
+    console.log(empowerScore);
 }
 
 checkExist = function(elem, data){
     for (var i = 0 ; i < data.length; i++){
-        if (elem == data[i] && i != 0){
+        if (elem == data[i].id && i != 0){
             return false;
         }
     }
@@ -189,7 +199,7 @@ tradingMatch = function(visitNode){
 
     //
     visitedCount++;
-    visitedProperty[visitedCount] = goThroughList[visitIndex].id;
+    visitedProperty[visitedCount] = goThroughList[visitIndex];
 
     if (goThroughList[visitIndex].id == origin){
         return "Success";
@@ -222,6 +232,12 @@ matchingAlgo = function(visitNode, i){
 }
 
 
+function bg(n, target){
+    target.css({
+      'background-image':'-webkit-linear-gradient(left ,#f22 0%,#f22 '+n+'%,#fff '+n+'%, #fff 100%)'
+    });
+}
+
 if (Meteor.isClient) {
 
   ////////////////////
@@ -230,14 +246,50 @@ if (Meteor.isClient) {
   //                //
   ////////////////////
 
+  var panelCounter = 1;
+
     Template.empowerment.events({
-      'click #previous': function (e) {
-        e.preventDefault();
-        onNavButtonClick(-1);
-      },
+      // 'click #previous': function (e) {
+      //   e.preventDefault();
+      //   onNavButtonClick(-1);
+      // },
+      // 'click #next': function (e) {
+      //   e.preventDefault();
+      //   onNavButtonClick(1);
+      // },
       'click #next': function (e) {
-        e.preventDefault();
-        onNavButtonClick(1);
+
+          //$(".empower_show").toggleClass("empowerPanel");
+          var temp = panelCounter;
+          $(".empowerPanel:nth-child("+temp+")").css("z-index", -1);
+          //$(".empowerPanel:nth-child("+temp+")").removeClass("empower_show");
+          //$(".empowerPanel:nth-child("+temp+")").addClass("empower_transition");
+
+
+          setTimeout(function(){
+            $(".empowerPanel:nth-child("+temp+")").removeClass("empower_show");
+          },1000);
+          panelCounter = (panelCounter+1)%panelCount;
+          if (panelCounter == 0){
+              panelCounter = panelCount;
+          }
+          $(".empowerPanel:nth-child("+panelCounter+")").css("z-index", 1);
+          $(".empowerPanel:nth-child("+panelCounter+")").addClass("empower_show");
+        // $(".empowerPanel").toggleClass("empower_show");
+
+      },
+      'mouseenter .range, click .range': function (e) {
+        var r = $(e.target);
+
+        var p = r.val();
+        p = r.val();
+        bg(p, r);
+      },
+      'mouseenter .range, mousemove .range': function (e) {
+        var r = $(e.target);
+        var p = r.val();
+        p = r.val();
+        bg(p, r);
       },
     });
 
@@ -250,28 +302,57 @@ if (Meteor.isClient) {
 
     Template.empowerment.helpers({
 
-      figures: function(){
-        var degree = 360/stakeholders.length;
-        var figureData = [];
-        figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / stakeholders.length ) ) +350;
+      // figures: function(){
+      //   var degree = 360/stakeholders.length;
+      //   var figureData = [];
+      //   figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / stakeholders.length ) ) +350;
+      //
+      //   for (var i = 0 ; i < stakeholders.length ; i++){
+      //       var title = "<h2>" + stakeholders[i] + "</h2>";
+      //
+      //       var content = "";
+      //       for (var j = 0 ; j < properties.length ; j ++){
+      //           var propertyTitle = "<div><span>" + properties[j].name + ": </span>";
+      //           var inputField = "<input type='text' /></div>";
+      //
+      //           content += propertyTitle+inputField;
+      //       }
+      //       var style = "transform: rotateY(" + degree*i + "deg) translateZ(" + figureOffset + "px) translate3d( 0, 0, 0)";
+      //       figureData.push({
+      //         "style":style,
+      //         "value":content
+      //       });
+      //   }
+      //   return figureData;
+      // },
 
-        for (var i = 0 ; i < stakeholders.length ; i++){
-            var title = "<h2>" + stakeholders[i] + "</h2>";
+      properties: function(){
+          var data = [];
+          var detail = [];
+          panelCount = stakeholders.length;
 
-            var content = "";
-            for (var j = 0 ; j < properties.length ; j ++){
-                var propertyTitle = "<div><span>" + properties[j].name + ": </span>";
-                var inputField = "<input type='text' /></div>";
+          for (var i = 0 ; i < stakeholders.length; i++){
 
-                content += propertyTitle+inputField;
-            }
-            var style = "transform: rotateY(" + degree*i + "deg) translateZ(" + figureOffset + "px) translate3d( 0, 0, 0)";
-            figureData.push({
-              "style":style,
-              "value":content
-            });
-        }
-        return figureData;
-      },
+              for (var j = 0 ; j < properties.length; j++){
+                detail.push({
+                  "name": properties[j].name,
+                  "value": properties[j].rating[i],
+                })
+              }
+
+              var panelClass = "empowerPanel";
+              if (i == 0){
+                panelClass += " empower_show";
+              }
+
+              data.push({
+                "className": panelClass,
+                "stakeholder": stakeholders[i],
+                "detail": detail
+              });
+              detail = [];
+          }
+          return data;
+      }
     });
 }
