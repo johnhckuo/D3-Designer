@@ -21,7 +21,7 @@ var consensus_level = 0,
     empowerment = 0,
     flow = 0;
 
-//#endregion 
+//#endregion
 
 d3.select('body').style('background-color', '#E7E6E6');
 
@@ -482,7 +482,8 @@ function reset_node() {
     svg.on("mousemove", null);
 }
 
-function svgclick() {
+function svgclick(event) {
+  console.log(event)
     if (d3.event.target.nodeName == 'svg') {
         if (svg_clicked) {
             //double_click();
@@ -513,18 +514,18 @@ function add_stakeholder(_index, _x, _y, edit_type) {
     stakeholder_creater.classed('container_hidden', false);
     var table = stakeholder_creater.append('table')
                                    .attr('class', 'container_table');
-                                   
+
     var tr;
     tr = table.append('tr');
     tr.append('td').html('Name:')
                    .attr('class', 'configuration_font');
-    
+
     var td = tr.append('td');
     td.append('input')
       .attr('type', 'text')
       .attr('class', 'line_input')
       .attr('id', 'stakeholder_name');
-    
+
     if (edit_type != 'add') {
         nodes.filter(function (d, i) {
             if (d.id == _index) {
@@ -657,7 +658,7 @@ function add_property(_type) {
 }
 
 function stakeholder_save(_index, _x, _y, edit_type) {
-    var _id = "stakeholder" + (_index + 1);
+    var _id = "stakeholder" + (parseInt(_index, 10));
     var _name = $('#stakeholder_name').val();
     //false = not be used
     var node_check = false;
