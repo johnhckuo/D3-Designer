@@ -1,8 +1,8 @@
 var theta = 0, figureOffset, panelWidth = 210;
 var empowerScore, panelCount;
 
-stakeholders = [];
-properties = [];
+empowerment_stakeholders = [];
+empowerment_properties = [];
 
 
 ////////////////////
@@ -18,9 +18,9 @@ var actualVisitIndex = [];
 var origin;
 
 dataReset = function(){
-    for (var i = 0 ; i< properties.length; i++){
-        properties[i].rating = [];
-        properties[i].averageImportance = 0;
+    for (var i = 0 ; i< empowerment_properties.length; i++){
+        empowerment_properties[i].rating = [];
+        empowerment_properties[i].averageImportance = 0;
     }
     visitedProperty = [];
     visitedCount = 0;
@@ -30,7 +30,7 @@ dataReset = function(){
 onNavButtonClick = function( increment ){
     var carousel = $('#carousel');
 
-    theta += ( 360 / stakeholders.length ) * increment * -1;
+    theta += ( 360 / empowerment_stakeholders.length ) * increment * -1;
     carousel.css('transform', 'rotateY(' + theta + 'deg)');
 };
 
@@ -42,16 +42,16 @@ importanceCalculator = function(){
 }
 
 updateAverageImportance = function(){
-    for (var i = 0 ; i < properties.length ; i++){
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
         var importance = 0;
-        for (var j = 0 ; j < properties[i].rating.length; j++){
-            properties[i].rating[j] = parseInt(properties[i].rating[j]);
-            if ( j == properties[i].owner){
+        for (var j = 0 ; j < empowerment_properties[i].rating.length; j++){
+            empowerment_properties[i].rating[j] = parseInt(empowerment_properties[i].rating[j]);
+            if ( j == empowerment_properties[i].owner){
                 continue;
             }
-            importance += properties[i].rating[j];
+            importance += empowerment_properties[i].rating[j];
         }
-        properties[i].averageImportance = importance/(stakeholders.length-1);
+        empowerment_properties[i].averageImportance = importance/(empowerment_stakeholders.length-1);
     }
 
 
@@ -83,10 +83,10 @@ startMatching = function(){
     var visitList = [];
     var sortedList = [];
 
-    for (var i = 0 ; i < properties.length ; i++){
-        var owner = properties[i].owner;
-        var averageRating = properties[i].averageImportance;
-        var self_Importance = properties[i].rating[owner];
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
+        var owner = empowerment_properties[i].owner;
+        var averageRating = empowerment_properties[i].averageImportance;
+        var self_Importance = empowerment_properties[i].rating[owner];
 
         var diff = averageRating - self_Importance;
         priorityList.push({
@@ -127,10 +127,10 @@ tradingMatch = function(visitNode){
     var goThroughList = [];
     var diffList = [];
     //console.log(goThroughList);
-    for (var i = 0 ; i < properties.length ; i++){
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
 
-        var newOwner = properties[i].owner;
-        var currentOwner = properties[visitNode].owner;
+        var newOwner = empowerment_properties[i].owner;
+        var currentOwner = empowerment_properties[visitNode].owner;
 
         if (i == visitNode || (newOwner == currentOwner && i != origin)){
             continue;
@@ -148,13 +148,13 @@ tradingMatch = function(visitNode){
     var flag = false;
     var visitIndex;
 
-    for (var j = 0 ; j< properties.length ; j++){
+    for (var j = 0 ; j< empowerment_properties.length ; j++){
         flag = checkExist(goThroughList[j].id, visitedProperty);
         if (flag){
             visitIndex = j;
             break;
         }
-        if (!flag && j == (properties.length-1)){
+        if (!flag && j == (empowerment_properties.length-1)){
             alert("Fail");
         }
     }
@@ -178,10 +178,10 @@ tradingMatch = function(visitNode){
 matchingAlgo = function(visitNode, i){
 
     //self diff
-    var owner = properties[visitNode].owner;
-    var self_Importance = properties[visitNode].rating[owner];
+    var owner = empowerment_properties[visitNode].owner;
+    var self_Importance = empowerment_properties[visitNode].rating[owner];
 
-    var currentRating = properties[i].rating[owner];
+    var currentRating = empowerment_properties[i].rating[owner];
 
     var diff = currentRating - self_Importance;
 
@@ -197,6 +197,7 @@ matchingAlgo = function(visitNode, i){
 
 
 function bg(n, target){
+  
     target.css({
       'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
     });
@@ -262,14 +263,14 @@ if (Meteor.isClient) {
           });
           console.log(values);
           dataReset();
-          for (var i = 0 ; i < stakeholders.length ; i++){
+          for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
 
-            for (var j = 0 ; j < properties.length; j++){
-                properties[j].rating.push(values[properties.length*i+j]);
+            for (var j = 0 ; j < empowerment_properties.length; j++){
+                empowerment_properties[j].rating.push(values[empowerment_properties.length*i+j]);
               }
 
           }
-          console.log(properties)
+          //console.log(empowerment_properties)
           updateAverageImportance();
           startMatching();
       },
@@ -278,18 +279,18 @@ if (Meteor.isClient) {
           id = id.split("property")[1];
 
           var index;
-          for (var i = 0 ; i < properties.length; i++){
-              if (properties[i].id == id){
+          for (var i = 0 ; i < empowerment_properties.length; i++){
+              if (empowerment_properties[i].id == id){
                   index = i;
               }
           }
 
           if (index > -1) {
-            properties.splice(index, 1);
+            empowerment_properties.splice(index, 1);
           }
-          console.log(properties);
+          console.log(empowerment_properties);
           Router.go("/empowerment");
-          //Template.empowerment.__helpers.get('properties')();
+          //Template.empowerment.__helpers.get('empowerment_properties')();
       },
       "click #newProperty": function(e){
           $(".hiddenDIV").toggleClass("displayNewProperty");
@@ -312,16 +313,16 @@ if (Meteor.isClient) {
     Template.empowerment.helpers({
 
       // figures: function(){
-      //   var degree = 360/stakeholders.length;
+      //   var degree = 360/empowerment_stakeholders.length;
       //   var figureData = [];
-      //   figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / stakeholders.length ) ) +350;
+      //   figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / empowerment_stakeholders.length ) ) +350;
       //
-      //   for (var i = 0 ; i < stakeholders.length ; i++){
-      //       var title = "<h2>" + stakeholders[i] + "</h2>";
+      //   for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
+      //       var title = "<h2>" + empowerment_stakeholders[i] + "</h2>";
       //
       //       var content = "";
-      //       for (var j = 0 ; j < properties.length ; j ++){
-      //           var propertyTitle = "<div><span>" + properties[j].name + ": </span>";
+      //       for (var j = 0 ; j < empowerment_properties.length ; j ++){
+      //           var propertyTitle = "<div><span>" + empowerment_properties[j].name + ": </span>";
       //           var inputField = "<input type='text' /></div>";
       //
       //           content += propertyTitle+inputField;
@@ -335,18 +336,18 @@ if (Meteor.isClient) {
       //   return figureData;
       // },
 
-      properties: function(){
+      empowerment_properties: function(){
           var data = [];
           var detail = [];
-          panelCount = stakeholders.length;
+          panelCount = empowerment_stakeholders.length;
 
-          for (var i = 0 ; i < stakeholders.length; i++){
+          for (var i = 0 ; i < empowerment_stakeholders.length; i++){
 
-              for (var j = 0 ; j < properties.length; j++){
+              for (var j = 0 ; j < empowerment_properties.length; j++){
                 detail.push({
-                  "propertyClass" : "property"+properties[j].id,
-                  "name": properties[j].name,
-                  "value": properties[j].rating[i],
+                  "propertyClass" : "property"+empowerment_properties[j].id,
+                  "name": empowerment_properties[j].name,
+                  "value": empowerment_properties[j].rating[i],
                 })
               }
 
@@ -357,7 +358,7 @@ if (Meteor.isClient) {
 
               data.push({
                 "className": panelClass,
-                "stakeholder": stakeholders[i].name,
+                "stakeholder": empowerment_stakeholders[i].name,
                 "detail": detail
               });
               detail = [];
@@ -367,10 +368,10 @@ if (Meteor.isClient) {
       newProperties:function(){
           var data = [];
 
-          for (var i = 0 ; i < properties.length; i++){
+          for (var i = 0 ; i < empowerment_properties.length; i++){
               data.push({
-                "name":properties[i].name,
-                "owner": properties[i].owner
+                "name":empowerment_properties[i].name,
+                "owner": empowerment_properties[i].owner
 
               })
           }
