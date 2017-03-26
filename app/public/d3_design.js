@@ -22,6 +22,8 @@ var consensus_level = 0,
     flow = 0;
 
 //#endregion 
+
+d3.select('body').style('background-color', '#E7E6E6');
 var svg_container = d3.select('#full_container').append('div')
                                                 .attr('id', 'svg_container')
                                                 .style({
@@ -56,34 +58,35 @@ var borderPath = svg.append("rect")
                     .style("stroke", bordercolor)
                     .style("fill", "none")
                     .style("stroke-width", border);
+var nodes = [], links = [], property = [];
 
-var nodes = [
-    { id: 0, name: 'a', benefit: 3 },
-    { id: 1, name: 'b', benefit: 4 },
-    { id: 2, name: 'c', benefit: 3 }
-];
+//var nodes = [
+//    { id: 0, name: 'a', benefit: 3 },
+//    { id: 1, name: 'b', benefit: 4 },
+//    { id: 2, name: 'c', benefit: 3 }
+//];
 
-var links = [
-    {
-        source: 0, target: 1, interaction:
-        [
-            { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-            { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
-        ]
-    },
-    {
-        source: 1, target: 2, interaction:
-        [
-            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-        ]
-    }
-];
+//var links = [
+//    {
+//        source: 0, target: 1, interaction:
+//        [
+//            { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
+//            { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+//        ]
+//    },
+//    {
+//        source: 1, target: 2, interaction:
+//        [
+//            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
+//        ]
+//    }
+//];
 
-var property = [
-    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
-    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
-    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-];
+//var property = [
+//    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
+//    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
+//    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
+//];
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
@@ -287,7 +290,10 @@ function cretae_interaction_container(link) {
     thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
     thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
 
-    var tbody = table.append('tbody').attr('id', 'item');;
+    var tbody = table.append('tbody').attr('id', 'item');
+                                     //.style('display', 'block')
+                                     //.style('height', '500px')
+                                     //.style('overflow', 'auto');
     for (i = 0; i < link.interaction.length; i++) {
         var tr = tbody.append('tr');
         tr.append('td').append('input')
@@ -547,8 +553,13 @@ function add_stakeholder(_index, _x, _y, edit_type) {
     }
 
     tr = table.append('tr');
-    tr.append('td').attr('colspan',2).html('BENEFIT SCORE:' + benefit_score).attr('class', 'configuration_font').style('text-align', 'center');
-    td = tr.append('td').style('text-align', 'left');
+    if (edit_type != 'add') {
+        tr.append('td').attr('colspan', 2).html('BENEFIT SCORE:' + benefit_score).attr('class', 'configuration_font').style('text-align', 'center');
+        td = tr.append('td').style('text-align', 'left');
+    }
+    else {
+        td = tr.append('td').style('text-align', 'right').attr('colspan', 3);
+    }
 
     td.append('input')
       .attr('type', 'button')
