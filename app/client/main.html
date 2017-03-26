@@ -134,5 +134,44 @@
   {{> footer}}
 </template>
 
+<template name="configuration">
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="configure.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="element_setting.js"></script>
+    <script src="google_trend.js"></script>
+    <script src="d3_design.js"></script>
+    <div id="full_container" style="width:1400px; height:700px;">
+    </div>
+    <div class="stakeholder_creater" title="Stakeholder editor" style="align-content:center; display:none;">
+        <!--<table>
+            <tr>
+                <td>
+                    <label for="stakeholder_name">Name:</label>
+                </td>
+                <td>
+                    <input type="text" id="stakeholder_name" name="stakeholder_name" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="benefit_score">Benefit Score:</label>
+                </td>
+                <td>
+                    <label id="benefit_score"></label>
+                </td>
+            </tr>
+        </table>-->
+    </div>
+    <div class="stakeholder_delete" title="Are you sure to delete?" style="align-content:center; display:none;">
+        <label>The links will also be deleted!!</label>
+    </div>
+    <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
+
+    </div>
+</template>
+
 <template name="manage">
 </template>
