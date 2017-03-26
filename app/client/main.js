@@ -3,6 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 import './empowerment.js';
+import './configuration.js';
 var flag = false;
 var duration = 200;
 
