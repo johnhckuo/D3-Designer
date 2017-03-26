@@ -1,6 +1,7 @@
 //google trend
 function set_trend() {
     var trend = d3.select('#full_container').append('div')
+                  .attr('id', 'trend_container')
                   .style('width', window.innerWidth - width - 50 + 'px')
                   .style('height', 600 + 'px')
                   .style('margin-top', 0 + 'px')
@@ -14,8 +15,9 @@ function set_trend() {
     trend.append('input')
          .attr('type', 'button')
          .attr('value', 'search')
+         .attr('class', 'trend_button')
          .attr('id', 'get_trend')
-         .attr('onclick', 'search_trend("' + $('#keyword').val() + '" ,"search_bar");');
+    ;//.attr('onclick', 'search_trend("' + $('#keyword').val() + '" ,"search_bar");');
 
     trend.append('table')
           .attr('id', 'trend_content')
