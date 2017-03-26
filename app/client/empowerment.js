@@ -197,6 +197,7 @@ matchingAlgo = function(visitNode, i){
 
 
 function bg(n, target){
+  
     target.css({
       'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
     });
