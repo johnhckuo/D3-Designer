@@ -25,39 +25,62 @@ var onButtonClick = function( className ){
 
 if (Meteor.isClient) {
 
-  ////////////////////
-  //                //
-  //     Event      //
-  //                //
-  ////////////////////
+    ////////////////////
+    //                //
+    //     Event      //
+    //                //
+    ////////////////////
 
-  Template.index.events({
-    'click .show-front': function (e) {
-      onButtonClick("show-front");
-    },
-    'click .show-back': function (e) {
-      onButtonClick("show-back");
-    },
-    'click .show-right': function (e) {
-      onButtonClick("show-right");
-    },
-    'click .show-left': function (e) {
-      onButtonClick("show-left");
-    },
-    'click .show-top': function (e) {
-      onButtonClick("show-top");
-    },
-    'click .show-bottom': function (e) {
-      onButtonClick("show-bottom");
-    },
-  });
+    Template.index.events({
+      'click .show-front': function (e) {
+        onButtonClick("show-front");
+      },
+      'click .show-back': function (e) {
+        onButtonClick("show-back");
+      },
+      'click .show-right': function (e) {
+        onButtonClick("show-right");
+      },
+      'click .show-left': function (e) {
+        onButtonClick("show-left");
+      },
+      'click .show-top': function (e) {
+        onButtonClick("show-top");
+      },
+      'click .show-bottom': function (e) {
+        onButtonClick("show-bottom");
+      },
+    });
+
+    Template.configuration.events({
+        'click #submit ': function (e) {
+            properties = property;
+            stakeholders = nodes;
+        },
+
+    });
+
+    ////////////////////
+    //                //
+    //    Helpers     //
+    //                //
+    ////////////////////
+
 
 
 
 
 }
 
+////////////////////
+//                //
+//     init       //
+//                //
+////////////////////
+
 window.onload = function(){
+
+
 
     $(document).scroll(function() {
       if ($(document).scrollTop() > $(window).innerHeight()) {

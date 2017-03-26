@@ -177,6 +177,8 @@ body{
      -moz-transition: -moz-transform 1s;
        -o-transition: -o-transform 1s;
           transition: transform 1s;
+  /*transform-origin: 70% 80%;*/
+
 
 }
 
@@ -238,7 +240,150 @@ body{
           transform: translateZ( -100px ) translateX(-250px) translateY(250px) rotateX(   90deg );
 }
 
+
 /*  empowerment  */
+
+.empowerment{
+
+  width:30vw;
+  height:100vh;
+  float:right;
+}
+
+.empowerment h2{
+  color: #7D89DE;
+  font-size: xx-large;
+}
+
+.empowerment > div{
+  position: absolute;
+
+  flex-direction: column;
+  padding:50px;
+  padding-top:100px;
+  width:30vw;
+  height:100%;
+  background: #0D5661;
+  color:#E7E6E6;
+  border: 1px solid black;
+
+}
+
+.empowerPanel{
+  transform: translateX(30vw);
+  top:100px;
+}
+
+.panelContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.panelContainer *{
+    margin-top:30px;
+    margin-right:15px;
+
+}
+
+/*.empower_transition{
+  transition: transform 1s;
+  transform: scale(0.8);
+
+}*/
+
+.empower_show{
+  transition: transform 1s;
+
+  transform: translateX(0vw);
+
+}
+
+
+.empowerContent{
+  color: #7D89DE;
+  font-size: medium;
+}
+
+.empowerContent input{
+  margin-bottom: 15px;
+  color: black;
+}
+
+.empowerContent label{
+  margin-bottom: 15px;
+  color: black;
+}
+
+.empowerContent button{
+  margin-bottom: 15px;
+}
+
+.empowerment button{
+  color: black;
+}
+
+input[type="range"]{
+  -webkit-appearance: none;
+  border-radius:2px;
+  width:200px;
+  height:3px;
+  box-shadow:inset #ebb 0 0 5px;
+  outline : none;
+  transition:.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width:10px;
+  height:10px;
+  background:#7D89DE;
+  border-radius:50%;
+  transition:.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover,
+input[type="range"]::-webkit-slider-thumb:active{
+  width:16px;
+  height:16px;
+}
+
+.empowermentContent input{
+  display: inline-block;
+  color:black;
+}
+
+/*for DEMO */
+
+#empowerTest{
+  position: relative;
+  margin-top: 5px;
+}
+#full_container{
+  position: absolute;
+    top:200px;
+
+}
+.hiddenDIV{
+  position: relative;
+  background-color: rgba(0,0,0,0.8);
+  width:50vw;
+  height:50vh;
+  margin-left: auto;
+  margin-right: auto;
+  top:20vh;
+  transition: all 1s;
+  transform: translateY(100vh);
+  z-index: 100;
+}
+
+.displayNewProperty{
+  transform: translateY(0vh);
+
+}
+/*
 
 .empowerment{
   display:flex;
@@ -274,7 +419,10 @@ body{
 }
 
 #carousel figure {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   width: 210px;
   height: 186px;
@@ -286,6 +434,56 @@ body{
   font-weight: bold;
   color: white;
   text-align: center;
+  padding:10px;
+
+}
+
+#carousel div {
+
+  display: block;
+  position: relative;
+  width: 80%;
+  height: 20px;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
+}
+
+#carousel span {
+
+  display: inline;
+  position: relative;
+  width: 10%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
+}
+
+#carousel input {
+
+  display: inline;
+  position: relative;
+  width: 80%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  line-height: normal;
+  font-size: medium;
+  font-weight: normal;
+  color: black;
+  text-align: center;
+
 }
 
 #options div{
@@ -294,6 +492,7 @@ body{
   width: 100px;
   background: #000;
 }
+*/
 
 .green_btn {
     font-family: "franklin-gothic-urw-comp", "sans-serif";
@@ -355,5 +554,6 @@ body{
     font-weight: normal;
     color: #E7E6E6;
 }
+
 
 
