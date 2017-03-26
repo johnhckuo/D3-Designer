@@ -15,3 +15,7 @@ Router.route('/empowerment', function () {
 Router.route('/flow', function () {
   this.render('flow');
 });
+
+Router.route('/configuration', function () {
+    this.render('configuration');
+});
