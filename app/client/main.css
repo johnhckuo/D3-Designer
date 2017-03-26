@@ -1,8 +1,8 @@
 /* CSS declarations go here */
+import "./flow.css"
 body{
 
 }
-
 .header{
   position: absolute;
   display:flex;
