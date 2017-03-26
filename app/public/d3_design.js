@@ -4,7 +4,7 @@ var width = 500;
 var height = 600;
 var radius = 60;
 //var colors = d3.scale.category10();
-var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7'];
+var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7', '#BC9F77', '#D19826', '#C18A26', '#C7802D'];
 var svg_clicked = false;
 var timer;
 var draw_mode;
