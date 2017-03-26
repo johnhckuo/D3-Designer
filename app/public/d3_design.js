@@ -77,6 +77,12 @@ var links = [
     }
 ];
 
+var property = [
+    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
+    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
+    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
+];
+
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
 var force = d3.layout.force()
@@ -412,35 +418,6 @@ function stakeholder_delete() {
       .attr('type', 'button')
       .attr('value', 'Cancel')
       .attr('onclick', "d3.select('div.stakeholder_delete').classed('container_hidden', true);");
-
-    //$(".stakeholder_delete").dialog({
-    //    resizable: false,
-    //    height: "auto",
-    //    width: 400,
-    //    modal: true,
-    //    buttons: {
-    //        "OK": function () {
-    //            nodes.filter(function (d, i) {
-    //                if (d.id == clicked_node.id) {
-    //                    nodes.splice(i, 1);
-    //                    var toSplice = links.filter(function (l) {
-    //                        return (l.source === clicked_node || l.target === clicked_node);
-    //                    });
-    //                    toSplice.map(function (l) {
-    //                        links.splice(links.indexOf(l), 1);
-    //                    });
-    //                }
-    //            });
-    //            reset_node();
-    //            do_changes();
-    //            $(".stakeholder_creater").dialog("close");
-    //            $(this).dialog("close");
-    //        },
-    //        Cancel: function () {
-    //            $(this).dialog("close");
-    //        }
-    //    }
-    //});
 }
 
 function stakeholder_delete_checked() {
@@ -522,6 +499,21 @@ function add_stakeholder(_index, _x, _y, edit_type) {
                        .attr('value', 'delete')
                        .attr('onclick', 'stakeholder_delete(' + _index + ');');
     }
+
+    tr = table.append('tr');
+    property_table = tr.append('td').attr('colspan', 5)
+                       .append('table').attr('class', 'property_container');
+    var property_tr = property_table.append('tr');
+    property_tr.append('td').html('property');
+    property_tr.append('td').append('input')
+                            .attr('type', 'button')
+                            .attr('value', 'add')
+                            .attr('onclick', 'add_property("add");');
+
+    if (edit_type != 'add') {
+        load_property(_index);
+    }
+
     tr = table.append('tr');
     var td = tr.append('td').attr('colspan', 5)
                             .style('text-align', 'center');
@@ -535,66 +527,81 @@ function add_stakeholder(_index, _x, _y, edit_type) {
       .attr('value', 'Cancel')
       .attr('onclick', "d3.select('div.stakeholder_creater').classed('container_hidden', true);");
 
-    
+}
 
-    //$(".stakeholder_creater").dialog({
-    //    resizable: false,
-    //    height: "auto",
-    //    width: 400,
-    //    modal: true,
-    //    buttons: {
-    //        "OK": function () {
-                //var _id = "stakeholder" + (_index + 1);
-                //var _name = $('#stakeholder_name').val();
-                ////false = not be used
-                //var node_check = false;
-                //nodes.filter(function (d, i) {
-                //    if ((d.name == _name) && (edit_type =='add'))
-                //        node_check = true;
-                //});
-                //if (node_check) {
-                //    $('#stakeholder_name').focus();
-                //    alert("This name" + _name + " has be used!");
-                //}
-                //else {
-                //    if (_name != '') {
-                //        if (edit_type == 'edit') {
-                //            nodes.filter(function (d, i) {
-                //                if (d.id == _index) {
-                //                    d.name = _name;
-                //                    var t = d3.selectAll('text')
-                //                    t.each(function () {
-                //                        if (d3.select(this)[0][0].id == 'text_' + _index) {
-                //                            d3.select(this)[0][0].textContent = _name;
-                //                        }
-                //                    });
-                //                    wrap(t, 100);
-                //                }
-                //            })
-                //        }
-                //        else {
-                //            var node = { id: _id, name: _name, benefit: 0 };
-                //            node.x = _x;
-                //            node.y = _y;
-                //            nodes.push(node);
-                //        }
-                //        $('#stakeholder_name').val('');
-                //        $(this).dialog("close");
-                //        do_changes();
-                //    }
-                //    else {
-                //        $('#stackholder_name').focus();
-                //        alert("Stakeholder's name cannot be empty!");
-                //    }
-                //}
-    //        },
-    //        Cancel: function () {
-    //            $(this).dialog("close");
-    //        }
-    //    }
-    //});
+function save_property(_owner) {
+    property_count = d3.select('table.property_container')[0][0].childNodes.length;
+    var max = 0;
+    for(i = 0; i < property.length; i++){
+        if(property[i].id > max){
+            max = property[i].id;
+        }
+    }
+    max++;
+    for (i = 1; i < property_count; i++) {
+        var _id, _name;
+        _name = $('#property_name_' + i).val();
+        if ($('#property_id_' + i).val() != 'new') {
+            _id = $('#property_id_' + i).val();
+            $.each(property, function (j, p) {
+                if (p.id == _id) {
+                    p.name = _name;
+                }
+            });
+        }
+        else {
+            _id = max;
+            var new_property = { id: _id, name: _name, rating: [], owner: _owner, averageImportance: 0 };
+            property.push(new_property);
+            max++;
+        }    
+    }
+}
 
-   
+function load_property(_owner) {
+    $.each(property, function (i, p) {
+        if (p.owner == _owner) {
+            index = add_property('load');
+            $('#property_name_' + index).val(p.name);
+            $('#property_id_' + index).val(p.id);
+        }
+    })
+}
+
+function delete_property(_index){
+    if( $('#property_id_' + _index).val() == 'new'){
+        d3.select('table.property_container')[0][0].childNodes[_index].remove();
+    }
+    else {
+        var toSplice = property.filter(function (l) {
+            return (l.id == $('#property_id_' + _index).val());
+        });
+        toSplice.map(function (l) {
+            property.splice(property.indexOf(l), 1);
+        });
+        d3.select('table.property_container')[0][0].childNodes[_index].remove();
+    }
+}
+
+function add_property(_type) {
+    property_table = d3.select('table.property_container');
+    var input_index = property_table[0][0].childNodes.length;
+    var property_tr = property_table.append('tr');
+    var property_td = property_tr.append('td').attr('colspan', 2);
+
+    property_td.append('input')
+               .attr('type', 'text')
+               .attr('id', 'property_name_' + input_index);
+    property_td.append('input')
+           .attr('type', 'hidden')
+           .attr('id', 'property_id_' + input_index)
+           .attr('value', 'new');
+
+    property_td.append('input')
+               .attr('type', 'button')
+               .attr('value', 'Delete')
+               .attr('onclick', 'delete_property(' + input_index + ')');
+    return (input_index);
 }
 
 function stakeholder_save(_index, _x, _y, edit_type) {
@@ -615,6 +622,7 @@ function stakeholder_save(_index, _x, _y, edit_type) {
             if (edit_type == 'edit') {
                 nodes.filter(function (d, i) {
                     if (d.id == _index) {
+                        _id = d.id;
                         d.name = _name;
                         var t = d3.selectAll('text')
                         t.each(function () {
@@ -630,8 +638,9 @@ function stakeholder_save(_index, _x, _y, edit_type) {
                 var node = { id: _id, name: _name, benefit: 0 };
                 node.x = _x;
                 node.y = _y;
-                nodes.push(node);
+                nodes.push(node);                
             }
+            save_property(_id);
             $('#stakeholder_name').val('');
             d3.select('div.stakeholder_creater').classed('container_hidden', true);
             do_changes();
