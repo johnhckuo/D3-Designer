@@ -92,24 +92,24 @@ updateAverageImportance = function(){
 
 }
 
-function sort(priorityList){
+function sort(list){
   //selection sort
 
-    for (var i=0; i < priorityList.length; i++)
+    for (var i=0; i < list.length; i++)
     {
 
         var max_index = i;
-        for (var j=i+1; j<priorityList.length; j++){
-            if (priorityList[j].priority > priorityList[max_index].priority){
+        for (var j=i+1; j<list.length; j++){
+            if (list[j].priority > list[max_index].priority){
                 max_index = j;
             }
         }
-        var temp = priorityList[i];
-        priorityList[i] = priorityList[max_index];
-        priorityList[max_index] = temp;
+        var temp = list[i];
+        list[i] = list[max_index];
+        list[max_index] = temp;
 
     }
-    return priorityList;
+    return list;
 }
 
 startMatching = function(){
@@ -130,16 +130,13 @@ startMatching = function(){
         });
     }
     priorityList = sort(priorityList);
-    console.log(priorityList)
 
-    //console.log(priorityList)
-    //actualVisitIndex = new uint[](length);
     origin = priorityList[0].id;
 
     visitedCount = 0;
     visitedProperty[visitedCount] = origin;
     success = tradingMatch(origin);
-    alert(success);
+    console.log(visitedProperty);
 }
 
 checkExist = function(elem, data){
@@ -151,15 +148,11 @@ checkExist = function(elem, data){
     return true;
 }
 
-
 tradingMatch = function(visitNode){
 
     var goThroughList = [];
-
     var diffList = [];
-    console.log(goThroughList);
-
-
+    //console.log(goThroughList);
     for (var i = 0 ; i < properties.length ; i++){
 
         var newOwner = properties[i].owner;
@@ -169,21 +162,25 @@ tradingMatch = function(visitNode){
             continue;
         }
 
-        diffList[i] = matchingAlgo(visitNode, i);
-        goThroughList.push(i);
-    }
-    goThroughList = sort(diffList, goThroughList);
+        var diff = matchingAlgo(visitNode, i);
+        goThroughList.push({
+          id:i,
+          priority:diff
+        });
 
+    }
+
+    goThroughList = sort(goThroughList);
     var flag = false;
     var visitIndex;
 
-    for (var j = 0 ; j< length ; j++){
-        flag = checkExist(goThroughList[j], visitedProperty);
+    for (var j = 0 ; j< properties.length ; j++){
+        flag = checkExist(goThroughList[j].id, visitedProperty);
         if (flag){
             visitIndex = j;
             break;
         }
-        if (!flag && j == length-1){
+        if (!flag && j == (properties.length-1)){
             return "Fail";
         }
     }
@@ -191,13 +188,14 @@ tradingMatch = function(visitNode){
     //test(goThroughList[visitIndex]);
 
     //
-    if (goThroughList[visitIndex] == origin){
-         return "Success";
+    visitedCount++;
+    visitedProperty[visitedCount] = goThroughList[visitIndex].id;
+
+    if (goThroughList[visitIndex].id == origin){
+        return "Success";
     }else{
-        visitedCount++;
-        visitedProperty[visitedCount] = goThroughList[visitIndex];
         // return bytes32(visitNode);
-        tradingMatch(goThroughList[visitIndex]);
+        tradingMatch(goThroughList[visitIndex].id);
     }
 
 }
@@ -208,7 +206,9 @@ matchingAlgo = function(visitNode, i){
     //self diff
     var owner = properties[visitNode].owner;
     var self_Importance = properties[visitNode].rating[owner];
+
     var currentRating = properties[i].rating[owner];
+
     var diff = currentRating - self_Importance;
 
     //other diff
