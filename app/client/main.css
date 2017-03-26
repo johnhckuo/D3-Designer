@@ -383,8 +383,8 @@ input[type="range"]::-webkit-slider-thumb:active{
   transform: translateY(0vh);
 
 }
-
 /*
+
 .empowerment{
   display:flex;
   justify-content: center;
@@ -491,4 +491,69 @@ input[type="range"]::-webkit-slider-thumb:active{
   height: 100px;
   width: 100px;
   background: #000;
-}*/
+}
+*/
+
+.green_btn {
+    font-family: "franklin-gothic-urw-comp", "sans-serif";
+    font-size: 15px;
+    font-weight: normal;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px 7px;
+    text-decoration: none;
+    background: -moz-linear-gradient( center top, #a0d354 13%, #97C74F 28%, #7aa23f 92% );
+    background: -ms-linear-gradient( top, #a0d354 13%, #97C74F 28%, #7aa23f 92% );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a0d354', endColorstr='#7aa23f');
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(13%, #a0d354), color-stop(92%, #7aa23f) );
+    background-color: #a0d354;
+    color: #ffffff;
+    display: inline-block;
+}
+
+.red_btn {
+    font-size: 15px;
+    font-family: "franklin-gothic-urw-comp", "sans-serif";
+    font-weight: normal;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px 7px;
+    text-decoration: none;
+    background: -moz-linear-gradient( center top, #d0104d 5%, #CB1B45 15%,#9f353a 100% );
+    background: -ms-linear-gradient( top, #d0104d 5%, #CB1B45 15%, #9f353a 100% );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0104d', endColorstr='#9f353a');
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(5%, #d0104d), color-stop(100%, #9f353a) );
+    background-color: #d0104d;
+    color: #ffffff;
+    display: inline-block;
+}
+
+.line_input{
+    height: 25px; 
+    width: 80%; 
+    background-color: transparent;  
+    border-style: solid;  
+    border-width: 0px 0px 1px 0px;  
+    border-color: #7DB9DE; 
+    color:#ffffff;
+    outline:0; 
+}
+
+.configuration_font {
+    font-size: 25px;
+    font-family: "franklin-gothic-urw-comp", "sans-serif";
+    font-weight: normal;
+    color: #7DB9DE;
+}
+
+.configuration_font_white {
+    font-size: 25px;
+    font-family: "franklin-gothic-urw-comp", "sans-serif";
+    font-weight: normal;
+    color: #E7E6E6;
+}
+
+
+
