@@ -22,9 +22,9 @@
           <!-- <li class="b1"><a href="/aboutus">D3 Accelerator</a></li> -->
           <li class="b2"><a href="/">Home</a></li>
           <li class="b3"><a href="/update">Intro.</a></li>
-          <li class="b4"><a href="/switch">Flow</a></li>
+          <li class="b4"><a href="/flow">Flow</a></li>
           <li class="b4"><a href="/empowerment">Empowerment</a></li>
-          <li class="b5"><a href="/switch">About Us</a></li>
+          <li class="b5"><a href="/configuration">Configuration</a></li>
         </ul>
       </div>
     </div>
@@ -35,7 +35,7 @@
 </template>
 
 <template name="figure">
-  <figure style={{style}}>{{value}}</figure>
+  <figure style={{style}}>{{{value}}}</figure>
 </template>
 
 <template name="footer">
@@ -44,15 +44,47 @@
   </div>
 </template>
 
+<template name="property">
+  <div class={{className}}>
+    <h2>{{stakeholder}}</h2>
+    <hr>
+    {{#each detail}}
+
+    <div class="empowerContent">
+      <div class="panelContainer {{propertyClass}}">
+          <label for="disabledTextInput">{{name}}</label>
+          <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
+          <button type="button" class="btn btn-danger" id='removeProperty' name="button">Remove</button>
+      </div>
+    </div>
+    {{/each}}
+    <button type="button" class="btn btn-primary" id="newProperty" name="button">New</button>
+    <button name="button" class="btn btn-info" id="empowerTest">Calculate</button>
+    <button name="button" class="btn btn-info" id="next">Next</button>
+
+  </div>
+
+</template>
+
+<!-- <template name="newProperty">
+
+      <label for="disabledTextInput">{{name}}</label>
+      <label for="disabledTextInput">{{owner}}</label>
+      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
+
+</template> -->
+
 <!--
 *************************
 *        Modules        *
 *************************
 -->
 
+
+
 <template name="empowerment">
   {{> header}}
-  <div class="empowerment">
+  <!-- <div class="empowerment">
     <section class="empowermentContainer">
         <div id="carousel">
           {{#each figures}}
@@ -68,10 +100,160 @@
         </p>
 
       </section>
-  </div>
+  </div> -->
+    <div class="leftPanel">
+      {{> configuration}}
+    </div>
+
+    <div class="empowerment">
+
+      {{#each properties}}
+        {{> property}}
+      {{/each}}
+
+    </div>
+    <div class="hiddenDIV">
+      <!-- {{#each newProperties}}
+        {{> newProperty}}
+      {{/each}} -->
+    </div>
 </template>
 
 <template name="flow">
+  <div class="container">
+    <p class="activity_selected">activity 1</p><br>
+    <p>Identifying Variability and Setting Strategy</p>
+    <div id="tableContainer" class="flexbox">
+
+    <div id="table_v" class="variability_Identifier_table">
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Variability Type</th>
+          <th>the condition of sub-service</th>
+          <th>Band Degree</th>
+          <th>Weight</th>
+          <th>Important Degree</th>
+          <th>Recommended Strategy</th>
+          <th><span class="table-add glyphicon glyphicon-plus"></span></th>
+        </tr>
+        </thead>
+
+
+        <!--dynamic rows-->
+        <tr class="hide">
+          <td>
+            <select class="v_type form-control input-sm">
+              <option value="V1">Arrival variability</option>
+              <option value="V2">Request variability</option>
+              <option value="V3">Capability variability</option>
+              <option value="V4">Effort variability</option>
+              <option value="V5">Subjective preference variability</option>
+            </select>
+          </td>
+
+          <!--sub-service-->
+          <td><input type="text" class="sub_service form-control input-sm"></td>
+
+          <!--Band degree-->
+          <td>
+            <input type="range" class="b_degree" min="0" max="20" step="1" value="10">
+          </td>
+
+          <!--weight-->
+          <td>
+            <select class="weight form-control input-sm">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </td>
+          <!--importance degree-->
+          <td><p class="i_degree">5</p></td>
+          <!--recommeddend-->
+          <td><p class="re_strategy">LCA > UR > CR</p></td>
+          <!--deleteRow-->
+          <td>
+              <span class="table-remove glyphicon glyphicon-remove"></span>
+          </td>
+          <td>
+              <span class="table-lookup glyphicon glyphicon-edit"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <br>
+
+    <div>
+      <span class="element_arrow glyphicon glyphicon-arrow-right"></span>
+    </div>
+
+    <div id="table_f" class="fulfillment_table">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Flow Elements</th>
+          <th>Degree of Flow Elements Fulfillment</th>
+          <th>Complexity of interaction</th>
+          <th>Cost of designing</th>
+          <th><span class="f_table-add glyphicon glyphicon-plus"></span></th>
+        </tr>
+      </thead>
+        <!-- <tr class=f1>
+          <td>
+            <select class="f_element form-control input-sm">
+              <option>validation</option>
+              <option>self service</option>
+              <option>anytime service</option>
+            </select>
+          </td>
+          <td><input type="range" class="f_degree" min="0" max="100" step="1" value="50"></td>
+          <td><input type="range" class="c_degree" min="0" max="100" step="1" value="50"></td>
+          <td><span class="f_table-remove glyphicon glyphicon-remove"></span></td>
+        </tr> -->
+        <tbody>
+        <tr class="hide">
+          <td>
+            <select class="f_element form-control input-sm">
+              <option>validation</option>
+              <option>self service</option>
+              <option>anytime service</option>
+            </select>
+          </td>
+          <td><input type="range" class="f_degree" min="0" max="100" step="1" value="0"></td>
+          <td><input type="range" class="c_degree" min="0" max="100" step="1" value="0"></td>
+          <td><input type="range" class="individual_cost" min="0" max="100" step="50" value="0"></td>
+          <td><span class="f_table-remove glyphicon glyphicon-remove"></span></td>
+        </tr>
+      </tbody>
+      </table>
+      <button id="cal-btn" class="btn btn-primary">save</button>
+    </div>
+  </div> <!--ene of table flexbox-->
+
+    <br>
+
+    <div id="C_Container" class="flexbox">
+    <div class="plan plan-highlight">
+      <h3 class="plan-title"  align="center" >LFEL( )</h3>
+      <p id="LFEL" class="LFEL_score"  align="center">0</p>
+    </div>
+
+    <!-- <div class="plan plan-highlight2">
+      <h3 class="plan-title" align="center">Cost</h3>
+      <p id="cost" class="Cost"></p>
+      <input type="range" class="cost_degree" min="0" max="100" step="50" value="0">
+    </div> -->
+    </div>
+    <br>
+
+    <button id="export-btn" class="btn btn-primary">Export Data(Test)</button>
+    <p id="export"></p>
+
+  </div> <!--ene of container-->
 
 </template>
 
@@ -112,7 +294,6 @@
       </section>
 
       <section id="options">
-
         <p id="show-buttons">
           <button class="show-front">Show 1</button>
           <button class="show-back">Show 2</button>
@@ -121,8 +302,6 @@
           <button class="show-top">Show 5</button>
           <button class="show-bottom">Show 6</button>
         </p>
-
-
       </section>
     <!-- <div>
       <img id=logo src="/images/temp_second_left.png" height="500px">
@@ -138,6 +317,7 @@
 </template>
 
 <template name="configuration">
+  {{> header}}
     <link rel="stylesheet" href="jquery-ui.min.css">
     <link rel="stylesheet" href="configure.css">
     <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -172,6 +352,7 @@
     <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
 
     </div>
+
 </template>
 
 <template name="manage">

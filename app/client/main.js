@@ -1,9 +1,11 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+import './flow.js';
 import './main.html';
 import './empowerment.js';
 import './configuration.js';
+
 var flag = false;
 var duration = 200;
 
@@ -25,37 +27,58 @@ var onButtonClick = function( className ){
 
 if (Meteor.isClient) {
 
-  ////////////////////
-  //                //
-  //     Event      //
-  //                //
-  ////////////////////
+    ////////////////////
+    //                //
+    //     Event      //
+    //                //
+    ////////////////////
 
-  Template.index.events({
-    'click .show-front': function (e) {
-      onButtonClick("show-front");
-    },
-    'click .show-back': function (e) {
-      onButtonClick("show-back");
-    },
-    'click .show-right': function (e) {
-      onButtonClick("show-right");
-    },
-    'click .show-left': function (e) {
-      onButtonClick("show-left");
-    },
-    'click .show-top': function (e) {
-      onButtonClick("show-top");
-    },
-    'click .show-bottom': function (e) {
-      onButtonClick("show-bottom");
-    },
-  });
+    Template.index.events({
+      'click .show-front': function (e) {
+        onButtonClick("show-front");
+      },
+      'click .show-back': function (e) {
+        onButtonClick("show-back");
+      },
+      'click .show-right': function (e) {
+        onButtonClick("show-right");
+      },
+      'click .show-left': function (e) {
+        onButtonClick("show-left");
+      },
+      'click .show-top': function (e) {
+        onButtonClick("show-top");
+      },
+      'click .show-bottom': function (e) {
+        onButtonClick("show-bottom");
+      },
+    });
+
+    Template.configuration.events({
+        'click #submit ': function (e) {
+            properties = property;
+            stakeholders = nodes;
+        },
+
+    });
+
+    ////////////////////
+    //                //
+    //    Helpers     //
+    //                //
+    ////////////////////
+
 
 
 
 
 }
+
+////////////////////
+//                //
+//     init       //
+//                //
+////////////////////
 
 window.onload = function(){
 
@@ -72,7 +95,7 @@ window.onload = function(){
           },duration);
         }
         flag = false;
-
+        alert(gg);
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){
@@ -87,5 +110,4 @@ window.onload = function(){
       }
 
     });
-
 }

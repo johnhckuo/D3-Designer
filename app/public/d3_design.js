@@ -24,6 +24,7 @@ var consensus_level = 0,
 //#endregion 
 
 d3.select('body').style('background-color', '#E7E6E6');
+
 var svg_container = d3.select('#full_container').append('div')
                                                 .attr('id', 'svg_container')
                                                 .style({
@@ -58,6 +59,7 @@ var borderPath = svg.append("rect")
                     .style("stroke", bordercolor)
                     .style("fill", "none")
                     .style("stroke-width", border);
+
 var nodes = [], links = [], property = [];
 
 //var nodes = [
@@ -87,6 +89,7 @@ var nodes = [], links = [], property = [];
 //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
 //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
 //];
+
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
@@ -600,7 +603,7 @@ function save_property(_owner) {
             var new_property = { id: _id, name: _name, rating: [], owner: _owner, averageImportance: 0 };
             property.push(new_property);
             max++;
-        }    
+        }
     }
 }
 
@@ -687,7 +690,7 @@ function stakeholder_save(_index, _x, _y, edit_type) {
                 var node = { id: _id, name: _name, benefit: 0 };
                 node.x = _x;
                 node.y = _y;
-                nodes.push(node);                
+                nodes.push(node);
             }
             save_property(_id);
             $('#stakeholder_name').val('');

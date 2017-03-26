@@ -19,6 +19,13 @@ function set_trend() {
          .style('margin-left','5px')
          .attr('id', 'get_trend');
 
+
+
+     trend.append('input')
+          .attr('type', 'button')
+          .attr('value', 'submit')
+          .attr('id', 'submit');
+
     trend.append('table')
           .attr('id', 'trend_content')
           .attr('border', 1)
@@ -26,7 +33,7 @@ function set_trend() {
           .style('display', 'none');
 }
 
-//¤å¦r´«¦æ
+//ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
 function wrap(text, width) {
     text.each(function () {
         var text = d3.select(this),
