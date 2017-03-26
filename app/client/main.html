@@ -20,11 +20,11 @@
           <li class="logo"><img id=logo src="/images/logo_thin.png" width="80px" ></li>
           <li class="b1"><img id=logo_words src="/images/logo_words thin.png" width="300px" ></li>
           <!-- <li class="b1"><a href="/aboutus">D3 Accelerator</a></li> -->
-          <li class="b2"><a href="/manage">Home</a></li>
+          <li class="b2"><a href="/">Home</a></li>
           <li class="b3"><a href="/update">Intro.</a></li>
           <li class="b4"><a href="/flow">Flow</a></li>
           <li class="b4"><a href="/empowerment">Empowerment</a></li>
-          <li class="b5"><a href="/switch">About Us</a></li>
+          <li class="b5"><a href="/configuration">Configuration</a></li>
         </ul>
       </div>
     </div>
@@ -34,11 +34,45 @@
 
 </template>
 
+<template name="figure">
+  <figure style={{style}}>{{{value}}}</figure>
+</template>
+
 <template name="footer">
   <div class="">
     Copyright (c) 2017 Copyright Holder All Rights Reserved.
   </div>
 </template>
+
+<template name="property">
+  <div class={{className}}>
+    <h2>{{stakeholder}}</h2>
+    <hr>
+    {{#each detail}}
+
+    <div class="empowerContent">
+      <div class="panelContainer {{propertyClass}}">
+          <label for="disabledTextInput">{{name}}</label>
+          <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
+          <button type="button" class="btn btn-danger" id='removeProperty' name="button">Remove</button>
+      </div>
+    </div>
+    {{/each}}
+    <button type="button" class="btn btn-primary" id="newProperty" name="button">New</button>
+    <button name="button" class="btn btn-info" id="empowerTest">Calculate</button>
+    <button name="button" class="btn btn-info" id="next">Next</button>
+
+  </div>
+
+</template>
+
+<!-- <template name="newProperty">
+
+      <label for="disabledTextInput">{{name}}</label>
+      <label for="disabledTextInput">{{owner}}</label>
+      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
+
+</template> -->
 
 <!--
 *************************
@@ -46,8 +80,43 @@
 *************************
 -->
 
-<template name="empowerment">
 
+
+<template name="empowerment">
+  {{> header}}
+  <!-- <div class="empowerment">
+    <section class="empowermentContainer">
+        <div id="carousel">
+          {{#each figures}}
+            {{> figure}}
+          {{/each}}
+        </div>
+      </section>
+
+      <section id="options">
+        <p id="navigation">
+          <div id="previous">Previous</div>
+          <div id="next">Next</div>
+        </p>
+
+      </section>
+  </div> -->
+    <div class="leftPanel">
+      {{> configuration}}
+    </div>
+
+    <div class="empowerment">
+
+      {{#each properties}}
+        {{> property}}
+      {{/each}}
+
+    </div>
+    <div class="hiddenDIV">
+      <!-- {{#each newProperties}}
+        {{> newProperty}}
+      {{/each}} -->
+    </div>
 </template>
 
 <template name="flow">
@@ -210,17 +279,80 @@
   <div class="rectangle" id="rectangle2"></div>
 
   <div class="second layout flexbox">
-    <div>
+
+
+      <section class="boxContainer">
+        <!-- <div id="cube" class="show-front panels-backface-invisible"> -->
+        <div id="cube" class="show-front">
+          <figure class="front">1</figure>
+          <figure class="back">2</figure>
+          <figure class="right">3</figure>
+          <figure class="left">4</figure>
+          <figure class="top">5</figure>
+          <figure class="bottom">6</figure>
+        </div>
+      </section>
+
+      <section id="options">
+        <p id="show-buttons">
+          <button class="show-front">Show 1</button>
+          <button class="show-back">Show 2</button>
+          <button class="show-right">Show 3</button>
+          <button class="show-left">Show 4</button>
+          <button class="show-top">Show 5</button>
+          <button class="show-bottom">Show 6</button>
+        </p>
+      </section>
+    <!-- <div>
       <img id=logo src="/images/temp_second_left.png" height="500px">
     </div>
     <div>
       <img id=logo src="/images/temp_second_right.png" height="500px">
-    </div>
+    </div> -->
   </div>
 
   <div class="third layout">
   </div>
   {{> footer}}
+</template>
+
+<template name="configuration">
+  {{> header}}
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="configure.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="element_setting.js"></script>
+    <script src="d3_design.js"></script>
+    <div id="full_container" style="width:1400px; height:700px;">
+    </div>
+    <div class="stakeholder_creater container_hidden" style="align-content:center;">
+        <!--<table>
+            <tr>
+                <td>
+                    <label for="stakeholder_name">Name:</label>
+                </td>
+                <td>
+                    <input type="text" id="stakeholder_name" name="stakeholder_name" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="benefit_score">Benefit Score:</label>
+                </td>
+                <td>
+                    <label id="benefit_score"></label>
+                </td>
+            </tr>
+        </table>-->
+    </div>
+    <div class="stakeholder_delete container_hidden"  style="align-content:center;">
+    </div>
+    <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
+
+    </div>
+
 </template>
 
 <template name="manage">
