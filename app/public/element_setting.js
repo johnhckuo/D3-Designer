@@ -14,10 +14,11 @@ function set_trend() {
 
     trend.append('input')
          .attr('type', 'button')
-         .attr('value', 'search')
+         .attr('value', 'SEARCH')
          .attr('class', 'trend_button')
-         .attr('id', 'get_trend')
-    ;//.attr('onclick', 'search_trend("' + $('#keyword').val() + '" ,"search_bar");');
+         .attr('class', 'green_btn')
+         .style('margin-left','5px')
+         .attr('id', 'get_trend');
 
     trend.append('table')
           .attr('id', 'trend_content')

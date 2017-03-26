@@ -13,14 +13,15 @@ path.link.draw_line {
     }
 div.interaction_container {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 35em;
-    height: 18em;
-    margin-top: -9em; /*set to a negative number 1/2 of your height*/
-    margin-left: -15em; /*set to a negative number 1/2 of your width*/
-    border: 1px solid #ccc;
-    background-color: #f3f3f3;
+    top: 25%;
+    left: 20%;
+    width: 60%;
+    height: 50%;
+    background: -moz-linear-gradient( center top, #046874 5%,#0D5661 50%, #03353D 100% );
+    background: -ms-linear-gradient( top, #046874 5%,#0D5661 50%, #03353D 100%  );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#046874', endColorstr='#03353D');
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(5%, #046874), color-stop(100%, #03353D) );
+    background-color: #046874;
 }
 
 div.stakeholder_creater{
@@ -32,7 +33,11 @@ div.stakeholder_creater{
     margin-top: -9em; /*set to a negative number 1/2 of your height*/
     margin-left: -15em; /*set to a negative number 1/2 of your width*/
 	align-content:center; 
-    background-color: #f3f3f3;
+    background: -moz-linear-gradient( center top, #046874 5%,#0D5661 50%, #03353D 100% );
+    background: -ms-linear-gradient( top, #046874 5%,#0D5661 50%, #03353D 100%  );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#046874', endColorstr='#03353D');
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(5%, #046874), color-stop(100%, #03353D) );
+    background-color: #046874;
 }
 
 div.stakeholder_delete{
@@ -56,8 +61,27 @@ div.interaction_container_hidden{
 }
 
 table.interaction_container {
-    margin: auto;
-    width: 25em;
-    height: 18em;
+    width:90%;
+    height:90%;
+    margin-left:5%;
+    margin-top:2.5%;
     border: 1px solid #ccc;
 }
+    table.interaction_container.td {
+        valign="middle";
+    }
+
+table.property_container{
+    width:100%;
+}
+
+table.container_table{
+    width:90%;
+    height:90%;
+    margin-left:5%;
+    margin-top:2.5%;
+    border: 1px solid #ccc;
+}
+    table.container_table.td {
+        valign="middle";
+    }

@@ -19,6 +19,7 @@ var dialog_control;
 var consensus_level = 0,
     empowerment = 0,
     flow = 0;
+
 //#endregion 
 var svg_container = d3.select('#full_container').append('div')
                                                 .attr('id', 'svg_container')
@@ -254,44 +255,61 @@ function cretae_interaction_container(link) {
                          .attr('class', 'interaction_container');
     var thead = table.append('thead').append('tr');
     var controller = thead.append('th')
-                         .text('interaction')
-                         .style('width', '20%');
-    controller.append('input')
-                         .attr('type', 'button')
-                         .attr('value', '+')
-                         .attr('onclick', 'add_interaction()')
-    controller.append('input')
-                         .attr('type', 'button')
-                         .attr('value', 'flow')
-                         .attr('onclick', 'flow_adjust()');
+                          .attr('colspan', 5)
+                          .text('INTERACTION ' + link.source.name + ' & ' + link.target.name)
+                          .attr('class', 'configuration_font')
+                          .style('font-size', '35px')
+                          .style('text-align', 'left')
+                          .style('width', '100%');
 
-    thead.append('th').text(link.source.name).style('width', '30%');
-    thead.append('th').text(link.source.name + "'s affect").style('width', '10%');
-    thead.append('th').text(link.target.name).style('width', '30%');
-    thead.append('th').text(link.target.name + "'s affect").style('width', '10%');
+    thead = table.append('thead').append('tr').style('height','25px');
+    controller = thead.append('th')
+                      .text('ACTIVITY')
+                      .attr('class', 'configuration_font_white');
+
+    controller.append('input')
+                         .attr('type', 'button')
+                         .attr('value', 'ADD')
+                         .attr('class', 'green_btn')
+                         .attr('onclick', 'add_interaction()')
+    //controller.append('input')
+    //                     .attr('type', 'button')
+    //                     .attr('value', 'FLOW')
+    //                     .attr('class', 'green_btn')
+    //                     .attr('onclick', 'flow_adjust()');
+
+    thead.append('th').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
+    thead.append('th').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
+    thead.append('th').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
+    thead.append('th').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
 
     var tbody = table.append('tbody').attr('id', 'item');;
     for (i = 0; i < link.interaction.length; i++) {
         var tr = tbody.append('tr');
         tr.append('td').append('input')
                           .attr('type', 'text')
+                          .attr('class', 'line_input')
                           .attr('id', 'interaction' + (i + 1))
                           .attr('value', link.interaction[i].name);
         tr.append('td').append('input')
                           .attr('type', 'text')
+                          .attr('class', 'line_input')
                           .attr('id', 'give' + (i + 1))
                           .attr('value', link.interaction[i].give);
         tr.append('td').append('input')
                        .attr('type', 'text')
+                       .attr('class', 'line_input')
                        .attr('id', 'source_affect' + (i + 1))
                        .attr('value', link.interaction[i].source_affect)
                        .attr('size', '2');
         tr.append('td').append('input')
                           .attr('type', 'text')
+                          .attr('class', 'line_input')
                           .attr('id', 'receive' + (i + 1))
                           .attr('value', link.interaction[i].receive);
         tr.append('td').append('input')
                        .attr('type', 'text')
+                       .attr('class', 'line_input')
                        .attr('id', 'target_affect' + (i + 1))
                        .attr('value', link.interaction[i].target_affect)
                        .attr('size', '2');
@@ -322,12 +340,14 @@ function interaction_control() {
                .attr('type', 'button')
                .attr('value', 'OK')
                .attr('alt', '')
+               .attr('class', 'green_btn')
                .attr('onclick', 'save_interaction("save");');
 
     control_row.append('input')
                .attr('type', 'button')
                .attr('value', 'Cancel')
                .attr('alt', '')
+               .attr('class', 'red_btn')
                .attr('onclick', 'save_interaction("no");');
 }
 
@@ -412,11 +432,13 @@ function stakeholder_delete() {
     td.append('input')
       .attr('type', 'button')
       .attr('value', 'OK')
+      .attr('class', 'green_btn')
       .attr('onclick', 'stakeholder_delete_checked();');
 
     td.append('input')
       .attr('type', 'button')
       .attr('value', 'Cancel')
+      .attr('class', 'red_btn')
       .attr('onclick', "d3.select('div.stakeholder_delete').classed('container_hidden', true);");
 }
 
@@ -477,14 +499,19 @@ function add_stakeholder(_index, _x, _y, edit_type) {
     stakeholder_creater.html('');
     stakeholder_creater.classed('container_hidden', false);
     var table = stakeholder_creater.append('table')
-                                   .style('width', '500px');
+                                   .attr('class', 'container_table');
+                                   
     var tr;
     tr = table.append('tr');
-    tr.append('td').html('Name:');
-    var stackholder_name = tr.append('td')
-                             .append('input')
-                             .attr('type', 'text')
-                             .attr('id', 'stakeholder_name');
+    tr.append('td').html('Name:')
+                   .attr('class', 'configuration_font');
+    
+    var td = tr.append('td');
+    td.append('input')
+      .attr('type', 'text')
+      .attr('class', 'line_input')
+      .attr('id', 'stakeholder_name');
+    
     if (edit_type != 'add') {
         nodes.filter(function (d, i) {
             if (d.id == _index) {
@@ -492,22 +519,23 @@ function add_stakeholder(_index, _x, _y, edit_type) {
                 benefit_score = d.benefit;
             }
         });
-        tr.append('td').html('Benefit score');
-        tr.append('td').html(benefit_score);
         tr.append('td').append('input')
                        .attr('type', 'button')
-                       .attr('value', 'delete')
-                       .attr('onclick', 'stakeholder_delete(' + _index + ');');
+                       .attr('value', 'DELETE')
+                       .attr('class', 'red_btn')
+                       .attr('onclick', 'stakeholder_delete("' + _index + '");');
     }
 
     tr = table.append('tr');
-    property_table = tr.append('td').attr('colspan', 5)
+    property_table = tr.append('td').attr('colspan', 3)
                        .append('table').attr('class', 'property_container');
     var property_tr = property_table.append('tr');
-    property_tr.append('td').html('property');
-    property_tr.append('td').append('input')
+    property_tr.append('td').html('PROPERTY:').attr('class', 'configuration_font').style('width','10%');
+    property_tr.append('td').style('width', '90%')
+                            .append('input')
                             .attr('type', 'button')
-                            .attr('value', 'add')
+                            .attr('value', 'ADD')
+                            .attr('class', 'green_btn')
                             .attr('onclick', 'add_property("add");');
 
     if (edit_type != 'add') {
@@ -515,16 +543,19 @@ function add_stakeholder(_index, _x, _y, edit_type) {
     }
 
     tr = table.append('tr');
-    var td = tr.append('td').attr('colspan', 5)
-                            .style('text-align', 'center');
-    td.append('input')
-      .attr('type', 'button')
-      .attr('value', 'OK')
-      .attr('onclick', 'stakeholder_save(' + _index + ',  ' + _x + ',' + _y + ' ,"' + edit_type + '");');
+    tr.append('td').attr('colspan',2).html('BENEFIT SCORE:' + benefit_score).attr('class', 'configuration_font').style('text-align', 'center');
+    td = tr.append('td').style('text-align', 'left');
 
     td.append('input')
       .attr('type', 'button')
-      .attr('value', 'Cancel')
+      .attr('value', 'DONE')
+      .attr('class', 'green_btn')
+      .attr('onclick', 'stakeholder_save("' + _index + '",  ' + _x + ',' + _y + ' ,"' + edit_type + '");');
+
+    td.append('input')
+      .attr('type', 'button')
+      .attr('value', 'CANCEL')
+      .attr('class', 'red_btn')
       .attr('onclick', "d3.select('div.stakeholder_creater').classed('container_hidden', true);");
 
 }
@@ -587,10 +618,12 @@ function add_property(_type) {
     property_table = d3.select('table.property_container');
     var input_index = property_table[0][0].childNodes.length;
     var property_tr = property_table.append('tr');
-    var property_td = property_tr.append('td').attr('colspan', 2);
+    property_tr.append('td');
+    var property_td = property_tr.append('td').style('text-align', 'right');
 
     property_td.append('input')
                .attr('type', 'text')
+               .attr('class', 'line_input')
                .attr('id', 'property_name_' + input_index);
     property_td.append('input')
            .attr('type', 'hidden')
@@ -599,7 +632,8 @@ function add_property(_type) {
 
     property_td.append('input')
                .attr('type', 'button')
-               .attr('value', 'Delete')
+               .attr('value', 'DELETE')
+               .attr('class', 'red_btn')
                .attr('onclick', 'delete_property(' + input_index + ')');
     return (input_index);
 }
