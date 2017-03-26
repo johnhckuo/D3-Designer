@@ -24,7 +24,7 @@
           <li class="b3"><a href="/update">Intro.</a></li>
           <li class="b4"><a href="/switch">Flow</a></li>
           <li class="b4"><a href="/empowerment">Empowerment</a></li>
-          <li class="b5"><a href="/switch">About Us</a></li>
+          <li class="b5"><a href="/configuration">Configuration</a></li>
         </ul>
       </div>
     </div>
@@ -51,23 +51,36 @@
     {{#each detail}}
 
     <div class="empowerContent">
-      <div class="">
-          <input type="text" name="" value={{name}} size="6">
-          <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#f22 0%,#f22 {{value}}%,#fff {{value}}%, #fff 100%);">
+      <div class="panelContainer {{propertyClass}}">
+          <label for="disabledTextInput">{{name}}</label>
+          <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
+          <button type="button" class="btn btn-danger" id='removeProperty' name="button">Remove</button>
       </div>
     </div>
     {{/each}}
-    <button name="button" id="next">YO</button>
+    <button type="button" class="btn btn-primary" id="newProperty" name="button">New</button>
+    <button name="button" class="btn btn-info" id="empowerTest">Calculate</button>
+    <button name="button" class="btn btn-info" id="next">Next</button>
 
   </div>
 
 </template>
+
+<!-- <template name="newProperty">
+
+      <label for="disabledTextInput">{{name}}</label>
+      <label for="disabledTextInput">{{owner}}</label>
+      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
+
+</template> -->
 
 <!--
 *************************
 *        Modules        *
 *************************
 -->
+
+
 
 <template name="empowerment">
   {{> header}}
@@ -88,11 +101,21 @@
 
       </section>
   </div> -->
+    <div class="leftPanel">
+      {{> configuration}}
+    </div>
+
     <div class="empowerment">
+
       {{#each properties}}
         {{> property}}
       {{/each}}
 
+    </div>
+    <div class="hiddenDIV">
+      <!-- {{#each newProperties}}
+        {{> newProperty}}
+      {{/each}} -->
     </div>
 </template>
 
@@ -160,6 +183,7 @@
 </template>
 
 <template name="configuration">
+  {{> header}}
     <link rel="stylesheet" href="jquery-ui.min.css">
     <link rel="stylesheet" href="configure.css">
     <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -194,6 +218,7 @@
     <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
 
     </div>
+
 </template>
 
 <template name="manage">

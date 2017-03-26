@@ -1,5 +1,6 @@
 
 Template.configuration.events({
+
     'click .trend_button ': function (e) {
         e.preventDefault();
         var _keyword;

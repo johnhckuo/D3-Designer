@@ -16,7 +16,13 @@ function set_trend() {
          .attr('type', 'button')
          .attr('value', 'search')
          .attr('class', 'trend_button')
-         .attr('id', 'get_trend')
+         .attr('id', 'get_trend');
+
+
+     trend.append('input')
+          .attr('type', 'button')
+          .attr('value', 'submit')
+          .attr('id', 'submit')
     ;//.attr('onclick', 'search_trend("' + $('#keyword').val() + '" ,"search_bar");');
 
     trend.append('table')
@@ -26,7 +32,7 @@ function set_trend() {
           .style('display', 'none');
 }
 
-//¤å¦r´«¦æ
+//ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½
 function wrap(text, width) {
     text.each(function () {
         var text = d3.select(this),

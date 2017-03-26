@@ -52,6 +52,14 @@ if (Meteor.isClient) {
       },
     });
 
+    Template.configuration.events({
+        'click #submit ': function (e) {
+            properties = property;
+            stakeholders = nodes;
+        },
+
+    });
+
     ////////////////////
     //                //
     //    Helpers     //
@@ -72,9 +80,6 @@ if (Meteor.isClient) {
 
 window.onload = function(){
 
-
-    updateAverageImportance();
-    startMatching();
 
 
     $(document).scroll(function() {

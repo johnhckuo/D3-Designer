@@ -257,11 +257,10 @@ body{
 
 .empowerment > div{
   position: absolute;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 
+  flex-direction: column;
+  padding:50px;
+  padding-top:100px;
   width:30vw;
   height:100%;
   background: #0D5661;
@@ -272,6 +271,21 @@ body{
 
 .empowerPanel{
   transform: translateX(30vw);
+  top:100px;
+}
+
+.panelContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.panelContainer *{
+    margin-top:30px;
+    margin-right:15px;
+
 }
 
 /*.empower_transition{
@@ -288,9 +302,27 @@ body{
 }
 
 
-.empowermentContent{
+.empowerContent{
   color: #7D89DE;
-  font-size: xx-large;
+  font-size: medium;
+}
+
+.empowerContent input{
+  margin-bottom: 15px;
+  color: black;
+}
+
+.empowerContent label{
+  margin-bottom: 15px;
+  color: black;
+}
+
+.empowerContent button{
+  margin-bottom: 15px;
+}
+
+.empowerment button{
+  color: black;
 }
 
 input[type="range"]{
@@ -307,7 +339,7 @@ input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance: none;
   width:10px;
   height:10px;
-  background:#f22;
+  background:#7D89DE;
   border-radius:50%;
   transition:.1s;
 }
@@ -316,6 +348,40 @@ input[type="range"]::-webkit-slider-thumb:hover,
 input[type="range"]::-webkit-slider-thumb:active{
   width:16px;
   height:16px;
+}
+
+.empowermentContent input{
+  display: inline-block;
+  color:black;
+}
+
+/*for DEMO */
+
+#empowerTest{
+  position: relative;
+  margin-top: 5px;
+}
+#full_container{
+  position: absolute;
+    top:200px;
+
+}
+.hiddenDIV{
+  position: relative;
+  background-color: rgba(0,0,0,0.8);
+  width:50vw;
+  height:50vh;
+  margin-left: auto;
+  margin-right: auto;
+  top:20vh;
+  transition: all 1s;
+  transform: translateY(100vh);
+  z-index: 100;
+}
+
+.displayNewProperty{
+  transform: translateY(0vh);
+
 }
 
 /*
