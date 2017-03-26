@@ -1,13 +1,12 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-
+import './flow.js';
 import './main.html';
-import './empowerment.html';
+
 var flag = false;
 var duration = 200;
 
 window.onload = function(){
-
     $(document).scroll(function() {
       if ($(document).scrollTop() > $(window).innerHeight()) {
         $(".header").addClass("smallheader");
@@ -21,7 +20,7 @@ window.onload = function(){
           },duration);
         }
         flag = false;
-
+        alert(gg);
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){
@@ -34,7 +33,5 @@ window.onload = function(){
         }
         flag = true;
       }
-      $("")
     });
-
 }
