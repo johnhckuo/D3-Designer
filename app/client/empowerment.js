@@ -3,7 +3,7 @@ var empowerScore, panelCount;
 
 empowerment_stakeholders = [];
 empowerment_properties = [];
-
+empowerment_links = [];
 
 ////////////////////
 //                //
@@ -17,7 +17,7 @@ var visitedCount;  //in order to ignore the rest of the array elem
 var actualVisitIndex = [];
 var origin;
 
-dataReset = function(){
+var dataReset = function(){
     for (var i = 0 ; i< empowerment_properties.length; i++){
         empowerment_properties[i].rating = [];
         empowerment_properties[i].averageImportance = 0;
@@ -27,21 +27,80 @@ dataReset = function(){
     actualVisitIndex = [];
 }
 
-onNavButtonClick = function( increment ){
-    var carousel = $('#carousel');
+var rangeElementBG = function(n, target){
 
-    theta += ( 360 / empowerment_stakeholders.length ) * increment * -1;
-    carousel.css('transform', 'rotateY(' + theta + 'deg)');
-};
+    target.css({
+      'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
+    });
+}
 
-importanceCalculator = function(){
+// onNavButtonClick = function( increment ){
+//     var carousel = $('#carousel');
+//
+//     theta += ( 360 / empowerment_stakeholders.length ) * increment * -1;
+//     carousel.css('transform', 'rotateY(' + theta + 'deg)');
+// };
+
+var updateLink = function(){
+    var newLink = [];
+    var visitedOwner = [];
+    var visitedPropertyName = [];
+
+    //get property owner and name
+    for (var i = 0 ; i< visitedProperty.length ; i++){
+
+
+        for (var j = 0 ; j < empowerment_properties.length; j++){
+            if (visitedProperty[i].id == empowerment_properties[j].id){
+                visitedPropertyName.push(empowerment_properties[j].name);
+                visitedOwner.push(empowerment_properties[j].owner);
+            }else{
+                alert("An error has occured in finding property owner & name");
+            }
+        }
+    }
+
+    console.log(visitedProperty);
+    console.log(visitedPropertyName);
+    console.log(visitedOwner);
+
+    for (var i = 0 ; i < visitedProperty.length-1 ; i++){
+
+        var interaction = [];
+
+        interaction.push({
+            'name': 'system matchmaking',
+            'give': visitedPropertyName[i],
+            'source_affect': 0,
+            'receive': 'none',
+            'target_affect': 0
+        });
+
+        newLink.push({
+            'source': visitedOwner[i],
+            'target': visitedOwner[i+1],
+            'interaction': interaction
+        });
+
+    }
+
+    console.log(newLink);
+}
+
+
+var importanceCalculator = function(){
 
 
 
 
 }
 
-updateAverageImportance = function(){
+
+
+
+/* ----- Matchmaking Functions ----- */
+
+var updateAverageImportance = function(){
     for (var i = 0 ; i < empowerment_properties.length ; i++){
         var importance = 0;
         for (var j = 0 ; j < empowerment_properties[i].rating.length; j++){
@@ -57,7 +116,7 @@ updateAverageImportance = function(){
 
 }
 
-sort = function(list){
+var sort = function(list){
   //selection sort
 
     for (var i=0; i < list.length; i++)
@@ -77,7 +136,7 @@ sort = function(list){
     return list;
 }
 
-startMatching = function(){
+var findOrigin = function(){
 
     var priorityList = [];
     var visitList = [];
@@ -101,7 +160,7 @@ startMatching = function(){
     visitedCount = 0;
     visitedProperty.push({id : origin, priority : 0})
 
-    success = tradingMatch(origin);
+    success = findVisitNode(origin);
 
     var score = 0 ;
     for (var i = 0 ; i<visitedProperty.length ; i++){
@@ -113,7 +172,7 @@ startMatching = function(){
     alert(empowerScore);
 }
 
-checkExist = function(elem, data){
+var checkExist = function(elem, data){
     for (var i = 0 ; i < data.length; i++){
         if (elem == data[i].id && i != 0){
             return false;
@@ -122,7 +181,7 @@ checkExist = function(elem, data){
     return true;
 }
 
-tradingMatch = function(visitNode){
+var findVisitNode = function(visitNode){
 
     var goThroughList = [];
     var diffList = [];
@@ -136,7 +195,7 @@ tradingMatch = function(visitNode){
             continue;
         }
 
-        var diff = matchingAlgo(visitNode, i);
+        var diff = returnPriority(visitNode, i);
         goThroughList.push({
           id:i,
           priority:diff
@@ -156,6 +215,7 @@ tradingMatch = function(visitNode){
         }
         if (!flag && j == (empowerment_properties.length-1)){
             alert("Fail");
+            return;
         }
     }
 
@@ -167,15 +227,16 @@ tradingMatch = function(visitNode){
 
     if (goThroughList[visitIndex].id == origin){
         alert("Success");
+        updateLink();
     }else{
         // return bytes32(visitNode);
-        tradingMatch(goThroughList[visitIndex].id);
+        findVisitNode(goThroughList[visitIndex].id);
     }
 
 }
 
 
-matchingAlgo = function(visitNode, i){
+var returnPriority = function(visitNode, i){
 
     //self diff
     var owner = parseInt(empowerment_properties[visitNode].owner);
@@ -196,14 +257,23 @@ matchingAlgo = function(visitNode, i){
 }
 
 
-function bg(n, target){
-  
-    target.css({
-      'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
-    });
-}
+
 
 if (Meteor.isClient) {
+
+  ////////////////////
+  //                //
+  //     Init       //
+  //                //
+  ////////////////////
+
+  Template.empowerment.onRendered(function () {
+      if (empowerment_properties.length == 0 || empowerment_stakeholders.length == 0){
+          alert("Data not Found");
+          Router.go("/configuration");
+      }
+
+  });
 
   ////////////////////
   //                //
@@ -248,20 +318,19 @@ if (Meteor.isClient) {
 
         var p = r.val();
         p = r.val();
-        bg(p, r);
+        rangeElementBG(p, r);
       },
       'mouseenter .range, mousemove .range': function (e) {
         var r = $(e.target);
         var p = r.val();
         p = r.val();
-        bg(p, r);
+        rangeElementBG(p, r);
       },
       "click #empowerTest": function(e){
           var values = [];
           $('.empowerContent .range').each(function(i, obj) {
               values.push($(this).val());
           });
-          console.log(values);
           dataReset();
           for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
 
@@ -272,7 +341,7 @@ if (Meteor.isClient) {
           }
           //console.log(empowerment_properties)
           updateAverageImportance();
-          startMatching();
+          findOrigin();
       },
       "click #removeProperty": function(e){
           var id = $(e.target).parent()[0].className;
@@ -288,13 +357,11 @@ if (Meteor.isClient) {
           if (index > -1) {
             empowerment_properties.splice(index, 1);
           }
-          console.log(empowerment_properties);
           Router.go("/empowerment");
           //Template.empowerment.__helpers.get('empowerment_properties')();
       },
       "click #newProperty": function(e){
           $(".hiddenDIV").toggleClass("displayNewProperty");
-          console.log("hh")
       },
       // "click #addProperty": function(e){
       //     $(".leftPanel").toggleClass("displayNewProperty");

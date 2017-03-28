@@ -62,13 +62,13 @@ var borderPath = svg.append("rect")
 
 var nodes = [], links = [], property = [];
 
-//var nodes = [
+// var nodes = [
 //    { id: 0, name: 'a', benefit: 3 },
 //    { id: 1, name: 'b', benefit: 4 },
 //    { id: 2, name: 'c', benefit: 3 }
-//];
-
-//var links = [
+// ];
+//
+// var links = [
 //    {
 //        source: 0, target: 1, interaction:
 //        [
@@ -82,13 +82,13 @@ var nodes = [], links = [], property = [];
 //            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
 //        ]
 //    }
-//];
-
-//var property = [
+// ];
+//
+// var property = [
 //    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
 //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
 //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-//];
+// ];
 
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
@@ -483,7 +483,6 @@ function reset_node() {
 }
 
 function svgclick(event) {
-  console.log(event)
     if (d3.event.target.nodeName == 'svg') {
         if (svg_clicked) {
             //double_click();
