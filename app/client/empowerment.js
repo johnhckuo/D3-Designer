@@ -5,6 +5,9 @@ empowerment_stakeholders = [];
 empowerment_properties = [];
 empowerment_links = [];
 
+
+var lineWidthOffset = 10;
+
 ////////////////////
 //                //
 //     Utility    //
@@ -73,7 +76,7 @@ var d3Testing = function(){
       var link = svg.selectAll(".link")
           .data(json.links)
         .enter().append("line")
-          .attr("class", "link")
+          .attr("class", function(d){ return "link "+d.source})
         .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
 
       var node = svg.selectAll(".node")
@@ -118,7 +121,7 @@ var updateLink = function(){
                 visitedPropertyName.push(empowerment_properties[j].name);
                 visitedOwner.push(empowerment_properties[j].owner);
             }else{
-                alert("An error has occured in finding property owner & name");
+                console.log("An error has occured in finding property owner & name");
             }
         }
     }
@@ -149,9 +152,24 @@ var updateLink = function(){
 
     }
 
-    empowerment_links = newLink;
+
+
+    for (var i = 0 ; i < newLink.length ; i++ ){
+      for (var j = 0 ; j < empowerment_links.length ; j++ ){
+          if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+              empowerment_links[j].weight += lineWidthOffset;
+          }else{
+              empowerment_links.push(newLink[i]);
+              empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+          }
+      }
+
+    }
+
+    //empowerment_links = newLink;
     console.log(newLink);
-    d3Testing();
+    updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
+    //d3Testing();
     //benefit_update();
 }
 
@@ -237,7 +255,7 @@ var findOrigin = function(){
     }
 
     empowerScore = score/(visitedProperty.length-1);
-    alert(empowerScore);
+    alert("Empowerment Score :"+empowerScore);
 }
 
 var checkExist = function(elem, data){
@@ -282,7 +300,7 @@ var findVisitNode = function(visitNode){
             break;
         }
         if (!flag && j == (empowerment_properties.length-1)){
-            alert("Fail");
+            console.log("Fail");
             return;
         }
     }
@@ -294,7 +312,7 @@ var findVisitNode = function(visitNode){
     visitedProperty[visitedCount] = goThroughList[visitIndex];
 
     if (goThroughList[visitIndex].id == origin){
-        alert("Success");
+        console.log("Success");
         updateLink();
     }else{
         // return bytes32(visitNode);
@@ -340,7 +358,7 @@ if (Meteor.isClient) {
           alert("Data not Found");
           Router.go("/configuration");
       }
-      d3Testing();
+      //d3Testing();
 
   });
 

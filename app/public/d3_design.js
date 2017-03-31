@@ -113,38 +113,6 @@ function updateData(newNodes, newLinks, newProperties){
     links = newLinks;
     property = newProperties;
 
-    reset_node();
-
-
-    activity = activity.data(links);
-
-    activity.enter().append('svg:path')
-            .attr('class', 'link')
-            .on('mouseover', function (d) {
-                //d3.select(this).style('stroke-width', '6px');
-            })
-            .on('mouseout', function (d) {
-                //d3.select(this).style('stroke-width', '4px');
-            })
-            .on('click', function (d) {
-                if (clicked) {
-                    //double_click();
-                    clicked = false;
-                    clicked_link = d;
-                    interaction_edit(d);
-                    clearTimeout(timer);
-                    d3.event.stopPropagation();
-                }
-                else {
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        //single_click();
-                        clicked = false;
-                    }, 200);
-                    clicked = true;
-                }
-            });
-    activity.exit().remove();
     do_changes();
 
 }
