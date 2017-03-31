@@ -6,7 +6,7 @@ empowerment_properties = [];
 empowerment_links = [];
 
 
-var lineWidthOffset = 10;
+var lineWidthOffset = 200;
 
 ////////////////////
 //                //
@@ -76,14 +76,15 @@ var d3Testing = function(){
       var link = svg.selectAll(".link")
           .data(json.links)
         .enter().append("line")
-          .attr("class", function(d){ return "link "+d.source})
+          .attr("class", function(d){ return "link link"+d.source})
         .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
 
       var node = svg.selectAll(".node")
           .data(json.nodes)
         .enter().append("g")
-          .attr("class", "node")
-          .call(force.drag);
+        .attr("class", function(d){ return "node node"+d.id})
+        .call(force.drag);
 
       node.append("circle")
           .attr("r","5");
@@ -102,6 +103,18 @@ var d3Testing = function(){
         node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
       });
     };
+
+
+    var nodes = $(".node");
+    for (var i = 0 ; i < nodes.length ; i++){
+        console.log(nodes.className);
+    }
+
+
+
+
+
+
     render();
 }
 
@@ -168,8 +181,8 @@ var updateLink = function(){
 
     //empowerment_links = newLink;
     console.log(newLink);
-    updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
-    //d3Testing();
+    //updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
+    d3Testing();
     //benefit_update();
 }
 
@@ -358,7 +371,7 @@ if (Meteor.isClient) {
           alert("Data not Found");
           Router.go("/configuration");
       }
-      //d3Testing();
+      d3Testing();
 
   });
 
