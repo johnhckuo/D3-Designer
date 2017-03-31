@@ -120,70 +120,103 @@ var d3Testing = function(){
 
 
 
-var updateLink = function(){
-    var newLink = [];
-    var visitedOwner = [];
-    var visitedPropertyName = [];
+var updateLink = function(type){
 
-    //get property owner and name
-    for (var i = 0 ; i< visitedProperty.length ; i++){
+    if (type == "calculate"){
+        var newLink = [];
+        var visitedOwner = [];
+        var visitedPropertyName = [];
+
+        //get property owner and name
+        for (var i = 0 ; i< visitedProperty.length ; i++){
 
 
-        for (var j = 0 ; j < empowerment_properties.length; j++){
-            if (visitedProperty[i].id == empowerment_properties[j].id){
-                visitedPropertyName.push(empowerment_properties[j].name);
-                visitedOwner.push(empowerment_properties[j].owner);
-            }else{
-                console.log("An error has occured in finding property owner & name");
+            for (var j = 0 ; j < empowerment_properties.length; j++){
+                if (visitedProperty[i].id == empowerment_properties[j].id){
+                    visitedPropertyName.push(empowerment_properties[j].name);
+                    visitedOwner.push(empowerment_properties[j].owner);
+                }else{
+                    console.log("An error has occured in finding property owner & name");
+                }
             }
         }
-    }
 
-    console.log(visitedProperty);
-    console.log(visitedPropertyName);
-    console.log(visitedOwner);
-
-
-
-    for (var i = 0 ; i < visitedProperty.length-1 ; i++){
-
-        var interaction = [];
-
-        interaction.push({
-            'name': 'system matchmaking',
-            'give': visitedPropertyName[i],
-            'source_affect': 0,
-            'receive': 'none',
-            'target_affect': 0
-        });
-
-        newLink.push({
-            'source': visitedOwner[i],
-            'target': visitedOwner[i+1],
-            'interaction': interaction
-        });
-
-    }
+        console.log(visitedProperty);
+        console.log(visitedPropertyName);
+        console.log(visitedOwner);
 
 
 
-    for (var i = 0 ; i < newLink.length ; i++ ){
-      for (var j = 0 ; j < empowerment_links.length ; j++ ){
-          if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
-              empowerment_links[j].weight += lineWidthOffset;
-          }else{
-              empowerment_links.push(newLink[i]);
-              empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+        for (var i = 0 ; i < visitedProperty.length-1 ; i++){
+
+            var interaction = [];
+
+            interaction.push({
+                'name': 'system matchmaking',
+                'give': visitedPropertyName[i],
+                'source_affect': 0,
+                'receive': 'none',
+                'target_affect': 0
+            });
+
+            newLink.push({
+                'source': visitedOwner[i],
+                'target': visitedOwner[i+1],
+                'interaction': interaction
+            });
+
+        }
+
+
+
+        for (var i = 0 ; i < newLink.length ; i++ ){
+          for (var j = 0 ; j < empowerment_links.length ; j++ ){
+              if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+                  empowerment_links[j].weight += lineWidthOffset;
+              }else{
+                  empowerment_links.push(newLink[i]);
+                  empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+              }
+          }
+
+        }
+
+        //empowerment_links = newLink;
+        console.log(newLink);
+        //updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
+        d3Testing();
+        //benefit_update();
+    }else if (type == "remove"){
+      for (var i = 0 ; i < empowerment_stakeholders.length; i++){
+          var flag = true;
+          for (var j = 0 ; j < empowerment_properties.length ; j++){
+              if (empowerment_properties[j].owner == empowerment_stakeholders[i].id){
+                  flag = false;
+                  break;
+              }
+          }
+          if (flag){
+              empowerment_stakeholders.splice(i, 1);
           }
       }
 
+      for (var i = 0 ; i < empowerment_links.length ; i++){
+          var flag = true;
+          for (var j = 0 ; j < empowerment_stakeholders.length; j++){
+              if (empowerment_links[i].source == empowerment_stakeholders[j].id || empowerment_links[i].target == empowerment_stakeholders[j].id){
+                  flag = false;
+                  break;
+              }
+          }
+          if (flag){
+              empowerment_links.splice(i, 1);
+          }
+      }
+
+
     }
 
-    //empowerment_links = newLink;
-    console.log(newLink);
-    //updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
-    d3Testing();
-    //benefit_update();
+
 }
 
 
@@ -326,7 +359,7 @@ var findVisitNode = function(visitNode){
 
     if (goThroughList[visitIndex].id == origin){
         console.log("Success");
-        updateLink();
+        updateLink('calculate');
     }else{
         // return bytes32(visitNode);
         findVisitNode(goThroughList[visitIndex].id);
@@ -443,7 +476,7 @@ if (Meteor.isClient) {
           updateAverageImportance();
           findOrigin();
       },
-      "click #removeProperty": function(e){
+      "click .removeProperty": function(e){
           var id = $(e.target).parent()[0].className;
           id = id.split("property")[1];
 
@@ -454,10 +487,18 @@ if (Meteor.isClient) {
               }
           }
 
+          console.log(empowerment_properties[2])
           if (index > -1) {
-            empowerment_properties.splice(index, 1);
+              empowerment_properties.splice(index, 1);
           }
-          Router.go("/empowerment");
+          console.log(empowerment_properties)
+          //dataReset();
+          //findOrigin();
+          console.log(empowerment_links);
+          updateLink('remove');
+          console.log(empowerment_links);
+          d3Testing();
+          //Router.go("/empowerment");
           //Template.empowerment.__helpers.get('empowerment_properties')();
       },
       "click #newProperty": function(e){
