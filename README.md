@@ -35,8 +35,9 @@ Please read [CONTRIBUTING.md](https://gist.github.com/johnhckuo/a08fc77a28d2addd
 
 ## Authors
 
-* **Bryant Chen** - (https://github.com/cjybryant)
 * **John Kuo** - (https://github.com/johnhckuo)
+* **Bryant Chen** - (https://github.com/cjybryant)
+* **Powei Chiang** - (https://github.com/kokokon)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
