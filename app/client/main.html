@@ -66,13 +66,13 @@
 
 </template>
 
-<!-- <template name="newProperty">
-
-      <label for="disabledTextInput">{{name}}</label>
-      <label for="disabledTextInput">{{owner}}</label>
-      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
-
-</template> -->
+<template name="newProperty">
+    <div class='propertyContainer {{propertyClass}}'>
+        <label for="disabledTextInput">{{name}}</label>
+        <label for="disabledTextInput">{{owner}}</label>
+        <button type="button" class="btn btn-danger addProperty" name="button">Add</button>
+    </div>
+</template>
 
 <!--
 *************************
@@ -112,11 +112,13 @@
       {{/each}}
 
     </div>
-    <!-- <div class="hiddenDIV">
+    <div class="hiddenDIV">
+      <h2>Adding new properties</h2>
+      <hr>
       {{#each newProperties}}
         {{> newProperty}}
       {{/each}}
-    </div> -->
+    </div>
 </template>
 
 <template name="flow">

@@ -59,6 +59,7 @@ if (Meteor.isClient) {
             empowerment_properties = property;
             empowerment_stakeholders = nodes;
             empowerment_links = links;
+            other_empowerment_properties = other_property;
         },
 
     });

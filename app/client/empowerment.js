@@ -1,10 +1,11 @@
 var theta = 0, figureOffset, panelWidth = 210;
 var empowerScore, panelCount;
+var hidden = true;
 
 empowerment_stakeholders = [];
 empowerment_properties = [];
 empowerment_links = [];
-
+other_empowerment_properties = [];
 
 var lineWidthOffset = 200;
 
@@ -214,6 +215,62 @@ var updateLink = function(type){
       }
 
 
+    }else if (type == "insert"){
+      var newLink = [];
+
+
+      //get property owner and name
+
+
+      for (var j = 0 ; j < empowerment_properties.length; j++){
+          if (visitedProperty[i].id == empowerment_properties[j].id){
+              visitedPropertyName.push(empowerment_properties[j].name);
+              visitedOwner.push(empowerment_properties[j].owner);
+          }else{
+              console.log("An error has occured in finding property owner & name");
+          }
+      }
+
+
+      console.log(visitedProperty);
+      console.log(visitedPropertyName);
+      console.log(visitedOwner);
+
+
+
+      for (var i = 0 ; i < visitedProperty.length-1 ; i++){
+
+          var interaction = [];
+
+          interaction.push({
+              'name': 'system matchmaking',
+              'give': visitedPropertyName[i],
+              'source_affect': 0,
+              'receive': 'none',
+              'target_affect': 0
+          });
+
+          newLink.push({
+              'source': visitedOwner[i],
+              'target': visitedOwner[i+1],
+              'interaction': interaction
+          });
+
+      }
+
+
+
+      for (var i = 0 ; i < newLink.length ; i++ ){
+        for (var j = 0 ; j < empowerment_links.length ; j++ ){
+            if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+                empowerment_links[j].weight += lineWidthOffset;
+            }else{
+                empowerment_links.push(newLink[i]);
+                empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+            }
+        }
+
+      }
     }
 
 
@@ -487,23 +544,41 @@ if (Meteor.isClient) {
               }
           }
 
-          console.log(empowerment_properties[2])
           if (index > -1) {
               empowerment_properties.splice(index, 1);
           }
-          console.log(empowerment_properties)
-          //dataReset();
-          //findOrigin();
-          console.log(empowerment_links);
+
           updateLink('remove');
-          console.log(empowerment_links);
           d3Testing();
           //Router.go("/empowerment");
           //Template.empowerment.__helpers.get('empowerment_properties')();
       },
       "click #newProperty": function(e){
           $(".hiddenDIV").toggleClass("displayNewProperty");
+
       },
+      "click .addProperty": function(e){
+          var id = $(e.target).parent()[0].className;
+          id = id.split("newProperty")[1];
+          console.log(id);
+
+          var index;
+          for (var i = 0 ; i < other_empowerment_properties.length; i++){
+              if (other_empowerment_properties[i].id == id){
+                  index = i;
+              }
+          }
+
+          if (index > -1) {
+              empowerment_properties.push(other_empowerment_properties[index]);
+              other_empowerment_properties.splice(index, 1);
+          }
+
+          updateLink('insert');
+          d3Testing();
+
+      },
+
       // "click #addProperty": function(e){
       //     $(".leftPanel").toggleClass("displayNewProperty");
       //
@@ -576,10 +651,11 @@ if (Meteor.isClient) {
       newProperties:function(){
           var data = [];
 
-          for (var i = 0 ; i < empowerment_properties.length; i++){
+          for (var i = 0 ; i < other_empowerment_properties.length; i++){
               data.push({
-                "name":empowerment_properties[i].name,
-                "owner": empowerment_properties[i].owner
+                "propertyClass" : "newProperty"+other_empowerment_properties[i].id,
+                "name":other_empowerment_properties[i].name,
+                "owner": other_empowerment_properties[i].owner
 
               })
           }

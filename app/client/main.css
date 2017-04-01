@@ -374,15 +374,29 @@ input[type="range"]::-webkit-slider-thumb:active{
   margin-left: auto;
   margin-right: auto;
   top:20vh;
-  transition: all 1s;
+  transition: transform 1s;
   transform: translateY(100vh);
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color:white;
+}
+
+.propertyContainer{
+    margin-bottom:10px;
 }
 
 .displayNewProperty{
   transform: translateY(0vh);
 
 }
+
+.leftPanel{
+  position: absolute;
+}
+
 /*
 
 .empowerment{

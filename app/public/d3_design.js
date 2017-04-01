@@ -90,6 +90,12 @@ var property = [
    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
 ];
 
+//store those properties which are not being selected but being input
+var other_property= [
+  { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
+  { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
+  { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
+];
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
