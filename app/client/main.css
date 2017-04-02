@@ -374,15 +374,29 @@ input[type="range"]::-webkit-slider-thumb:active{
   margin-left: auto;
   margin-right: auto;
   top:20vh;
-  transition: all 1s;
+  transition: transform 1s;
   transform: translateY(100vh);
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color:white;
+}
+
+.propertyContainer{
+    margin-bottom:10px;
 }
 
 .displayNewProperty{
   transform: translateY(0vh);
 
 }
+
+.leftPanel{
+  position: absolute;
+}
+
 /*
 
 .empowerment{
@@ -494,6 +508,26 @@ input[type="range"]::-webkit-slider-thumb:active{
 }
 */
 
+/*testing*/
+
+.link {
+  stroke: #aaa;
+}
+
+.node text {
+stroke:#333;
+cursos:pointer;
+}
+
+.node circle{
+stroke:#fff;
+stroke-width:3px;
+fill:#555;
+}
+
+
+/*--------*/
+
 .green_btn {
     font-family: "franklin-gothic-urw-comp", "sans-serif";
     font-size: 15px;
@@ -531,14 +565,14 @@ input[type="range"]::-webkit-slider-thumb:active{
 }
 
 .line_input{
-    height: 25px; 
-    width: 80%; 
-    background-color: transparent;  
-    border-style: solid;  
-    border-width: 0px 0px 1px 0px;  
-    border-color: #7DB9DE; 
+    height: 25px;
+    width: 80%;
+    background-color: transparent;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: #7DB9DE;
     color:#ffffff;
-    outline:0; 
+    outline:0;
 }
 
 .configuration_font {
@@ -554,6 +588,3 @@ input[type="range"]::-webkit-slider-thumb:active{
     font-weight: normal;
     color: #E7E6E6;
 }
-
-
-

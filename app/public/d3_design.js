@@ -50,6 +50,40 @@ var borderPath = svg.append("rect")
 var nodes = [], links = [], property = [];
 
 
+// var nodes = [
+//    { id: 0, name: 'a', benefit: 3 },
+//    { id: 1, name: 'b', benefit: 4 },
+//    { id: 2, name: 'c', benefit: 3 }
+// ];
+
+// var links = [
+//    {
+//        source: 0, target: 1, interaction:
+//        [
+//            { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
+//            { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+//        ]
+//    },
+//    {
+//        source: 1, target: 2, interaction:
+//        [
+//            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
+//        ]
+//    }
+// ];
+
+// var property = [
+//    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
+//    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
+//    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
+// ];
+
+// //store those properties which are not being selected but being input
+// var other_property= [
+//   { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
+//   { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
+//   { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
+// ];
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
@@ -67,6 +101,16 @@ var draw_line = svg.append('svg:path')
 
 var activity = svg.append('svg:g').selectAll('path');
 var stakeholder = svg.append('svg:g').selectAll('g');
+
+function updateData(newNodes, newLinks, newProperties){
+    nodes = newNodes;
+    links = newLinks;
+    property = newProperties;
+
+    do_changes();
+
+}
+
 
 function tick() {
     activity.attr('d', function (d) {
@@ -423,7 +467,6 @@ function reset_node() {
 }
 
 function svgclick(event) {
-  console.log(event)
     if (d3.event.target.nodeName == 'svg') {
         if (svg_clicked) {
             //double_click();

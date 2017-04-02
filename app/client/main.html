@@ -54,7 +54,7 @@
       <div class="panelContainer {{propertyClass}}">
           <label for="disabledTextInput">{{name}}</label>
           <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
-          <button type="button" class="btn btn-danger" id='removeProperty' name="button">Remove</button>
+          <button type="button" class="btn btn-danger removeProperty" name="button">Remove</button>
       </div>
     </div>
     {{/each}}
@@ -66,13 +66,13 @@
 
 </template>
 
-<!-- <template name="newProperty">
-
-      <label for="disabledTextInput">{{name}}</label>
-      <label for="disabledTextInput">{{owner}}</label>
-      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
-
-</template> -->
+<template name="newProperty">
+    <div class='propertyContainer {{propertyClass}}'>
+        <label for="disabledTextInput">{{name}}</label>
+        <label for="disabledTextInput">{{owner}}</label>
+        <button type="button" class="btn btn-danger addProperty" name="button">Add</button>
+    </div>
+</template>
 
 <!--
 *************************
@@ -102,7 +102,7 @@
       </section>
   </div> -->
     <div class="leftPanel">
-      {{> configuration}}
+      <!-- {{> configuration}} -->
     </div>
 
     <div class="empowerment">
@@ -112,11 +112,13 @@
       {{/each}}
 
     </div>
-    <!-- <div class="hiddenDIV">
+    <div class="hiddenDIV">
+      <h2>Adding new properties</h2>
+      <hr>
       {{#each newProperties}}
         {{> newProperty}}
       {{/each}}
-    </div> -->
+    </div>
 </template>
 
 <template name="flow">

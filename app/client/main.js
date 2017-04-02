@@ -58,6 +58,8 @@ if (Meteor.isClient) {
         'click #submit ': function (e) {
             empowerment_properties = property;
             empowerment_stakeholders = nodes;
+            empowerment_links = links;
+            other_empowerment_properties = other_property;
         },
 
     });
@@ -95,7 +97,6 @@ window.onload = function(){
           },duration);
         }
         flag = false;
-        alert(gg);
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){
