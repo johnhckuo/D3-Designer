@@ -56,9 +56,11 @@ if (Meteor.isClient) {
 
     Template.configuration.events({
         'click #submit ': function (e) {
+            configuration_setting();
             empowerment_properties = property;
             empowerment_stakeholders = nodes;
             empowerment_links = links;
+            console.log(empowerment_links)
             other_empowerment_properties = other_property;
         },
 

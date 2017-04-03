@@ -17,7 +17,7 @@ var border = 1;
 var consensus_level = 0,
     empowerment = 0,
     flow = 0;
-var nodes = [], links = [], property = [];
+nodes = [], links = [], property = [], other_property = [];
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 var svg_container, svg, borderPath, force, draw_line, activity, stakeholder;
 //#endregion
@@ -41,14 +41,14 @@ configuration_setting = function () {
 
     links = [
         {
-            source: 0, target: 1, interaction:
+            source: 0, target: 1, weight:1, interaction:
             [
                 { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
                 { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
             ]
         },
         {
-            source: 1, target: 2, interaction:
+            source: 1, target: 2, weight:1, interaction:
             [
                 { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
             ]
@@ -60,6 +60,15 @@ configuration_setting = function () {
         { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
         { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
     ];
+
+
+    //store those properties which are not being selected but being input
+    other_property= [
+      { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
+      { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
+      { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
+    ];
+
     d3.select('body').style('background-color', '#E7E6E6');
     svg_container = d3.select('#full_container').append('div')
                                                 .attr('id', 'svg_container')
