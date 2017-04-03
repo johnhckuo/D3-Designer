@@ -27,6 +27,8 @@ var links =
 // var $TABLE_F=$("#table_f");
 var big_data=[]; // for all of data inspired by kokokon
 
+var selected_activity;
+
 var all_data_cal=[];  // all of data including variability and flow table
 var init_f_array=[];
 var init_f2_array=[];
@@ -52,16 +54,6 @@ jQuery.fn.shift = [].shift;
 
 function U(){
   $('#export').text(JSON.stringify(all_data_cal));
-  /*
-  [
-    [
-      {"0":1,"1":"validation","2":"50","3":"50"},{"0":1,"1":"anytime service","2":"50","3":"50"}
-    ] ,
-    [
-      {"0":2,"1":"self service","2":"50","3":"50"}
-    ]
-  ]
-  */
 }
 function cal_LFEL(){
   var sum_fulfill=0;
@@ -82,21 +74,46 @@ function cal_LFEL(){
   LFEL_score=Math.round((LFEL_score+100)/2); // 取整數
   $('#LFEL').text(LFEL_score);
 }
-// recommended_strategy
-function recommend_strategy($B_DEGREE_OR_WEIGHT,a) {
+// recommended_strategy -> cancel ->use dropdown list
+function recommend_strategy($B_DEGREE_OR_WEIGHT,idegree) {
   var msg_re_strategy;
-  if (a>=25){
+  if (idegree>=25){
     msg_re_strategy=("LCA > CA > UR > CR");
   }
-  else if (a>=12) {
+  else if (idegree>=12) {
     msg_re_strategy=("LCA > UR > CA > CR");
   }
   else{
     msg_re_strategy=("LCA > UR > CR");
   }
-  $B_DEGREE_OR_WEIGHT.parents().children('td:eq(5)').text(msg_re_strategy);
+  $B_DEGREE_OR_WEIGHT.parents().children('td:eq(5)').find('p').text(msg_re_strategy);
+  $B_DEGREE_OR_WEIGHT.parents().children('td:eq(5)').find('input hidden').val(msg_re_strategy);
 }
+function add_element_row(i,get_data){
+  if(get_data==0){  // get_data=0  means only add a row no get data
+    var $clone=$("#table_f").find('tr.hide').clone(true).removeClass('hide table-line').addClass('row_'+1);
+    $("#table_f").find('table').append($clone);
+  }else{
+    // add data for json
+    for(j=0; j<i ;j++){
+      var $clone=$("#table_f").find('tr.hide').clone(true).removeClass('hide table-line').addClass('row_'+j);
 
+      $clone.find(".f_element").val(big_data[selected_activity].detail[num_col].element[j].flow_Element);
+      $clone.find(".f_degree").val(big_data[selected_activity].detail[num_col].element[j].fulfillment);
+      $clone.find(".c_degree").val(big_data[selected_activity].detail[num_col].element[j].comlexity);
+      $clone.find(".individual_cost").val(big_data[selected_activity].detail[num_col].element[j].cost);
+
+      $("#table_f").find('table').append($clone);
+    }
+  }
+
+}
+function del_element_row(){
+  var cnt_l=$('#table_f tr').length;
+  for(i=cnt_l; i>=2; i--){
+    $("#table_f").find('tr').eq(i).detach();
+  }
+}
 /***********
 *  events *
 ***********/
@@ -116,33 +133,20 @@ Template.flow.events({
   "click .table-lookup":function(event){
     //num_col for #cal-btn for save to json
     num_col=$(event.target).parents('td').parents('tr').index();
-
-
-    var cnt_l=$('#table_f tr').length;
-    // 清空右邊flow table資料
-    for(i=cnt_l; i>=2; i--){
-      $("#table_f").find('tr').eq(i).detach();
-    }
-
-    //if there's data in json, add a row in flow table
-    if(num_col<all_data_amount.length){
-      for(i=0; i<all_data_amount[num_col] ;i++){
-        var $clone=$("#table_f").find('tr.hide').clone(true).removeClass('hide table-line').addClass('row_'+i+1);
-        $("#table_f").find('table').append($clone);
-
-
-        // $(".f_element").val(JSON.parse([0][num_col]["1"]));
-        // $(".f_degree").val(JSON.parse([0][num_col]["2"]));
-        // $(".c_degree").val(JSON.parse([0][num_col]["3"]));
-        // $(".individual_cost").val(JSON.parse([0][num_col]["4"]));
+    selected_activity=0;
+    if(big_data.length==0){  //一開始都是空的
+      add_element_row(1,0);
+    }else{  // 不是空的
+      if(big_data[selected_activity].detail.length==num_col){
+        del_element_row();// 清空右邊flow table資料
+        add_element_row(1,0);
+      }else{
+        // json 有data
+        // 選定的detail row的 f_table row 數
+        var element_len=big_data[selected_activity].detail[num_col].element.length;
+        del_element_row();
+        add_element_row(element_len,1);
       }
-    }
-    else{
-
-    //if there's no data in json, add a row in flow table
-      var k=1;
-      var $clone=$("#table_f").find('tr.hide').clone(true).removeClass('hide table-line').addClass('row_'+k);
-      $("#table_f").find('table').append($clone);
     }
   },
   // save button for json
@@ -153,80 +157,75 @@ Template.flow.events({
       for(j=0 ; j<links[i].interaction.length; j++){
         var activity_name=links[i].interaction[j].name;
         new_activity={ activity: activity_name, detail: []};
-        big_data.push(new_activity);
+        // big_data.push(new_activity);
+        big_data.splice(links.length,1, new_activity); // 怪怪的！
       }
     }
 
-    var table_v_rows = $("#table_v").find('tr:not(:hidden)').length-1;
 
-    var _varibiity_Type, _condition, _b_Degree, _weight, _i_Degree,  _strategy ;
+    // variability table
+    var $table_v_rows = $("#table_v").find('tr:not(:hidden)');
+    $table_v_rows.shift();
+    var table_v_rows_length = $table_v_rows.length;
+    // flow table
+    var $table_f_rows = $("#table_f").find('tr:not(:hidden)');
+    $table_f_rows.shift();
+    var table_f_rows_length = $table_f_rows.length;
+
+    // get value of variability table
+
+      _varibiity_Type=$('.v_type');
+      _condition=$('.sub_service');
+      _b_Degree=$('.b_degree');//
+      _weight=$('.weight');
+      _i_Degree=$('.i_degree');  // problem
+      _strategy=$('.strategy_option');
+
+    // get value of flow table
+
+      _flow_Element=$('.f_element');
+      _fulfillment=$('.f_degree');
+      _complexity=$('.c_degree');
+      _cost=$('.individual_cost');
 
 
     for(i=0 ; i<big_data.length ; i++){
-      for(j=0 ; j<table_v_rows ; j++){
-        new_varibility={
-          varibiity_Type:_varibiity_Type , condition:_condition , band_Degree: _b_Degree ,
-          weight:_weight , i_degree:_i_Degree , strategy: _strategy , element:[]
-        };
-        big_data[i].detail.push(new_varibility);
+      if(( big_data[i].activity)==("a=b")){
 
+        // num_col is which row you select
+        for(j=0 ; j<=num_col ; j++){
+
+          new_varibility={
+            varibiity_Type:_varibiity_Type[j+1].value , condition:_condition[j+1].value , band_Degree: _b_Degree[j+1].value/2 ,
+            weight:_weight[j+1].value , i_degree:_i_Degree[j+1].value , strategy: _strategy[j+1].value , element:[]
+          };
+          // big_data[i].detail.push(new_varibility);
+
+          big_data[i].detail.splice(num_col,1,new_varibility); //還沒按lookup-button 所以num_col還是上一個
+
+            if(j==num_col){
+
+              for(k=0 ; k<table_f_rows_length ; k++){
+
+                new_elements={
+                  flow_Element: _flow_Element[k+1].value , fulfillment: _fulfillment[k+1].value , comlexity: _complexity[k+1].value , cost: _cost[k+1].value
+                };
+                // big_data[i].detail[j].element.push(new_elements);
+                big_data[i].detail[j].element.splice(k,1, new_elements);
+
+              }
+            }
+
+        }
       }
 
     }
-
-    // old failed version////////////
-    // var data_flow_table = []; //中間層
-    // var headers_varibiity=[]; // varibiity table's headers
-    // var $rows_varibility=$("#table_v").find('tr:not(:hidden)');
-    // $($rows_varibility.shift()).find('th:not(:empty)').each(function () {
-    //   headers_varibiity.push($(this).text());
-    // });
-    // $rows_varibility.each(function(){
-    //   var $td_varibility=$(this).find('td');
-    //   var h_v={};
-    //   h_v[headers_varibiity[0]]=$td_varibility.find('.v_type').val();
-    //   h_v[headers_varibiity[1]]=$td_varibility.find('.sub_service').val();
-    //   h_v[headers_varibiity[2]]=$td_varibility.find('.b_degree').val()/2;
-    //   h_v[headers_varibiity[3]]=$td_varibility.find('.weight').val();
-    //   h_v[headers_varibiity[4]]=$td_varibility.text();
-    //   h_v[headers_varibiity[5]]=$td_varibility.text();
-    //   data_flow_table.push(h_v);
-    // });
-    //
-    //
-    //
-    //
-    // var headers_flow=[]; //flow table's headers
-    // var $rows = $("#table_f").find('tr:not(:hidden)');
-    // // $rows.shift();
-    // headers_flow.push("index_v");
-    // $($rows.shift(event)).find('th:not(:empty)').each(function () {
-    //   headers_flow.push($(this).text());
-    //   //headers.push($(this).text().toLowerCase());
-    // });
-    // var cnt=0;
-    // $rows.each(function () {
-    //   var $td = $(this).find('td');
-    //   var h = {};
-    //   h[headers_flow[0]]=num_col;
-    //   h[headers_flow[1]]=$td.find('.f_element').val();
-    //   h[headers_flow[2]]=$td.find('.f_degree').val();
-    //   h[headers_flow[3]]=$td.find('.c_degree').val();
-    //   h[headers_flow[4]]=$td.find('.individual_cost').val();
-    //   data_flow_table.push(h);
-    //   cnt++;
-    // });
-    // all_data_amount.splice(num_col,1,cnt);
-    // all_data_cal.splice(num_col,1,data_flow_table);
-    $('#export').text(JSON.stringify(big_data));
+    $('#export').text(JSON.stringify(big_data,undefined,'\t'));
     cal_LFEL();
     // U();
   },
-  // "change .cost_degree":function(){
-  //   cal_LFEL();
-  // },
 
-  //****flow table opertion****//
+  //**** flow table opertion ****//
   // add row
   "click .f_table-add":function(){
     var i=$('#table_f tr').length-1;
@@ -237,15 +236,19 @@ Template.flow.events({
   "click .f_table-remove":function(event){
     $(event.target).parents('tr').detach();
   },
+
+  //**** varibiity table opertion ****//
   //calculate importance degree
   "change .b_degree":function(event){
 
     var b_degree_1=event.target.value; //.id   .className
     var i_degree_1=(b_degree_1)/2*weight_1;
-    $(event.target).parents().children('td:eq(4)').text(i_degree_1);
-    temp2=b_degree_1;
     var $B_DEGREE_CLASS=$(event.target);
-    recommend_strategy($B_DEGREE_CLASS,i_degree_1);
+    $B_DEGREE_CLASS.parents().children('td:eq(4)').find('p').text(i_degree_1);  // for text in display
+    $B_DEGREE_CLASS.parents().children('td').find('input:hidden.i_degree').val(i_degree_1); // for save to json
+    temp2=b_degree_1;
+
+    // recommend_strategy($B_DEGREE_CLASS,i_degree_1);
   },
   "change .weight":function(event){
     weight_1=event.target.value;
@@ -253,8 +256,10 @@ Template.flow.events({
     var msg_re_strategy;
     var temp3=im_degree;
     var $WEIGHT_CLASS=$(event.target);
-    recommend_strategy($WEIGHT_CLASS,temp3);
-    $(event.target).parents().children('td:eq(4)').text(im_degree);
+    $(event.target).parents().children('td:eq(4)').find('p').text(im_degree);
+    $WEIGHT_CLASS.parents().children('td').find('input:hidden.i_degree').val(im_degree);
+
+    // recommend_strategy($WEIGHT_CLASS,temp3);
   },
   //// get the value
   "click #export-btn":function(event){

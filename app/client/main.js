@@ -3,6 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './flow.js';
 import './main.html';
+
 import './empowerment.js';
 import './configuration.js';
 
@@ -99,6 +100,7 @@ window.onload = function(){
           },duration);
         }
         flag = false;
+
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){
