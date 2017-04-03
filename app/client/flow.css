@@ -1,17 +1,18 @@
-/*body {
+.flow_section {
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 5%;
   font-family: "Open Sans", sans-serif;
-}*/
+}
 
 label {
   display: inline-block;
   width: 100px;
 }
 
-input {
 
+.v_type .sub_service .b_degree .weight .i_degree .f_degree .c_degree .individual_cost input {
+  width: 500px;
   padding: 5px;
   font-size: 16px;
 }
@@ -85,16 +86,17 @@ h2 {
 .f_table-remove {
   color: #700;
 }
+/*range 設定被蓋掉*/
 /*band degree's range slider css */
-input[type="range"]{
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]{
   -webkit-appearance: none;
   overflow:hidden;     /* 限定範圍 */
-  width:200px;
+  width:10px;
   height:20px;
   outline : none;      /* 避免點選會有藍線或虛線 */
   background:none;
 }
-input[type="range"]::-webkit-slider-thumb{
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance: none;
   position: relative;    /* 設為相對位置，為了前後區塊的絕對位置而設定 */
   width:10px;
@@ -103,8 +105,8 @@ input[type="range"]::-webkit-slider-thumb{
   border-radius:50%;
   transition:.2s;        /* 點選放大時候的漸變時間 */
 }
-input[type="range"]::-webkit-slider-thumb:before,
-input[type="range"]::-webkit-slider-thumb:after
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]::-webkit-slider-thumb:before,
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]::-webkit-slider-thumb:after
 {
   position: absolute;
   top: 3px;
@@ -115,11 +117,11 @@ input[type="range"]::-webkit-slider-thumb:after
   transition:.2s;
 }
 
-input[type="range"]::-webkit-slider-thumb:before{
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]::-webkit-slider-thumb:before{
   left: -1997px;
   background: #4b80a1;
 }
-input[type="range"]::-webkit-slider-thumb:after {
+.b_degree .f_degree .c_degree .individual_cost input[type="range"]::-webkit-slider-thumb:after {
   left: 10px;
   background: #c3dcec;
 }

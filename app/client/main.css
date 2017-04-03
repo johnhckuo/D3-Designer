@@ -1,7 +1,6 @@
 /* CSS declarations go here */
 import "./flow.css"
 body{
-
 }
 .header{
   position: absolute;
@@ -375,7 +374,7 @@ input[type="range"]::-webkit-slider-thumb:active{
   margin-right: auto;
   top:20vh;
   transition: transform 1s;
-  transform: translateY(100vh);
+  transform: translateY(80vh);
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -389,14 +388,30 @@ input[type="range"]::-webkit-slider-thumb:active{
 }
 
 .displayNewProperty{
-  transform: translateY(0vh);
+  transform: translateY(-40vh);
 
 }
 
 .leftPanel{
-  position: absolute;
-}
 
+  position: relative;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vw;
+  height: 50vh;
+  top:30vh;
+
+
+}
+.barrier{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 100vh;
+    background-color: rgb(231, 230, 230);
+    z-index: 1000;
+}
 /*
 
 .empowerment{
