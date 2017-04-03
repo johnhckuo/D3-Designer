@@ -1,8 +1,12 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+
 import './flow.js';
 import './main.html';
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 import './empowerment.js';
 import './configuration.js';
 
