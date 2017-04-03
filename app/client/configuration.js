@@ -22,15 +22,33 @@ var d3_variables = { consensus_level: consensus_level, empowerment_level: empowe
 var svg_container, svg, borderPath, force, draw_line, activity, stakeholder;
 //#endregion
 
-
-
-
 Template.configuration.onRendered(function () {
     configuration_setting();
     do_changes();
     set_trend();
 
 });
+
+set_configuration_data = function (_nodes, _links, _property) {
+    nodes = _nodes;
+    links = _links;
+    property = _property;
+    force_activation();
+    do_changes();
+    svg.on('click', function () {
+        //disable event
+    });
+    svg.selectAll('path').on('click', function () {
+        //disable event
+    });
+    svg.selectAll('g').on('click', function () {
+        //disable event
+    });
+}
+
+interaction_style_setting = function (_source, _target, _weight) {
+    svg.selectAll('path').style('')
+}
 
 configuration_setting = function () {
     nodes = [
@@ -83,13 +101,7 @@ configuration_setting = function () {
                     .style("fill", "none")
                     .style("stroke-width", border);
 
-    force = d3.layout.force()
-            .nodes(nodes)
-            .links(links)
-            .size([width, height])
-            .linkDistance(60)
-            .charge(-500)
-            .on('tick', tick);
+    force_activation();
 
     draw_line = svg.append('svg:path')
                    .attr('class', 'link draw_line_hidden')
@@ -97,6 +109,16 @@ configuration_setting = function () {
 
     activity = svg.append('svg:g').selectAll('path');
     stakeholder = svg.append('svg:g').selectAll('g');
+}
+
+force_activation = function () {
+    force = d3.layout.force()
+        .nodes(nodes)
+        .links(links)
+        .size([width, height])
+        .linkDistance(60)
+        .charge(-500)
+        .on('tick', tick);
 }
 
 tick = function() {
@@ -212,7 +234,7 @@ do_changes = function() {
                   }
                   else {
                       end_node = clicked_node;
-                      var link = { source: start_node, target: end_node, interaction: [] };
+                      var link = { source: start_node.id, target: end_node.id, interaction: [] };
                       links.push(link);
                       draw_line.classed('draw_line_hidden', true);
                       clicked_link = link;
@@ -629,7 +651,7 @@ save_interaction = function (order) {
                 d = clicked_link;
             }
         });
-        benefit_update();
+        //benefit_update();
     }
     container.html('')
              .classed('interaction_container_hidden', true);
@@ -717,7 +739,7 @@ Template.configuration.events({
                 var click_position_y = event.screenY;
                 add_stakeholder(nodes.length, click_position_x, click_position_y, 'add');
                 clearTimeout(timer);
-                d3.event.stopPropagation();
+                //d3.event.stopPropagation();
             }
             else {
                 if (timer) clearTimeout(timer);
@@ -733,14 +755,19 @@ Template.configuration.events({
         }
     },
 
-    'click #test' : function(){
-        //nodes = [
+    'click #test': function () {
+        //var _nodes = [
         //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 1, name: 'b', benefit: 4 },
-        //    { id: 2, name: 'c', benefit: 3 }
+        //    { id: 1, name: 'bb', benefit: 3 },
+        //    { id: 2, name: 'ccc', benefit: 3 },
+        //    { id: 0, name: 'a', benefit: 3 },
+        //    { id: 0, name: 'a', benefit: 3 },
+        //    { id: 0, name: 'a', benefit: 3 },
+        //    { id: 0, name: 'a', benefit: 3 },
+        //    { id: 0, name: 'a', benefit: 3 }
         //];
 
-        //links = [
+        //var _links = [
         //    {
         //        source: 0, target: 1, interaction:
         //        [
@@ -753,16 +780,21 @@ Template.configuration.events({
         //        [
         //            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
         //        ]
-        //    }
+        //    },
+        //                {
+        //                    source: 3, target: 4, interaction:
+        //                    [
+        //                        { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
+        //                    ]
+        //                }
         //];
 
-        //property = [
+        //var _property = [
         //    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
         //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
         //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
         //];
-
-        //do_changes();
+        //set_configuration_data(_nodes, _links, _property);
     },
 
     'click .trend_button ': function (e) {
