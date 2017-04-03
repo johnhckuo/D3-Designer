@@ -47,7 +47,15 @@ set_configuration_data = function (_nodes, _links, _property) {
 }
 
 interaction_style_setting = function (_source, _target, _weight) {
-    svg.selectAll('path').style('')
+    svg.selectAll('path').style('stroke-width', '4px');
+    for (i = 0; i < links.length; i++) {
+        if ((_source == links[i].source.id) && (_target == links[i].target.id)) {
+            svg.selectAll('path').filter(function (d, j) {
+                if (j == i + 1)
+                    d3.select(this).style('stroke-width', _weight + 'px');
+            });
+        }
+    }
 }
 
 configuration_setting = function () {
@@ -59,14 +67,14 @@ configuration_setting = function () {
 
     links = [
         {
-            source: 0, target: 1, interaction:
+            source:  0, target:  1, interaction:
             [
                 { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
                 { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
             ]
         },
         {
-            source: 1, target: 2, interaction:
+            source: 1, target:  2, interaction:
             [
                 { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
             ]
@@ -234,7 +242,7 @@ do_changes = function() {
                   }
                   else {
                       end_node = clicked_node;
-                      var link = { source: start_node.id, target: end_node.id, interaction: [] };
+                      var link = { source: start_node, target: end_node, interaction: [] };
                       links.push(link);
                       draw_line.classed('draw_line_hidden', true);
                       clicked_link = link;
@@ -651,7 +659,7 @@ save_interaction = function (order) {
                 d = clicked_link;
             }
         });
-        //benefit_update();
+        benefit_update();
     }
     container.html('')
              .classed('interaction_container_hidden', true);
@@ -756,46 +764,8 @@ Template.configuration.events({
     },
 
     'click #test': function () {
-        //var _nodes = [
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 1, name: 'bb', benefit: 3 },
-        //    { id: 2, name: 'ccc', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 }
-        //];
 
-        //var _links = [
-        //    {
-        //        source: 0, target: 1, interaction:
-        //        [
-        //            { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-        //            { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
-        //        ]
-        //    },
-        //    {
-        //        source: 1, target: 2, interaction:
-        //        [
-        //            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-        //        ]
-        //    },
-        //                {
-        //                    source: 3, target: 4, interaction:
-        //                    [
-        //                        { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-        //                    ]
-        //                }
-        //];
-
-        //var _property = [
-        //    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
-        //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
-        //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-        //];
-        //set_configuration_data(_nodes, _links, _property);
-        do_changes();
+       // interaction_style_setting(0,1,20);
     },
 
     'click .trend_button ': function (e) {
