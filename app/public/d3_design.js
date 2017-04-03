@@ -3,7 +3,6 @@
 var width = 500;
 var height = 600;
 var radius = 60;
-//var colors = d3.scale.category10();
 var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7', '#BC9F77', '#D19826', '#C18A26', '#C7802D'];
 var svg_clicked = false;
 var timer;
@@ -16,12 +15,11 @@ var clicked_link = null;
 var on_node = false;
 var bordercolor = '#404040';
 var border = 1;
-var dialog_control;
 var consensus_level = 0,
     empowerment = 0,
     flow = 0;
 
-//#endregion 
+//#endregion
 
 d3.select('body').style('background-color', '#E7E6E6');
 
@@ -34,22 +32,11 @@ var svg_container = d3.select('#full_container').append('div')
                                                 });
 
 var svg = d3.select('#svg_container').append('svg')
-            .attr('width', width)
-            .attr('height', height)
-            .attr('border', 1)
-            .on('click', svgclick);
+                                    .attr('width', width)
+                                    .attr('height', height)
+                                    .on('click', svgclick);
 
-var flow_page = d3.select('#full_container').append('div')
-        .attr('id', 'flow_container')
-       .style('width', window.innerWidth + 'px')
-       .style('height', 600 + 'px')
-       .style('margin-top', 0 + 'px')
-       .style('display', 'none')
-       .style('position', 'absolute');
-
-//.style('margin-left', 520 + 'px');
-
-set_trend();
+//set_trend();
 
 var borderPath = svg.append("rect")
                     .attr("x", 0)
@@ -62,13 +49,14 @@ var borderPath = svg.append("rect")
 
 var nodes = [], links = [], property = [];
 
-//var nodes = [
+
+// var nodes = [
 //    { id: 0, name: 'a', benefit: 3 },
 //    { id: 1, name: 'b', benefit: 4 },
 //    { id: 2, name: 'c', benefit: 3 }
-//];
+// ];
 
-//var links = [
+// var links = [
 //    {
 //        source: 0, target: 1, interaction:
 //        [
@@ -82,14 +70,20 @@ var nodes = [], links = [], property = [];
 //            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
 //        ]
 //    }
-//];
+// ];
 
-//var property = [
+// var property = [
 //    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
 //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
 //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-//];
+// ];
 
+// //store those properties which are not being selected but being input
+// var other_property= [
+//   { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
+//   { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
+//   { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
+// ];
 
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 
@@ -107,6 +101,16 @@ var draw_line = svg.append('svg:path')
 
 var activity = svg.append('svg:g').selectAll('path');
 var stakeholder = svg.append('svg:g').selectAll('g');
+
+function updateData(newNodes, newLinks, newProperties){
+    nodes = newNodes;
+    links = newLinks;
+    property = newProperties;
+
+    do_changes();
+
+}
+
 
 function tick() {
     activity.attr('d', function (d) {
@@ -184,7 +188,6 @@ function do_changes() {
       .on('mouseout', function (d) {
           on_node = false;
           d3.select(this).attr('transform', '')
-                         //.style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')); })
                          .style('stroke-width', '0px');
       })
       .on('click', function (d) {
@@ -281,12 +284,7 @@ function cretae_interaction_container(link) {
                          .attr('type', 'button')
                          .attr('value', 'ADD')
                          .attr('class', 'green_btn')
-                         .attr('onclick', 'add_interaction()')
-    //controller.append('input')
-    //                     .attr('type', 'button')
-    //                     .attr('value', 'FLOW')
-    //                     .attr('class', 'green_btn')
-    //                     .attr('onclick', 'flow_adjust()');
+                         .attr('onclick', 'add_interaction()');
 
     thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
     thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
@@ -294,9 +292,7 @@ function cretae_interaction_container(link) {
     thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
 
     var tbody = table.append('tbody').attr('id', 'item');
-                                     //.style('display', 'block')
-                                     //.style('height', '500px')
-                                     //.style('overflow', 'auto');
+
     for (i = 0; i < link.interaction.length; i++) {
         var tr = tbody.append('tr');
         tr.append('td').append('input')
@@ -328,18 +324,6 @@ function cretae_interaction_container(link) {
                        .attr('size', '2');
     }
     interaction_control();
-}
-
-function flow_adjust() {
-    flow_page.style({
-        'display': 'block',
-    });
-    flow_page.append('object')
-             .attr('type', 'text/html')
-             .attr('data', 'http://localhost:3000/')
-             .attr('width', '1000px')
-             .attr('height', '800px');
-
 }
 
 function interaction_control() {
@@ -482,7 +466,7 @@ function reset_node() {
     svg.on("mousemove", null);
 }
 
-function svgclick() {
+function svgclick(event) {
     if (d3.event.target.nodeName == 'svg') {
         if (svg_clicked) {
             //double_click();
@@ -513,18 +497,18 @@ function add_stakeholder(_index, _x, _y, edit_type) {
     stakeholder_creater.classed('container_hidden', false);
     var table = stakeholder_creater.append('table')
                                    .attr('class', 'container_table');
-                                   
+
     var tr;
     tr = table.append('tr');
     tr.append('td').html('Name:')
                    .attr('class', 'configuration_font');
-    
+
     var td = tr.append('td');
     td.append('input')
       .attr('type', 'text')
       .attr('class', 'line_input')
       .attr('id', 'stakeholder_name');
-    
+
     if (edit_type != 'add') {
         nodes.filter(function (d, i) {
             if (d.id == _index) {
@@ -657,7 +641,7 @@ function add_property(_type) {
 }
 
 function stakeholder_save(_index, _x, _y, edit_type) {
-    var _id = "stakeholder" + (_index + 1);
+    var _id = parseInt(_index, 10);
     var _name = $('#stakeholder_name').val();
     //false = not be used
     var node_check = false;
@@ -704,4 +688,4 @@ function stakeholder_save(_index, _x, _y, edit_type) {
     }
 }
 
-do_changes();
+//do_changes();

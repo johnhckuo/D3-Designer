@@ -1,9 +1,13 @@
 var theta = 0, figureOffset, panelWidth = 210;
 var empowerScore, panelCount;
+var hidden = true;
 
-stakeholders = [];
-properties = [];
+empowerment_stakeholders = [];
+empowerment_properties = [];
+empowerment_links = [];
+other_empowerment_properties = [];
 
+var lineWidthOffset = 200;
 
 ////////////////////
 //                //
@@ -17,47 +21,291 @@ var visitedCount;  //in order to ignore the rest of the array elem
 var actualVisitIndex = [];
 var origin;
 
-dataReset = function(){
-    for (var i = 0 ; i< properties.length; i++){
-        properties[i].rating = [];
-        properties[i].averageImportance = 0;
+var dataReset = function(){
+    for (var i = 0 ; i< empowerment_properties.length; i++){
+        empowerment_properties[i].rating = [];
+        empowerment_properties[i].averageImportance = 0;
     }
     visitedProperty = [];
     visitedCount = 0;
     actualVisitIndex = [];
 }
 
-onNavButtonClick = function( increment ){
-    var carousel = $('#carousel');
+var rangeElementBG = function(n, target){
 
-    theta += ( 360 / stakeholders.length ) * increment * -1;
-    carousel.css('transform', 'rotateY(' + theta + 'deg)');
-};
-
-importanceCalculator = function(){
-
-
-
-
+    target.css({
+      'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
+    });
 }
 
-updateAverageImportance = function(){
-    for (var i = 0 ; i < properties.length ; i++){
-        var importance = 0;
-        for (var j = 0 ; j < properties[i].rating.length; j++){
-            properties[i].rating[j] = parseInt(properties[i].rating[j]);
-            if ( j == properties[i].owner){
-                continue;
+// onNavButtonClick = function( increment ){
+//     var carousel = $('#carousel');
+//
+//     theta += ( 360 / empowerment_stakeholders.length ) * increment * -1;
+//     carousel.css('transform', 'rotateY(' + theta + 'deg)');
+// };
+
+var d3Testing = function(){
+
+    var file = {};
+    file.nodes = empowerment_stakeholders;
+    file.links = empowerment_links;
+
+    if (d3.select(".leftPanel svg").length >0){
+        d3.select(".leftPanel svg").remove();
+    }
+
+    var width = 960,height = 500;
+
+    var svg = d3.select(".leftPanel").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var force = d3.layout.force()
+        .gravity(.05)
+        .distance(100)
+        .charge(-100)
+        .size([width, height]);
+
+    var render = function() {
+      var json = file;
+      force
+          .nodes(json.nodes)
+          .links(json.links)
+          .start();
+
+      var link = svg.selectAll(".link")
+          .data(json.links)
+        .enter().append("line")
+          .attr("class", function(d){ return "link link"+d.source})
+        .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
+
+      var node = svg.selectAll(".node")
+          .data(json.nodes)
+        .enter().append("g")
+        .attr("class", function(d){ return "node node"+d.id})
+        .call(force.drag);
+
+      node.append("circle")
+          .attr("r","5");
+
+      node.append("text")
+          .attr("dx", 12)
+          .attr("dy", ".35em")
+          .text(function(d) { return d.name });
+
+      force.on("tick", function() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      });
+    };
+
+
+    var nodes = $(".node");
+    for (var i = 0 ; i < nodes.length ; i++){
+        console.log(nodes.className);
+    }
+
+
+
+
+
+
+    render();
+}
+
+
+
+var updateLink = function(type){
+
+    if (type == "calculate"){
+        var newLink = [];
+        var visitedOwner = [];
+        var visitedPropertyName = [];
+
+        //get property owner and name
+        for (var i = 0 ; i< visitedProperty.length ; i++){
+
+
+            for (var j = 0 ; j < empowerment_properties.length; j++){
+                if (visitedProperty[i].id == empowerment_properties[j].id){
+                    visitedPropertyName.push(empowerment_properties[j].name);
+                    visitedOwner.push(empowerment_properties[j].owner);
+                }else{
+                    console.log("An error has occured in finding property owner & name");
+                }
             }
-            importance += properties[i].rating[j];
         }
-        properties[i].averageImportance = importance/(stakeholders.length-1);
+
+        console.log(visitedProperty);
+        console.log(visitedPropertyName);
+        console.log(visitedOwner);
+
+
+
+        for (var i = 0 ; i < visitedProperty.length-1 ; i++){
+
+            var interaction = [];
+
+            interaction.push({
+                'name': 'system matchmaking',
+                'give': visitedPropertyName[i],
+                'source_affect': 0,
+                'receive': 'none',
+                'target_affect': 0
+            });
+
+            newLink.push({
+                'source': visitedOwner[i],
+                'target': visitedOwner[i+1],
+                'interaction': interaction
+            });
+
+        }
+
+
+
+        for (var i = 0 ; i < newLink.length ; i++ ){
+          for (var j = 0 ; j < empowerment_links.length ; j++ ){
+              if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+                  empowerment_links[j].weight += lineWidthOffset;
+              }else{
+                  empowerment_links.push(newLink[i]);
+                  empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+              }
+          }
+
+        }
+
+        //empowerment_links = newLink;
+        console.log(newLink);
+        //updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
+        d3Testing();
+        //benefit_update();
+    }else if (type == "remove"){
+      for (var i = 0 ; i < empowerment_stakeholders.length; i++){
+          var flag = true;
+          for (var j = 0 ; j < empowerment_properties.length ; j++){
+              if (empowerment_properties[j].owner == empowerment_stakeholders[i].id){
+                  flag = false;
+                  break;
+              }
+          }
+          if (flag){
+              empowerment_stakeholders.splice(i, 1);
+          }
+      }
+
+      for (var i = 0 ; i < empowerment_links.length ; i++){
+          var flag = true;
+          for (var j = 0 ; j < empowerment_stakeholders.length; j++){
+              if (empowerment_links[i].source == empowerment_stakeholders[j].id || empowerment_links[i].target == empowerment_stakeholders[j].id){
+                  flag = false;
+                  break;
+              }
+          }
+          if (flag){
+              empowerment_links.splice(i, 1);
+          }
+      }
+
+
+    }else if (type == "insert"){
+      var newLink = [];
+
+
+      //get property owner and name
+
+
+      for (var j = 0 ; j < empowerment_properties.length; j++){
+          if (visitedProperty[i].id == empowerment_properties[j].id){
+              visitedPropertyName.push(empowerment_properties[j].name);
+              visitedOwner.push(empowerment_properties[j].owner);
+          }else{
+              console.log("An error has occured in finding property owner & name");
+          }
+      }
+
+
+      console.log(visitedProperty);
+      console.log(visitedPropertyName);
+      console.log(visitedOwner);
+
+
+
+      for (var i = 0 ; i < visitedProperty.length-1 ; i++){
+
+          var interaction = [];
+
+          interaction.push({
+              'name': 'system matchmaking',
+              'give': visitedPropertyName[i],
+              'source_affect': 0,
+              'receive': 'none',
+              'target_affect': 0
+          });
+
+          newLink.push({
+              'source': visitedOwner[i],
+              'target': visitedOwner[i+1],
+              'interaction': interaction
+          });
+
+      }
+
+
+
+      for (var i = 0 ; i < newLink.length ; i++ ){
+        for (var j = 0 ; j < empowerment_links.length ; j++ ){
+            if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+                empowerment_links[j].weight += lineWidthOffset;
+            }else{
+                empowerment_links.push(newLink[i]);
+                empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
+            }
+        }
+
+      }
     }
 
 
 }
 
-sort = function(list){
+
+var importanceCalculator = function(){
+
+
+
+
+}
+
+
+
+
+/* ----- Matchmaking Functions ----- */
+
+var updateAverageImportance = function(){
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
+        var importance = 0;
+        for (var j = 0 ; j < empowerment_properties[i].rating.length; j++){
+            empowerment_properties[i].rating[j] = parseInt(empowerment_properties[i].rating[j]);
+            if ( j == empowerment_properties[i].owner){
+                continue;
+            }
+            importance += empowerment_properties[i].rating[j];
+        }
+        empowerment_properties[i].averageImportance = importance/(empowerment_stakeholders.length-1);
+    }
+
+
+}
+
+var sort = function(list){
   //selection sort
 
     for (var i=0; i < list.length; i++)
@@ -77,16 +325,16 @@ sort = function(list){
     return list;
 }
 
-startMatching = function(){
+var findOrigin = function(){
 
     var priorityList = [];
     var visitList = [];
     var sortedList = [];
 
-    for (var i = 0 ; i < properties.length ; i++){
-        var owner = properties[i].owner;
-        var averageRating = properties[i].averageImportance;
-        var self_Importance = properties[i].rating[owner];
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
+        var owner = parseInt(empowerment_properties[i].owner);
+        var averageRating = empowerment_properties[i].averageImportance;
+        var self_Importance = empowerment_properties[i].rating[owner];
 
         var diff = averageRating - self_Importance;
         priorityList.push({
@@ -101,7 +349,7 @@ startMatching = function(){
     visitedCount = 0;
     visitedProperty.push({id : origin, priority : 0})
 
-    success = tradingMatch(origin);
+    success = findVisitNode(origin);
 
     var score = 0 ;
     for (var i = 0 ; i<visitedProperty.length ; i++){
@@ -110,10 +358,10 @@ startMatching = function(){
     }
 
     empowerScore = score/(visitedProperty.length-1);
-    alert(empowerScore);
+    alert("Empowerment Score :"+empowerScore);
 }
 
-checkExist = function(elem, data){
+var checkExist = function(elem, data){
     for (var i = 0 ; i < data.length; i++){
         if (elem == data[i].id && i != 0){
             return false;
@@ -122,21 +370,21 @@ checkExist = function(elem, data){
     return true;
 }
 
-tradingMatch = function(visitNode){
+var findVisitNode = function(visitNode){
 
     var goThroughList = [];
     var diffList = [];
     //console.log(goThroughList);
-    for (var i = 0 ; i < properties.length ; i++){
+    for (var i = 0 ; i < empowerment_properties.length ; i++){
 
-        var newOwner = properties[i].owner;
-        var currentOwner = properties[visitNode].owner;
+        var newOwner = parseInt(empowerment_properties[i].owner);
+        var currentOwner = parseInt(empowerment_properties[visitNode].owner);
 
         if (i == visitNode || (newOwner == currentOwner && i != origin)){
             continue;
         }
 
-        var diff = matchingAlgo(visitNode, i);
+        var diff = returnPriority(visitNode, i);
         goThroughList.push({
           id:i,
           priority:diff
@@ -148,14 +396,15 @@ tradingMatch = function(visitNode){
     var flag = false;
     var visitIndex;
 
-    for (var j = 0 ; j< properties.length ; j++){
+    for (var j = 0 ; j< empowerment_properties.length ; j++){
         flag = checkExist(goThroughList[j].id, visitedProperty);
         if (flag){
             visitIndex = j;
             break;
         }
-        if (!flag && j == (properties.length-1)){
-            alert("Fail");
+        if (!flag && j == (empowerment_properties.length-1)){
+            console.log("Fail");
+            return;
         }
     }
 
@@ -166,22 +415,23 @@ tradingMatch = function(visitNode){
     visitedProperty[visitedCount] = goThroughList[visitIndex];
 
     if (goThroughList[visitIndex].id == origin){
-        alert("Success");
+        console.log("Success");
+        updateLink('calculate');
     }else{
         // return bytes32(visitNode);
-        tradingMatch(goThroughList[visitIndex].id);
+        findVisitNode(goThroughList[visitIndex].id);
     }
 
 }
 
 
-matchingAlgo = function(visitNode, i){
+var returnPriority = function(visitNode, i){
 
     //self diff
-    var owner = properties[visitNode].owner;
-    var self_Importance = properties[visitNode].rating[owner];
+    var owner = parseInt(empowerment_properties[visitNode].owner);
+    var self_Importance = empowerment_properties[visitNode].rating[owner];
 
-    var currentRating = properties[i].rating[owner];
+    var currentRating = empowerment_properties[i].rating[owner];
 
     var diff = currentRating - self_Importance;
 
@@ -196,13 +446,24 @@ matchingAlgo = function(visitNode, i){
 }
 
 
-function bg(n, target){
-    target.css({
-      'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
-    });
-}
+
 
 if (Meteor.isClient) {
+
+  ////////////////////
+  //                //
+  //     Init       //
+  //                //
+  ////////////////////
+
+  Template.empowerment.onRendered(function () {
+      if (empowerment_properties.length == 0 || empowerment_stakeholders.length == 0){
+          alert("Data not Found");
+          Router.go("/configuration");
+      }
+      d3Testing();
+
+  });
 
   ////////////////////
   //                //
@@ -247,54 +508,77 @@ if (Meteor.isClient) {
 
         var p = r.val();
         p = r.val();
-        bg(p, r);
+        rangeElementBG(p, r);
       },
       'mouseenter .range, mousemove .range': function (e) {
         var r = $(e.target);
         var p = r.val();
         p = r.val();
-        bg(p, r);
+        rangeElementBG(p, r);
       },
       "click #empowerTest": function(e){
           var values = [];
           $('.empowerContent .range').each(function(i, obj) {
               values.push($(this).val());
           });
-          console.log(values);
           dataReset();
-          for (var i = 0 ; i < stakeholders.length ; i++){
+          for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
 
-            for (var j = 0 ; j < properties.length; j++){
-                properties[j].rating.push(values[properties.length*i+j]);
+            for (var j = 0 ; j < empowerment_properties.length; j++){
+                empowerment_properties[j].rating.push(values[empowerment_properties.length*i+j]);
               }
 
           }
-          console.log(properties)
+          //console.log(empowerment_properties)
           updateAverageImportance();
-          startMatching();
+          findOrigin();
       },
-      "click #removeProperty": function(e){
+      "click .removeProperty": function(e){
           var id = $(e.target).parent()[0].className;
           id = id.split("property")[1];
 
           var index;
-          for (var i = 0 ; i < properties.length; i++){
-              if (properties[i].id == id){
+          for (var i = 0 ; i < empowerment_properties.length; i++){
+              if (empowerment_properties[i].id == id){
                   index = i;
               }
           }
 
           if (index > -1) {
-            properties.splice(index, 1);
+              empowerment_properties.splice(index, 1);
           }
-          console.log(properties);
-          Router.go("/empowerment");
-          //Template.empowerment.__helpers.get('properties')();
+
+          updateLink('remove');
+          d3Testing();
+          //Router.go("/empowerment");
+          //Template.empowerment.__helpers.get('empowerment_properties')();
       },
       "click #newProperty": function(e){
           $(".hiddenDIV").toggleClass("displayNewProperty");
-          console.log("hh")
+
       },
+      "click .addProperty": function(e){
+          var id = $(e.target).parent()[0].className;
+          id = id.split("newProperty")[1];
+          console.log(id);
+
+          var index;
+          for (var i = 0 ; i < other_empowerment_properties.length; i++){
+              if (other_empowerment_properties[i].id == id){
+                  index = i;
+              }
+          }
+
+          if (index > -1) {
+              empowerment_properties.push(other_empowerment_properties[index]);
+              other_empowerment_properties.splice(index, 1);
+          }
+
+          updateLink('insert');
+          d3Testing();
+
+      },
+
       // "click #addProperty": function(e){
       //     $(".leftPanel").toggleClass("displayNewProperty");
       //
@@ -312,16 +596,16 @@ if (Meteor.isClient) {
     Template.empowerment.helpers({
 
       // figures: function(){
-      //   var degree = 360/stakeholders.length;
+      //   var degree = 360/empowerment_stakeholders.length;
       //   var figureData = [];
-      //   figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / stakeholders.length ) ) +350;
+      //   figureOffset = Math.round( ( panelWidth / 2) / Math.tan( Math.PI / empowerment_stakeholders.length ) ) +350;
       //
-      //   for (var i = 0 ; i < stakeholders.length ; i++){
-      //       var title = "<h2>" + stakeholders[i] + "</h2>";
+      //   for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
+      //       var title = "<h2>" + empowerment_stakeholders[i] + "</h2>";
       //
       //       var content = "";
-      //       for (var j = 0 ; j < properties.length ; j ++){
-      //           var propertyTitle = "<div><span>" + properties[j].name + ": </span>";
+      //       for (var j = 0 ; j < empowerment_properties.length ; j ++){
+      //           var propertyTitle = "<div><span>" + empowerment_properties[j].name + ": </span>";
       //           var inputField = "<input type='text' /></div>";
       //
       //           content += propertyTitle+inputField;
@@ -338,15 +622,15 @@ if (Meteor.isClient) {
       properties: function(){
           var data = [];
           var detail = [];
-          panelCount = stakeholders.length;
+          panelCount = empowerment_stakeholders.length;
 
-          for (var i = 0 ; i < stakeholders.length; i++){
+          for (var i = 0 ; i < empowerment_stakeholders.length; i++){
 
-              for (var j = 0 ; j < properties.length; j++){
+              for (var j = 0 ; j < empowerment_properties.length; j++){
                 detail.push({
-                  "propertyClass" : "property"+properties[j].id,
-                  "name": properties[j].name,
-                  "value": properties[j].rating[i],
+                  "propertyClass" : "property"+empowerment_properties[j].id,
+                  "name": empowerment_properties[j].name,
+                  "value": empowerment_properties[j].rating[i],
                 })
               }
 
@@ -357,7 +641,7 @@ if (Meteor.isClient) {
 
               data.push({
                 "className": panelClass,
-                "stakeholder": stakeholders[i].name,
+                "stakeholder": empowerment_stakeholders[i].name,
                 "detail": detail
               });
               detail = [];
@@ -367,10 +651,11 @@ if (Meteor.isClient) {
       newProperties:function(){
           var data = [];
 
-          for (var i = 0 ; i < properties.length; i++){
+          for (var i = 0 ; i < other_empowerment_properties.length; i++){
               data.push({
-                "name":properties[i].name,
-                "owner": properties[i].owner
+                "propertyClass" : "newProperty"+other_empowerment_properties[i].id,
+                "name":other_empowerment_properties[i].name,
+                "owner": other_empowerment_properties[i].owner
 
               })
           }

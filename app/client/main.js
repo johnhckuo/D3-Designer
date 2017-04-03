@@ -3,10 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './flow.js';
 import './main.html';
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
 import './empowerment.js';
 import './configuration.js';
 
@@ -60,8 +57,10 @@ if (Meteor.isClient) {
 
     Template.configuration.events({
         'click #submit ': function (e) {
-            properties = property;
-            stakeholders = nodes;
+            empowerment_properties = property;
+            empowerment_stakeholders = nodes;
+            empowerment_links = links;
+            other_empowerment_properties = other_property;
         },
 
     });

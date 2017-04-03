@@ -54,7 +54,7 @@
       <div class="panelContainer {{propertyClass}}">
           <label for="disabledTextInput">{{name}}</label>
           <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
-          <button type="button" class="btn btn-danger" id='removeProperty' name="button">Remove</button>
+          <button type="button" class="btn btn-danger removeProperty" name="button">Remove</button>
       </div>
     </div>
     {{/each}}
@@ -66,13 +66,13 @@
 
 </template>
 
-<!-- <template name="newProperty">
-
-      <label for="disabledTextInput">{{name}}</label>
-      <label for="disabledTextInput">{{owner}}</label>
-      <button type="button" class="btn btn-danger" id="addProperty" name="button">Add</button>
-
-</template> -->
+<template name="newProperty">
+    <div class='propertyContainer {{propertyClass}}'>
+        <label for="disabledTextInput">{{name}}</label>
+        <label for="disabledTextInput">{{owner}}</label>
+        <button type="button" class="btn btn-danger addProperty" name="button">Add</button>
+    </div>
+</template>
 
 <!--
 *************************
@@ -102,7 +102,7 @@
       </section>
   </div> -->
     <div class="leftPanel">
-      {{> configuration}}
+      <!-- {{> configuration}} -->
     </div>
 
     <div class="empowerment">
@@ -113,9 +113,11 @@
 
     </div>
     <div class="hiddenDIV">
-      <!-- {{#each newProperties}}
+      <h2>Adding new properties</h2>
+      <hr>
+      {{#each newProperties}}
         {{> newProperty}}
-      {{/each}} -->
+      {{/each}}
     </div>
 </template>
 
@@ -328,11 +330,9 @@
   {{> header}}
     <link rel="stylesheet" href="jquery-ui.min.css">
     <link rel="stylesheet" href="configure.css">
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="jquery-3.1.1.min.js"></script>
-    <script src="jquery-ui.min.js"></script>
-    <script src="element_setting.js"></script>
-    <script src="d3_design.js"></script>
+
+
+    
     <div id="full_container" style="width:1400px; height:700px;">
     </div>
     <div class="stakeholder_creater container_hidden" style="align-content:center;">
@@ -355,6 +355,7 @@
             </tr>
         </table>-->
     </div>
+    
     <div class="stakeholder_delete container_hidden"  style="align-content:center;">
     </div>
     <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
