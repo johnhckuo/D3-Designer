@@ -795,6 +795,7 @@ Template.configuration.events({
         //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
         //];
         //set_configuration_data(_nodes, _links, _property);
+        do_changes();
     },
 
     'click .trend_button ': function (e) {
