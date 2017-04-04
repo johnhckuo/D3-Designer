@@ -102,6 +102,13 @@ configuration_setting = function () {
             ]
         },
         {
+            source: 0, target: 1, weight:1, interaction:
+            [
+                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
+                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+            ]
+        },
+        {
             source: 1, target: 2, weight:1, interaction:
             [
                 { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
@@ -195,13 +202,11 @@ tick = function() {
 
           for (var i = 0 ; i < linksCount.length; i++){
               if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source){
-                  dr = 45/temp[i];
+                  dr = 60/temp[i];
                   temp[i]--;
-                  console.log(temp[i]);
 
               }
           }
-        console.log(linksCount[1].count)
         return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
     });
 
