@@ -81,7 +81,6 @@ countLink = function(){
             });
         }
     }
-    console.log(linksCount)
 }
 
 configuration_setting = function () {
@@ -95,46 +94,31 @@ configuration_setting = function () {
 
     links = [
         {
-            source: 0, target: 1, weight:1, interaction:
+            source: 0, target: 1, property_id: 0, weight:1, interaction:
             [
                 { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
                 { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
             ]
         },
         {
-            source: 0, target: 1, weight:1, interaction:
-            [
-                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
-            ]
-        },
-        {
-            source: 1, target: 2, weight:1, interaction:
-            [
-                { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-            ]
-        },
-        {
-            source: 1, target: 2, weight:1, interaction:
+            source: 1, target: 2, property_id: 1, weight:1, interaction:
             [
                 { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
             ]
         }
     ];
 
+
     property = [
-        { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
-        { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
-        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
+        { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0, used:1 },
+        { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0, used:1 },
+        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used:1 },
+        { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0, used:0  },
+        { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0, used:0  },
+        { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0, used:0  }
+
     ];
 
-
-    //store those properties which are not being selected but being input
-    other_property= [
-      { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
-      { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
-      { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
-    ];
 
     d3.select('body').style('background-color', '#E7E6E6');
     svg_container = d3.select('#full_container').append('div')
@@ -808,7 +792,6 @@ set_trend = function () {
 
 Template.configuration.events({
     'click #svg': function (event) {
-        console.log(event)
         if (event.target.nodeName == 'svg') {
             if (svg_clicked) {
                 //double_click();

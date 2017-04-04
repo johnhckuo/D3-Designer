@@ -5,9 +5,8 @@ var hidden = true;
 empowerment_stakeholders = [];
 empowerment_properties = [];
 empowerment_links = [];
-other_empowerment_properties = [];
 
-var lineWidthOffset = 20;
+var lineWidthOffset = 20, defaultLineWidth = 1;
 
 ////////////////////
 //                //
@@ -29,6 +28,15 @@ var dataReset = function(){
     visitedProperty = [];
     visitedCount = 0;
     actualVisitIndex = [];
+
+    empowerment_links = [];
+    empowerment_stakeholders = [];
+
+    var svg = d3.select(".leftPanel svg");
+
+    var link = svg.selectAll(".link")
+      .style("stroke-width", defaultLineWidth);
+
 }
 
 var rangeElementBG = function(n, target){
@@ -36,6 +44,22 @@ var rangeElementBG = function(n, target){
     target.css({
       'background-image':'-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE '+n+'%,#444444 '+n+'%, #444444 100%)'
     });
+}
+
+var getPropertyLength = function(type){
+    var counter = 0;
+    for (var i = 0 ; i < empowerment_properties.length; i++){
+        if (type ==1){
+            if (empowerment_properties[i].used ==1){
+              counter++;
+            }
+        }else if (type ==0){
+            if (empowerment_properties[i].used ==0){
+              counter++;
+            }
+        }
+    }
+
 }
 
 // onNavButtonClick = function( increment ){
@@ -46,9 +70,6 @@ var rangeElementBG = function(n, target){
 // };
 
 var d3Testing = function(){
-
-    console.log(empowerment_links);
-    console.log(empowerment_stakeholders);
 
     var file = {};
     file.nodes = empowerment_stakeholders;
@@ -126,8 +147,7 @@ var d3Testing = function(){
 
 
 
-var updateEmpowermentData = function(type){
-    console.log(empowerment_links);
+var updateEmpowermentData = function(type, prop){
 
     if (type == "calculate"){
         var newLink = [];
@@ -137,14 +157,16 @@ var updateEmpowermentData = function(type){
         //get property owner and name
         for (var i = 0 ; i< visitedProperty.length ; i++){
 
-
+            var flag = true;
             for (var j = 0 ; j < empowerment_properties.length; j++){
                 if (visitedProperty[i].id == empowerment_properties[j].id){
                     visitedPropertyName.push(empowerment_properties[j].name);
                     visitedOwner.push(empowerment_properties[j].owner);
-                }else{
-                    console.log("An error has occured in finding property owner & name");
+                    flag = false;
                 }
+            }
+            if (flag){
+                console.log("An error has occured in finding property owner & name");
             }
         }
 
@@ -168,8 +190,9 @@ var updateEmpowermentData = function(type){
             });
 
             newLink.push({
-                'source': visitedOwner[i],
-                'target': visitedOwner[i+1],
+                'source': {"id":visitedOwner[i], "weight": 0},
+                'target': {"id":visitedOwner[i+1], "weight": 0},
+                "property_id": visitedProperty[i],
                 'interaction': interaction,
                 'weight':0
             });
@@ -177,73 +200,75 @@ var updateEmpowermentData = function(type){
 
         }
 
-        console.log(empowerment_links);
-
-
         for (var i = 0 ; i < newLink.length ; i++ ){
             var flag = true;
             for (var j = 0 ; j < empowerment_links.length ; j++ ){
                 if (newLink[i].source.id == empowerment_links[j].source.id && newLink[i].target.id == empowerment_links[j].target.id){
+                    empowerment_links[j].weight = defaultLineWidth;
+
                     empowerment_links[j].weight += lineWidthOffset;
                     flag = false;
                 }
             }
             if (flag){
                 empowerment_links.push(newLink[i]);
+                empowerment_links[j].weight = defaultLineWidth;
                 empowerment_links[empowerment_links.length-1].weight += lineWidthOffset;
-                console.log(newLink[i]);
             }
 
         }
+        console.log(empowerment_links);
 
         //empowerment_links = newLink;
-        console.log(empowerment_links);
         //updateData(empowerment_stakeholders, empowerment_links, empowerment_properties);
-
         //benefit_update();
     }else if (type == "remove"){
-      for (var i = 0 ; i < empowerment_stakeholders.length; i++){
-          var flag = true;
-          for (var j = 0 ; j < empowerment_properties.length ; j++){
-              if (empowerment_properties[j].owner == empowerment_stakeholders[i].id){
-                  flag = false;
-                  break;
-              }
-          }
-          if (flag){
-              empowerment_stakeholders.splice(i, 1);
-          }
-      }
+      // for (var i = 0 ; i < empowerment_stakeholders.length; i++){
+      //     var flag = true;
+      //     for (var j = 0 ; j < empowerment_properties.length ; j++){
+      //         if (empowerment_properties[j].owner == empowerment_stakeholders[i].id){
+      //             flag = false;
+      //             break;
+      //         }
+      //     }
+      //     if (flag){
+      //         empowerment_stakeholders.splice(i, 1);
+      //     }
+      // }
+        var flag = true;
 
-      for (var i = 0 ; i < empowerment_links.length ; i++){
-          var flag = true;
-          for (var j = 0 ; j < empowerment_stakeholders.length; j++){
-              if (empowerment_links[i].source.id == empowerment_stakeholders[j].id || empowerment_links[i].target.id == empowerment_stakeholders[j].id){
-                  flag = false;
-                  break;
-              }
+        for (var i = 0 ; i < empowerment_links.length ; i++){
+            console.log(prop);
+            if (empowerment_links[i].property_id == prop.id){
+                flag = false;
+                break;
+            }
+        }
+        if (flag){
+            empowerment_links.splice(i, 1);
+        }
+
+        $(".empowerContent").each(function(i, obj){
+          var $this = $(this);
+
+          var id = $this.children('span')[0].className.split("property")[1];
+          if (id == prop.id){
+              $this.remove();
           }
-          if (flag){
-              empowerment_links.splice(i, 1);
-          }
-      }
+        });
 
 
     }else if (type == "insert"){
-        var length = empowerment_properties.length;
-        var element = empowerment_properties[length-1];
-
-
           //$(".empowerPanel div:first-child").after(content);
           $(".empowerPanel").each(function(i, obj){
 
             var content = $('<div></div>')
                 .addClass("empowerContent")
                 .append($('<span></span>')
-                  .addClass("panelContainer property"+element.id)
+                  .addClass("panelContainer property"+prop.id)
                   .append($('<label></label')
                     .attr("for", "disabledTextInput")
-                    .text(element.name))
+                    .text(prop.name))
                   .append($("<input></input>")
                     .attr({
                         "type" : "range",
@@ -327,15 +352,18 @@ var findOrigin = function(){
     var sortedList = [];
 
     for (var i = 0 ; i < empowerment_properties.length ; i++){
-        var owner = parseInt(empowerment_properties[i].owner);
-        var averageRating = empowerment_properties[i].averageImportance;
-        var self_Importance = empowerment_properties[i].rating[owner];
+        if (empowerment_properties[i].used == 1){
+            var owner = parseInt(empowerment_properties[i].owner);
+            var averageRating = empowerment_properties[i].averageImportance;
+            var self_Importance = empowerment_properties[i].rating[owner];
 
-        var diff = averageRating - self_Importance;
-        priorityList.push({
-          id:i,
-          priority:diff
-        });
+            var diff = averageRating - self_Importance;
+            priorityList.push({
+              id:i,
+              priority:diff
+            });
+        }
+
     }
     priorityList = sort(priorityList);
 
@@ -371,20 +399,20 @@ var findVisitNode = function(visitNode){
     var diffList = [];
     //console.log(goThroughList);
     for (var i = 0 ; i < empowerment_properties.length ; i++){
+        if (empowerment_properties[i].used ==1){
+            var newOwner = parseInt(empowerment_properties[i].owner);
+            var currentOwner = parseInt(empowerment_properties[visitNode].owner);
 
-        var newOwner = parseInt(empowerment_properties[i].owner);
-        var currentOwner = parseInt(empowerment_properties[visitNode].owner);
+            if (i == visitNode || (newOwner == currentOwner && i != origin)){
+                continue;
+            }
 
-        if (i == visitNode || (newOwner == currentOwner && i != origin)){
-            continue;
+            var diff = returnPriority(visitNode, i);
+            goThroughList.push({
+              id:i,
+              priority:diff
+            });
         }
-
-        var diff = returnPriority(visitNode, i);
-        goThroughList.push({
-          id:i,
-          priority:diff
-        });
-
     }
     console.log(goThroughList)
     goThroughList = sort(goThroughList);
@@ -397,7 +425,7 @@ var findVisitNode = function(visitNode){
             visitIndex = j;
             break;
         }
-        if (!flag && j == (empowerment_properties.length-1)){
+        if (!flag && j == (getPropertyLength(1)-1)){
             console.log("Fail");
             return;
         }
@@ -411,8 +439,12 @@ var findVisitNode = function(visitNode){
 
     if (goThroughList[visitIndex].id == origin){
         console.log("Success");
-        updateEmpowermentData('calculate');
-        d3Testing();
+        updateEmpowermentData('calculate', '');
+        links = empowerment_links;
+        nodes = empowerment_stakeholders;
+        property = empowerment_properties;
+        do_changes();
+        //d3Testing();
     }else{
         // return bytes32(visitNode);
         findVisitNode(goThroughList[visitIndex].id);
@@ -457,7 +489,6 @@ if (Meteor.isClient) {
           alert("Data not Found");
           Router.go("/configuration");
       }
-      d3Testing();
 
   });
 
@@ -521,7 +552,9 @@ if (Meteor.isClient) {
           for (var i = 0 ; i < empowerment_stakeholders.length ; i++){
 
             for (var j = 0 ; j < empowerment_properties.length; j++){
-                empowerment_properties[j].rating.push(values[empowerment_properties.length*i+j]);
+                if (empowerment_properties[j].used == 1){
+                    empowerment_properties[j].rating.push(values[empowerment_properties.length*i+j]);
+                }
               }
 
           }
@@ -532,20 +565,17 @@ if (Meteor.isClient) {
       "click .removeProperty": function(e){
           var id = $(e.target).parent()[0].className;
           id = id.split("property")[1];
-
           var index;
           for (var i = 0 ; i < empowerment_properties.length; i++){
               if (empowerment_properties[i].id == id){
+                  empowerment_properties[i].used = 0;
                   index = i;
+                  break;
               }
           }
 
-          if (index > -1) {
-              empowerment_properties.splice(index, 1);
-          }
-
-          updateEmpowermentData('remove');
-          d3Testing();
+          updateEmpowermentData('remove', empowerment_properties[index]);
+          do_changes();
           //Router.go("/empowerment");
           //Template.empowerment.__helpers.get('empowerment_properties')();
       },
@@ -557,20 +587,19 @@ if (Meteor.isClient) {
           var id = $(e.target).parent()[0].className;
           id = id.split("newProperty")[1];
           console.log(id);
-
           var index;
-          for (var i = 0 ; i < other_empowerment_properties.length; i++){
-              if (other_empowerment_properties[i].id == id){
+
+          for (var i = 0 ; i < empowerment_properties.length; i++){
+              if (empowerment_properties[i].id == id){
+                  empowerment_properties[i].used = 1;
                   index = i;
+                  break;
               }
           }
 
-          if (index > -1) {
-              empowerment_properties.push(other_empowerment_properties[index]);
-              other_empowerment_properties.splice(index, 1);
-          }
 
-          updateEmpowermentData('insert');
+          updateEmpowermentData('insert', empowerment_properties[index]);
+          do_changes();
           //d3Testing();
 
       },
@@ -623,11 +652,13 @@ if (Meteor.isClient) {
           for (var i = 0 ; i < empowerment_stakeholders.length; i++){
 
               for (var j = 0 ; j < empowerment_properties.length; j++){
-                detail.push({
-                  "propertyClass" : "property"+empowerment_properties[j].id,
-                  "name": empowerment_properties[j].name,
-                  "value": empowerment_properties[j].rating[i],
-                })
+                  if (empowerment_properties[j].used ==1){
+                      detail.push({
+                        "propertyClass" : "property"+empowerment_properties[j].id,
+                        "name": empowerment_properties[j].name,
+                        "value": empowerment_properties[j].rating[i],
+                      })
+                  }
               }
 
               var panelClass = "empowerPanel";
@@ -647,13 +678,16 @@ if (Meteor.isClient) {
       newProperties:function(){
           var data = [];
 
-          for (var i = 0 ; i < other_empowerment_properties.length; i++){
-              data.push({
-                "propertyClass" : "newProperty"+other_empowerment_properties[i].id,
-                "name":other_empowerment_properties[i].name,
-                "owner": other_empowerment_properties[i].owner
+          for (var i = 0 ; i < empowerment_properties.length; i++){
+              if (empowerment_properties[i].used == 0){
+                  data.push({
+                    "propertyClass" : "newProperty"+empowerment_properties[i].id,
+                    "name":empowerment_properties[i].name,
+                    "owner": empowerment_properties[i].owner
 
-              })
+                  })
+              }
+
           }
           return data;
       }
