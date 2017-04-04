@@ -80,7 +80,7 @@ var d3Testing = function(){
       var link = svg.selectAll(".link")
           .data(json.links)
         .enter().append("line")
-          .attr("class", function(d){ return "link link"+d.source})
+          .attr("class", function(d){ return "link link"+d.source.id})
         .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
 
 
@@ -101,7 +101,7 @@ var d3Testing = function(){
           .text(function(d) { return d.name });
 
       force.on("tick", function() {
-        link.attr("x1", function(d) { console.log(d.source); return d.source.x; })
+        link.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; });
@@ -183,7 +183,7 @@ var updateEmpowermentData = function(type){
         for (var i = 0 ; i < newLink.length ; i++ ){
             var flag = true;
             for (var j = 0 ; j < empowerment_links.length ; j++ ){
-                if (newLink[i].source == empowerment_links[j].source && newLink[i].target == empowerment_links[j].target){
+                if (newLink[i].source.id == empowerment_links[j].source.id && newLink[i].target.id == empowerment_links[j].target.id){
                     empowerment_links[j].weight += lineWidthOffset;
                     flag = false;
                 }
@@ -218,7 +218,7 @@ var updateEmpowermentData = function(type){
       for (var i = 0 ; i < empowerment_links.length ; i++){
           var flag = true;
           for (var j = 0 ; j < empowerment_stakeholders.length; j++){
-              if (empowerment_links[i].source == empowerment_stakeholders[j].id || empowerment_links[i].target == empowerment_stakeholders[j].id){
+              if (empowerment_links[i].source.id == empowerment_stakeholders[j].id || empowerment_links[i].target.id == empowerment_stakeholders[j].id){
                   flag = false;
                   break;
               }

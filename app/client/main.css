@@ -603,3 +603,7 @@ fill:#555;
     font-weight: normal;
     color: #E7E6E6;
 }
+
+path{
+  fill: none;
+}
