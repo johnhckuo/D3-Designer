@@ -56,8 +56,6 @@ interaction_style_setting = function (_source, _target, _weight) {
             });
         }
     }
-<<<<<<< HEAD
-=======
 }
 
 countLink = function(){
@@ -83,12 +81,10 @@ countLink = function(){
             });
         }
     }
-    console.log(linksCount)
->>>>>>> refs/remotes/johnhckuo/master
 }
 
 configuration_setting = function () {
-    nodes = [
+    nodes = [        
         { id: 0, name: 'a', benefit: 3 },
         { id: 1, name: 'b', benefit: 4 },
         { id: 2, name: 'c', benefit: 3 }
@@ -98,46 +94,26 @@ configuration_setting = function () {
 
     links = [
         {
-            source: 0, target: 1, weight:1, interaction:
-
+            source: 0, target: 1,
+            interaction:
             [
-                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+                { name: 'a=b', give: -1, source_affect: 5, receive: 0, target_affect: -1 },
+                { name: 'a=b2', give: -1, source_affect: -2, receive: 1, target_affect: 2 }
             ]
         },
         {
-            source: 0, target: 1, weight:1, interaction:
+            source: 1, target: 2,
+            interaction:
             [
-                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
-            ]
-        },
-        {
-            source: 1, target: 2, weight:1, interaction:
-            [
-                { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-            ]
-        },
-        {
-            source: 1, target: 2, weight:1, interaction:
-            [
-                { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
+                { name: 'b=c', give: 1, source_affect: -2, receive: 2, target_affect: 3 }
             ]
         }
     ];
 
     property = [
-        { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
-        { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
-        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-    ];
-
-
-    //store those properties which are not being selected but being input
-    other_property= [
-      { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0 },
-      { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0 },
-      { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0 }
+        { id: 0, name: "ticket", rating: [], owner: 1, averageImportance: 0, used: 0 },
+        { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
+        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
     ];
 
     d3.select('body').style('background-color', '#E7E6E6');
@@ -179,17 +155,18 @@ force_activation = function () {
         .nodes(nodes)
         .links(links)
         .size([width, height])
-        .linkDistance(60)
+        .linkDistance(80)
         .charge(-500)
         .on('tick', tick);
 }
 
-tick = function() {
+tick = function () {
     var temp = [];
-    for (var i = 0 ; i < linksCount.length; i++){
+    for (var i = 0 ; i < linksCount.length; i++) {
         temp.push(linksCount[i].count);
     }
     //var temp = linksCount.slice(0);
+
     activity.attr('d', function (d) {
         var deltaX = d.target.x - d.source.x,
             deltaY = d.target.y - d.source.y,
@@ -204,18 +181,18 @@ tick = function() {
             targetX = d.target.x - (targetPadding * normX),
             targetY = d.target.y - (targetPadding * normY);
 
-          for (var i = 0 ; i < linksCount.length; i++){
-              if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source){
-                  dr = 60/temp[i];
-                  temp[i]--;
-
-              }
-          }
+        for (var i = 0 ; i < linksCount.length; i++) {
+            if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source) {
+                dr = 60 / temp[i];
+                temp[i]--;
+                //console.log(dr + " , " + linksCount[i].target + " , " + linksCount[i].source);
+            }
+        }
+        dr = 60;
         return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
     });
 
     //countLink();
-
 
     stakeholder.attr('transform', function (d) {
         return 'translate(' + d.x + ',' + d.y + ')';
@@ -589,7 +566,7 @@ cretae_interaction_container = function (link) {
     var container = d3.select('div.interaction_container');
     container.html('');
     container.classed('interaction_container_hidden', false);
-
+    var t = link;
     var table = container.append('table')
                          .attr('id', 'interaction_table')
                          .attr('class', 'interaction_container');
@@ -611,49 +588,30 @@ cretae_interaction_container = function (link) {
                          .attr('type', 'button')
                          .attr('value', 'ADD')
                          .attr('class', 'green_btn')
-                         .attr('onclick', 'add_interaction()');
+                         .attr('onclick', 'add_interaction("' + link.source.id + '", "' + link.target.id + '");');
 
-    thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');
 
     var tbody = table.append('tbody').attr('id', 'item');
 
     for (i = 0; i < link.interaction.length; i++) {
-        var tr = tbody.append('tr');
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'interaction' + (i + 1))
-                          .attr('value', link.interaction[i].name);
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'give' + (i + 1))
-                          .attr('value', link.interaction[i].give);
-        tr.append('td').append('input')
-                       .attr('type', 'text')
-                       .attr('class', 'line_input')
-                       .attr('id', 'source_affect' + (i + 1))
-                       .attr('value', link.interaction[i].source_affect)
-                       .attr('size', '2');
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'receive' + (i + 1))
-                          .attr('value', link.interaction[i].receive);
-        tr.append('td').append('input')
-                       .attr('type', 'text')
-                       .attr('class', 'line_input')
-                       .attr('id', 'target_affect' + (i + 1))
-                       .attr('value', link.interaction[i].target_affect)
-                       .attr('size', '2');
+        add_interaction(link.source.id, link.target.id);
+        $('#interaction' + (i + 1)).val(link.interaction[i].name);
+        $('#give' + (i + 1) + ' option[value=' + link.interaction[i].give + ']').attr('selected', 'selected');
+        $('#source_affect' + (i + 1)).val(link.interaction[i].source_affect);
+        $('#label_source_affect' + (i + 1)).text(link.interaction[i].source_affect);
+        $('#interaction' + (i + 1)).val(link.interaction[i].name);
+        $('#receive' + (i + 1) + ' option[value=' + link.interaction[i].receive + ']').attr('selected', 'selected');
+        $('#target_affect' + (i + 1)).val(link.interaction[i].target_affect);
+        $('#label_target_affect' + (i + 1)).text(link.interaction[i].target_affect);
     }
     interaction_control();
 }
 
-add_interaction = function () {
+add_interaction = function (_source, _target) {
     var tbody = d3.select('div.interaction_container')
                   .select('#item');
 
@@ -665,28 +623,68 @@ add_interaction = function () {
           .attr('id', 'interaction' + (i + 1))
           .attr('class', 'line_input')
           .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'give' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'source_affect' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '')
-                      .attr('size', 2);
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'receive' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'target_affect' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '')
-                      .attr('size', '2');
+    tr.append('td').append('select')
+                      .attr('id', 'give' + (i + 1));
+    var give_select = $('#give' + (i + 1));
+    give_select.append($('<option>', {
+        value: "-1",
+        text: ""
+    }));
+
+    for (property_count = 0; property_count < property.length; property_count++) {
+        if (property[property_count].owner == _source) {
+            give_select.append($('<option>', {
+                value: property[property_count].id,
+                text: property[property_count].name
+            }));
+        }
+    }
+    var td = tr.append('td').style('text-align', 'center');
+    td.append('input')
+        .attr('type', 'range')
+        .attr('id', 'source_affect' + (i + 1))
+        .attr('max', 10)
+        .attr('min', -10)
+        .attr('step', 1)
+        .attr('value', 0)
+        .on('change', function (d) {
+            $('#label_source_affect' + (i + 1)).text($('#source_affect' + (i + 1)).val());
+        });
+    td.append('label')
+        .attr('id', 'label_source_affect' + (i + 1))
+        .text(0)
+        .attr('class', 'configuration_font_white');
+
+    tr.append('td').append('select')
+                  .attr('id', 'receive' + (i + 1));
+    var receive_select = $('#receive' + (i + 1));
+    receive_select.append($('<option>', {
+        value: "-1",
+        text: ""
+    }));
+    for (property_count = 0; property_count < property.length; property_count++) {
+        if (property[property_count].owner == _target) {
+            receive_select.append($('<option>', {
+                value: property[property_count].id,
+                text: property[property_count].name
+            }));
+        }
+    }
+    var td = tr.append('td').style('text-align', 'center');
+    td.append('input')
+        .attr('type', 'range')
+        .attr('id', 'target_affect' + (i + 1))
+        .attr('max', 10)
+        .attr('min', -10)
+        .attr('step', 1)
+        .attr('value', 0)
+        .on('change', function (d) {
+            $('#label_target_affect' + (i + 1)).text($('#target_affect' + (i + 1)).val());
+        });
+    td.append('label')
+        .attr('id', 'label_target_affect' + (i + 1))
+        .text(0)
+        .attr('class', 'configuration_font_white');
 }
 
 interaction_control = function () {
@@ -838,7 +836,7 @@ Template.configuration.events({
     },
 
     'click #test': function () {
-
+        do_changes();
        // interaction_style_setting(0,1,20);
     },
 
