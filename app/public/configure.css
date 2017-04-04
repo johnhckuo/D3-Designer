@@ -1,6 +1,6 @@
 path.link {
     stroke: black;
-    stroke-width: 4px;
+    stroke-width: 2px;
     cursor: default;
 }
 
@@ -32,7 +32,7 @@ div.stakeholder_creater{
     height: 18em;
     margin-top: -9em; /*set to a negative number 1/2 of your height*/
     margin-left: -15em; /*set to a negative number 1/2 of your width*/
-	align-content:center; 
+	align-content:center;
     background: -moz-linear-gradient( center top, #046874 5%,#0D5661 50%, #03353D 100% );
     background: -ms-linear-gradient( top, #046874 5%,#0D5661 50%, #03353D 100%  );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#046874', endColorstr='#03353D');
@@ -48,7 +48,7 @@ div.stakeholder_delete{
     height: 18em;
     margin-top: -9em; /*set to a negative number 1/2 of your height*/
     margin-left: -15em; /*set to a negative number 1/2 of your width*/
-	align-content:center; 
+	align-content:center;
     background-color: #f3f3f3;
 }
 

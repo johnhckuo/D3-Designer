@@ -56,6 +56,35 @@ interaction_style_setting = function (_source, _target, _weight) {
             });
         }
     }
+<<<<<<< HEAD
+=======
+}
+
+countLink = function(){
+    if (linksCount.length != 0){
+        linksCount = [];
+    }
+    for (var i = 0 ; i < links.length ; i++){
+        var tempCounter = 0;
+        var flag = true;
+        for (var j = 0 ; j < links.length ; j++){
+            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
+                flag = false;
+                break;
+            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
+                tempCounter++;
+            }
+        }
+        if (flag){
+            linksCount.push({
+                "source": links[i].source,
+                "target": links[i].target,
+                "count": tempCounter
+            });
+        }
+    }
+    console.log(linksCount)
+>>>>>>> refs/remotes/johnhckuo/master
 }
 
 configuration_setting = function () {
@@ -65,6 +94,8 @@ configuration_setting = function () {
         { id: 2, name: 'c', benefit: 3 }
     ];
 
+    linksCount = [];
+
     links = [
         {
             source: 0, target: 1, weight:1, interaction:
@@ -72,6 +103,19 @@ configuration_setting = function () {
             [
                 { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
                 { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+            ]
+        },
+        {
+            source: 0, target: 1, weight:1, interaction:
+            [
+                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
+                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+            ]
+        },
+        {
+            source: 1, target: 2, weight:1, interaction:
+            [
+                { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
             ]
         },
         {
@@ -118,6 +162,7 @@ configuration_setting = function () {
                     .style("stroke", bordercolor)
                     .style("fill", "none")
                     .style("stroke-width", border);
+    countLink();
 
     force_activation();
 
@@ -140,9 +185,15 @@ force_activation = function () {
 }
 
 tick = function() {
+    var temp = [];
+    for (var i = 0 ; i < linksCount.length; i++){
+        temp.push(linksCount[i].count);
+    }
+    //var temp = linksCount.slice(0);
     activity.attr('d', function (d) {
         var deltaX = d.target.x - d.source.x,
             deltaY = d.target.y - d.source.y,
+            dr,  //linknum awaits calculate
             dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
             normX = deltaX / dist,
             normY = deltaY / dist,
@@ -152,8 +203,19 @@ tick = function() {
             sourceY = d.source.y + (sourcePadding * normY),
             targetX = d.target.x - (targetPadding * normX),
             targetY = d.target.y - (targetPadding * normY);
-        return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
+
+          for (var i = 0 ; i < linksCount.length; i++){
+              if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source){
+                  dr = 60/temp[i];
+                  temp[i]--;
+
+              }
+          }
+        return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
     });
+
+    //countLink();
+
 
     stakeholder.attr('transform', function (d) {
         return 'translate(' + d.x + ',' + d.y + ')';
@@ -275,6 +337,8 @@ do_changes = function() {
         .call(wrap, 100);
 
     stakeholder.exit().remove();
+    countLink();
+
     force.start();
 }
 
