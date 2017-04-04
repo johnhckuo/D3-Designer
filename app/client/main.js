@@ -3,6 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './flow.js';
 import './main.html';
+
 import './empowerment.js';
 import './configuration.js';
 
@@ -56,9 +57,11 @@ if (Meteor.isClient) {
 
     Template.configuration.events({
         'click #submit ': function (e) {
+            configuration_setting();
             empowerment_properties = property;
             empowerment_stakeholders = nodes;
             empowerment_links = links;
+            console.log(empowerment_links)
             other_empowerment_properties = other_property;
         },
 
@@ -97,6 +100,7 @@ window.onload = function(){
           },duration);
         }
         flag = false;
+
         // $("#logo").animate({width:"50"});
       } else {
         if (!flag){

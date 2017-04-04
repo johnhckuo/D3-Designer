@@ -51,11 +51,11 @@
     {{#each detail}}
 
     <div class="empowerContent">
-      <div class="panelContainer {{propertyClass}}">
+      <span class="panelContainer {{propertyClass}}">
           <label for="disabledTextInput">{{name}}</label>
           <input type="range" class="range" min="0" max="100" step="1" value={{value}} style="  background-image:-webkit-linear-gradient(left ,#7D89DE 0%,#7D89DE {{value}}%,#444444 {{value}}%, #444444 100%);">
           <button type="button" class="btn btn-danger removeProperty" name="button">Remove</button>
-      </div>
+      </span>
     </div>
     {{/each}}
     <button type="button" class="btn btn-primary" id="newProperty" name="button">New</button>
@@ -112,6 +112,7 @@
       {{/each}}
 
     </div>
+    <div class="barrier"></div>
     <div class="hiddenDIV">
       <h2>Adding new properties</h2>
       <hr>
@@ -122,7 +123,7 @@
 </template>
 
 <template name="flow">
-  <div class="container">
+  <div class="flow_section container">
     <p class="activity_selected">activity 1</p><br>
     <p>Identifying Variability and Setting Strategy</p>
     <div id="tableContainer" class="flexbox">
@@ -174,9 +175,17 @@
             </select>
           </td>
           <!--importance degree-->
-          <td><p class="i_degree">5</p></td>
+          <td><input type="hidden" class="i_degree" value="5"><p>5</p></td>
           <!--recommeddend-->
-          <td><p class="re_strategy">LCA > UR > CR</p></td>
+          <!-- <td><input type="hidden" class="re_strategy" value="no"><p>LCA > UR > CR</p></td> -->
+          <td>
+            <select class="strategy_option form-control input-sm">
+              <option>LCA</option>
+              <option>CA</option>
+              <option>UR</option>
+              <option>CR</option>
+            </select>
+          </td>
           <!--deleteRow-->
           <td>
               <span class="table-remove glyphicon glyphicon-remove"></span>
@@ -253,7 +262,7 @@
     <br>
 
     <button id="export-btn" class="btn btn-primary">Export Data(Test)</button>
-    <p id="export"></p>
+    <pre id="export"></pre>
 
   </div> <!--ene of container-->
 
@@ -324,7 +333,7 @@
     <link rel="stylesheet" href="configure.css">
 
 
-    
+
     <div id="full_container" style="width:1400px; height:700px;">
         <input type="button" id="test" value="s" />
     </div>
@@ -348,7 +357,7 @@
             </tr>
         </table>-->
     </div>
-    
+
     <div class="stakeholder_delete container_hidden"  style="align-content:center;">
     </div>
     <div class="interaction_container interaction_container_hidden" title="" style="align-content:center;">
