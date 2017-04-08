@@ -1,6 +1,6 @@
 //#region variables
-var width = 500;
-var height = 600;
+var width = 600;
+var height = 500;
 var radius = 60;
 var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7', '#BC9F77', '#D19826', '#C18A26', '#C7802D'];
 var svg_clicked = false;
@@ -17,7 +17,7 @@ var border = 1;
 var consensus_level = 0,
     empowerment = 0,
     flow = 0;
-nodes = [], links = [], property = [], other_property = [];
+var nodes = [], links = [], property = [], other_property = [];
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 var svg_container, svg, borderPath, force, draw_line, activity, stakeholder;
 //#endregion
@@ -58,63 +58,63 @@ interaction_style_setting = function (_source, _target, _weight) {
     }
 }
 
-countLink = function(){
-    if (linksCount.length != 0){
-        linksCount = [];
-    }
-    for (var i = 0 ; i < links.length ; i++){
-        var tempCounter = 0;
-        var flag = true;
-        for (var j = 0 ; j < links.length ; j++){
-            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
-                flag = false;
-                break;
-            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
-                tempCounter++;
-            }
-        }
-        if (flag){
-            linksCount.push({
-                "source": links[i].source,
-                "target": links[i].target,
-                "count": tempCounter
-            });
-        }
-    }
-}
+//countLink = function(){
+//    if (linksCount.length != 0){
+//        linksCount = [];
+//    }
+//    for (var i = 0 ; i < links.length ; i++){
+//        var tempCounter = 0;
+//        var flag = true;
+//        for (var j = 0 ; j < links.length ; j++){
+//            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
+//                flag = false;
+//                break;
+//            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
+//                tempCounter++;
+//            }
+//        }
+//        if (flag){
+//            linksCount.push({
+//                "source": links[i].source,
+//                "target": links[i].target,
+//                "count": tempCounter
+//            });
+//        }
+//    }
+//}
 
 configuration_setting = function () {
-    nodes = [        
-        { id: 0, name: 'a', benefit: 3 },
-        { id: 1, name: 'b', benefit: 4 },
-        { id: 2, name: 'c', benefit: 3 }
-    ];
+    //nodes = [        
+    //    { id: 0, name: 'a', benefit: 3 },
+    //    { id: 1, name: 'b', benefit: 4 },
+    //    { id: 2, name: 'c', benefit: 3 }
+    //];
 
-    linksCount = [];
+    //linksCount = [];
 
-    links = [
-        {
-            source: 0, target: 1,
-            interaction:
-            [
-                { name: 'a=b', give: -1, source_affect: 5, receive: 0, target_affect: -1 },
-                { name: 'a=b2', give: -1, source_affect: -2, receive: 1, target_affect: 2 }
-            ]
-        },
-        {
-            source: 1, target: 2,
-            interaction:
-            [
-                { name: 'b=c', give: 1, source_affect: -2, receive: 2, target_affect: 3 }
-            ]
-        }
-    ];
+    //links = [
+    //    {
+    //        source: 0, target: 1,
+    //        interaction:
+    //        [
+    //            { name: 'a=b', give: -1, source_affect: 5, receive: 0, target_affect: -1 },
+    //            { name: 'a=b2', give: -1, source_affect: -2, receive: 1, target_affect: 2 }
+    //        ]
+    //    },
+    //    {
+    //        source: 1, target: 2,
+    //        interaction:
+    //        [
+    //            { name: 'b=c', give: 1, source_affect: -2, receive: 2, target_affect: 3 }
+    //        ]
+    //    }
+    //];
 
-    property = [
-        { id: 0, name: "ticket", rating: [], owner: 1, averageImportance: 0, used: 0 },
-        { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
-        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
-    ];
+    //property = [
+    //    { id: 0, name: "ticket", rating: [], owner: 1, averageImportance: 0, used: 0 },
+    //    { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
+    //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
+    //];
 
     d3.select('body').style('background-color', '#E7E6E6');
     svg_container = d3.select('#full_container').append('div')
@@ -138,7 +138,7 @@ configuration_setting = function () {
                     .style("stroke", bordercolor)
                     .style("fill", "none")
                     .style("stroke-width", border);
-    countLink();
+   // countLink();
 
     force_activation();
 
@@ -161,10 +161,10 @@ force_activation = function () {
 }
 
 tick = function () {
-    var temp = [];
-    for (var i = 0 ; i < linksCount.length; i++) {
-        temp.push(linksCount[i].count);
-    }
+    //var temp = [];
+    //for (var i = 0 ; i < linksCount.length; i++) {
+    //    temp.push(linksCount[i].count);
+    //}
     //var temp = linksCount.slice(0);
 
     activity.attr('d', function (d) {
@@ -181,13 +181,13 @@ tick = function () {
             targetX = d.target.x - (targetPadding * normX),
             targetY = d.target.y - (targetPadding * normY);
 
-        for (var i = 0 ; i < linksCount.length; i++) {
-            if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source) {
-                dr = 60 / temp[i];
-                temp[i]--;
-                //console.log(dr + " , " + linksCount[i].target + " , " + linksCount[i].source);
-            }
-        }
+        //for (var i = 0 ; i < linksCount.length; i++) {
+        //    if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source) {
+        //        dr = 60 / temp[i];
+        //        temp[i]--;
+        //        //console.log(dr + " , " + linksCount[i].target + " , " + linksCount[i].source);
+        //    }
+        //}
         dr = 60;
         return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
     });
@@ -201,120 +201,123 @@ tick = function () {
 
 do_changes = function() {
     //links
-    activity = activity.data(links);
+    if (links.length > 0) {
+        activity = activity.data(links);
 
-    activity.enter().append('svg:path')
-            .attr('class', 'link')
-            .on('mouseover', function (d) {
-                //d3.select(this).style('stroke-width', '6px');
-            })
-            .on('mouseout', function (d) {
-                //d3.select(this).style('stroke-width', '4px');
-            })
-            .on('click', function (d) {
-                if (clicked) {
-                    //double_click();
-                    clicked = false;
-                    clicked_link = d;
-                    cretae_interaction_container(d);
-                    clearTimeout(timer);
-                    d3.event.stopPropagation();
-                }
-                else {
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        //single_click();
+        activity.enter().append('svg:path')
+                .attr('class', 'link')
+                .on('mouseover', function (d) {
+                    //d3.select(this).style('stroke-width', '6px');
+                })
+                .on('mouseout', function (d) {
+                    //d3.select(this).style('stroke-width', '4px');
+                })
+                .on('click', function (d) {
+                    if (clicked) {
+                        //double_click();
                         clicked = false;
-                    }, 200);
-                    clicked = true;
-                }
-            });
-    activity.exit().remove();
-
+                        clicked_link = d;
+                        cretae_interaction_container(d);
+                        clearTimeout(timer);
+                        d3.event.stopPropagation();
+                    }
+                    else {
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            //single_click();
+                            clicked = false;
+                        }, 200);
+                        clicked = true;
+                    }
+                });
+        activity.exit().remove();
+    }
     //nodes
-    stakeholder = stakeholder.data(nodes, function (d) { return d.id; });
+    if (nodes.length > 0) {
+        stakeholder = stakeholder.data(nodes);
 
-    var g = stakeholder.enter().append('svg:g').call(force.drag);
+        var g = stakeholder.enter().append('svg:g').call(force.drag);
 
-    g.append('svg:rect')
-      .attr('class', 'node')
-      .attr('width', 30)
-      .attr('height', 30)
-      .attr('x', -15)
-      .attr('y', -15)
-      .style('fill', function (d, i) {
-          var color_index = i % colors.length;
-          return colors[color_index];
-      })
-      .on('mouseover', function (d) {
-          on_node = true;
-          d3.select(this).attr('transform', 'scale(1.1)')
-                         .style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')).darker(1); })
-                         .style('stroke-width', '2px');
-      })
-      .on('mouseout', function (d) {
-          on_node = false;
-          d3.select(this).attr('transform', '')
-                         .style('stroke-width', '0px');
-      })
-      .on('click', function (d) {
-         // if (d3.event.defaultPrevented) return;
-          if (clicked) {
-              //double_click();
-              clicked = false;
-              clicked_node = d;
-              add_stakeholder(d.id, d.x, d.y, 'edit');
-              clearTimeout(timer);
-              d3.event.stopPropagation();
-          }
-          else {
-              if (timer) clearTimeout(timer);
-              timer = setTimeout(function () {
-                  //single_click();
+        g.append('svg:rect')
+          .attr('class', 'node')
+          .attr('width', 30)
+          .attr('height', 30)
+          .attr('x', -15)
+          .attr('y', -15)
+          .style('fill', function (d, i) {
+              var color_index = i % colors.length;
+              return colors[color_index];
+          })
+          .on('mouseover', function (d) {
+              on_node = true;
+              d3.select(this).attr('transform', 'scale(1.1)')
+                             .style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')).darker(1); })
+                             .style('stroke-width', '2px');
+          })
+          .on('mouseout', function (d) {
+              on_node = false;
+              d3.select(this).attr('transform', '')
+                             .style('stroke-width', '0px');
+          })
+          .on('click', function (d) {
+              // if (d3.event.defaultPrevented) return;
+              if (clicked) {
+                  //double_click();
                   clicked = false;
-                  //new line handle
                   clicked_node = d;
-                  if (start_node == null) {
-                      start_node = clicked_node;
-                      //show draw line
-                      draw_line.classed('draw_line_hidden', false)
-                               .attr('d', 'M' + start_node.x + ',' + start_node.y + 'L' + start_node.x + ',' + start_node.y);
-                      draw_line.on('click', function () {
-                          if (!on_node) {
-                              reset_node();
-                          }
-                      });
-                      svg.on('mousemove', mousemove);
-                  }
-                  else if (start_node == clicked_node) {
-                      reset_node();
-                  }
-                  else {
-                      end_node = clicked_node;
-                      var link = { source: start_node, target: end_node, interaction: [] };
-                      links.push(link);
-                      draw_line.classed('draw_line_hidden', true);
-                      clicked_link = link;
-                      cretae_interaction_container(link);
-                      do_changes();
-                  }
-              }, 200);
-              clicked = true;
-          }
-      });
+                  add_stakeholder(d.id, d.x, d.y, 'edit');
+                  clearTimeout(timer);
+                  d3.event.stopPropagation();
+              }
+              else {
+                  if (timer) clearTimeout(timer);
+                  timer = setTimeout(function () {
+                      //single_click();
+                      clicked = false;
+                      //new line handle
+                      clicked_node = d;
+                      if (start_node == null) {
+                          start_node = clicked_node;
+                          //show draw line
+                          draw_line.classed('draw_line_hidden', false)
+                                   .attr('d', 'M' + start_node.x + ',' + start_node.y + 'L' + start_node.x + ',' + start_node.y);
+                          draw_line.on('click', function () {
+                              if (!on_node) {
+                                  reset_node();
+                              }
+                          });
+                          svg.on('mousemove', mousemove);
+                      }
+                      else if (start_node == clicked_node) {
+                          reset_node();
+                      }
+                      else {
+                          end_node = clicked_node;
+                          var link = { source: start_node, target: end_node, interaction: [] };
+                          links.push(link);
+                          draw_line.classed('draw_line_hidden', true);
+                          clicked_link = link;
+                          cretae_interaction_container(link);
+                          do_changes();
+                      }
+                  }, 200);
+                  clicked = true;
+              }
+          });
 
-    g.append('svg:text')
-        .attr("id", function (d) { return "text_" + d.id; })
-        .attr("x", ".2em")
-        .attr("y", ".600em")
-        .attr("text-anchor", "middle")
-        .attr('class', 'id')
-        .style('fill', '#404040')
-        .text(function (d) { return d.name; })
-        .call(wrap, 100);
+        g.append('svg:text')
+            .attr("id", function (d) { return "text_" + d.id; })
+            .attr("x", ".2em")
+            .attr("y", ".600em")
+            .attr("text-anchor", "middle")
+            .attr('class', 'id')
+            .style('fill', '#404040')
+            .text(function (d) { return d.name; })
+            .call(wrap, 100);
 
-    stakeholder.exit().remove();
-    countLink();
+        stakeholder.exit().remove();
+    }
+    //countLink();
 
     force.start();
 }
@@ -780,7 +783,7 @@ set_trend = function () {
                   .style('width', window.innerWidth - width - 50 + 'px')
                   .style('height', 600 + 'px')
                   .style('margin-top', 0 + 'px')
-                  .style('margin-left', 520 + 'px');
+                  .style('margin-left', 720 + 'px');
 
     trend.append('input')
          .attr('type', 'text')
@@ -793,8 +796,6 @@ set_trend = function () {
          .attr('class', 'trend_button green_btn')
          .style('margin-left', '5px')
          .attr('id', 'get_trend');
-
-
 
     trend.append('input')
          .attr('type', 'button')
@@ -833,11 +834,6 @@ Template.configuration.events({
                 svg_clicked = true;
             }
         }
-    },
-
-    'click #test': function () {
-        do_changes();
-       // interaction_style_setting(0,1,20);
     },
 
     'click .trend_button ': function (e) {
