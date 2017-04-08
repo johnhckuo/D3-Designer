@@ -6,6 +6,7 @@ import './main.html';
 
 import './empowerment.js';
 import './configuration.js';
+import './critical_mass.js';
 
 var flag = false;
 var duration = 200;

@@ -19,3 +19,7 @@ Router.route('/flow', function () {
 Router.route('/configuration', function () {
     this.render('configuration');
 });
+
+Router.route('/critical_mass', function () {
+    this.render('critical_mass');
+});
