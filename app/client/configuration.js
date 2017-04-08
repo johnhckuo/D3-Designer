@@ -115,6 +115,66 @@ configuration_setting = function () {
     //    { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
     //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
     //];
+countLink = function(){
+    if (linksCount.length != 0){
+        linksCount = [];
+    }
+    for (var i = 0 ; i < links.length ; i++){
+        var tempCounter = 0;
+        var flag = true;
+        for (var j = 0 ; j < links.length ; j++){
+            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
+                flag = false;
+                break;
+            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
+                tempCounter++;
+            }
+        }
+        if (flag){
+            linksCount.push({
+                "source": links[i].source,
+                "target": links[i].target,
+                "count": tempCounter
+            });
+        }
+    }
+}
+
+configuration_setting = function () {
+    nodes = [
+        { id: 0, name: 'a', benefit: 3 },
+        { id: 1, name: 'b', benefit: 4 },
+        { id: 2, name: 'c', benefit: 3 }
+    ];
+
+    linksCount = [];
+
+    links = [
+        {
+            source: 0, target: 1, property_id: 0, weight:1, interaction:
+            [
+                { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
+                { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
+            ]
+        },
+        {
+            source: 1, target: 2, property_id: 1, weight:1, interaction:
+            [
+                { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
+            ]
+        }
+    ];
+
+
+    property = [
+        { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0, used:1 },
+        { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0, used:1 },
+        { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used:1 },
+        { id: 3, name: "ddd", rating: [], owner: 2, averageImportance: 0, used:0  },
+        { id: 4, name: "eee", rating: [], owner: 2, averageImportance: 0, used:0  },
+        { id: 5, name: "fff", rating: [], owner: 1, averageImportance: 0, used:0  }
+
+    ];
 
     d3.select('body').style('background-color', '#E7E6E6');
     svg_container = d3.select('#full_container').append('div')
