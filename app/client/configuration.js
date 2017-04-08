@@ -1,6 +1,6 @@
 //#region variables
-var width = 500;
-var height = 600;
+var width = 600;
+var height = 500;
 var radius = 60;
 var colors = ['#7BA23F', '#046874', '#305A56', '#688D00', '#42602D', '#0D5661', '#646A58', '#58B2DC', '#0089A7', '#BC9F77', '#D19826', '#C18A26', '#C7802D'];
 var svg_clicked = false;
@@ -17,7 +17,7 @@ var border = 1;
 var consensus_level = 0,
     empowerment = 0,
     flow = 0;
-nodes = [], links = [], property = [], other_property = [];
+var nodes = [], links = [], property = [], other_property = [];
 var d3_variables = { consensus_level: consensus_level, empowerment_level: empowerment, flow_level: flow };
 var svg_container, svg, borderPath, force, draw_line, activity, stakeholder;
 //#endregion
@@ -58,6 +58,63 @@ interaction_style_setting = function (_source, _target, _weight) {
     }
 }
 
+//countLink = function(){
+//    if (linksCount.length != 0){
+//        linksCount = [];
+//    }
+//    for (var i = 0 ; i < links.length ; i++){
+//        var tempCounter = 0;
+//        var flag = true;
+//        for (var j = 0 ; j < links.length ; j++){
+//            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
+//                flag = false;
+//                break;
+//            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
+//                tempCounter++;
+//            }
+//        }
+//        if (flag){
+//            linksCount.push({
+//                "source": links[i].source,
+//                "target": links[i].target,
+//                "count": tempCounter
+//            });
+//        }
+//    }
+//}
+
+configuration_setting = function () {
+    //nodes = [        
+    //    { id: 0, name: 'a', benefit: 3 },
+    //    { id: 1, name: 'b', benefit: 4 },
+    //    { id: 2, name: 'c', benefit: 3 }
+    //];
+
+    //linksCount = [];
+
+    //links = [
+    //    {
+    //        source: 0, target: 1,
+    //        interaction:
+    //        [
+    //            { name: 'a=b', give: -1, source_affect: 5, receive: 0, target_affect: -1 },
+    //            { name: 'a=b2', give: -1, source_affect: -2, receive: 1, target_affect: 2 }
+    //        ]
+    //    },
+    //    {
+    //        source: 1, target: 2,
+    //        interaction:
+    //        [
+    //            { name: 'b=c', give: 1, source_affect: -2, receive: 2, target_affect: 3 }
+    //        ]
+    //    }
+    //];
+
+    //property = [
+    //    { id: 0, name: "ticket", rating: [], owner: 1, averageImportance: 0, used: 0 },
+    //    { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
+    //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
+    //];
 countLink = function(){
     if (linksCount.length != 0){
         linksCount = [];
@@ -119,7 +176,6 @@ configuration_setting = function () {
 
     ];
 
-
     d3.select('body').style('background-color', '#E7E6E6');
     svg_container = d3.select('#full_container').append('div')
                                                 .attr('id', 'svg_container')
@@ -142,7 +198,7 @@ configuration_setting = function () {
                     .style("stroke", bordercolor)
                     .style("fill", "none")
                     .style("stroke-width", border);
-    countLink();
+   // countLink();
 
     force_activation();
 
@@ -159,17 +215,18 @@ force_activation = function () {
         .nodes(nodes)
         .links(links)
         .size([width, height])
-        .linkDistance(60)
+        .linkDistance(80)
         .charge(-500)
         .on('tick', tick);
 }
 
-tick = function() {
-    var temp = [];
-    for (var i = 0 ; i < linksCount.length; i++){
-        temp.push(linksCount[i].count);
-    }
+tick = function () {
+    //var temp = [];
+    //for (var i = 0 ; i < linksCount.length; i++) {
+    //    temp.push(linksCount[i].count);
+    //}
     //var temp = linksCount.slice(0);
+
     activity.attr('d', function (d) {
         var deltaX = d.target.x - d.source.x,
             deltaY = d.target.y - d.source.y,
@@ -184,18 +241,18 @@ tick = function() {
             targetX = d.target.x - (targetPadding * normX),
             targetY = d.target.y - (targetPadding * normY);
 
-          for (var i = 0 ; i < linksCount.length; i++){
-              if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source){
-                  dr = 60/temp[i];
-                  temp[i]--;
-
-              }
-          }
+        //for (var i = 0 ; i < linksCount.length; i++) {
+        //    if (d.target.id == linksCount[i].target && d.source.id == linksCount[i].source) {
+        //        dr = 60 / temp[i];
+        //        temp[i]--;
+        //        //console.log(dr + " , " + linksCount[i].target + " , " + linksCount[i].source);
+        //    }
+        //}
+        dr = 60;
         return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
     });
 
     //countLink();
-
 
     stakeholder.attr('transform', function (d) {
         return 'translate(' + d.x + ',' + d.y + ')';
@@ -204,120 +261,123 @@ tick = function() {
 
 do_changes = function() {
     //links
-    activity = activity.data(links);
+    if (links.length > 0) {
+        activity = activity.data(links);
 
-    activity.enter().append('svg:path')
-            .attr('class', 'link')
-            .on('mouseover', function (d) {
-                //d3.select(this).style('stroke-width', '6px');
-            })
-            .on('mouseout', function (d) {
-                //d3.select(this).style('stroke-width', '4px');
-            })
-            .on('click', function (d) {
-                if (clicked) {
-                    //double_click();
-                    clicked = false;
-                    clicked_link = d;
-                    cretae_interaction_container(d);
-                    clearTimeout(timer);
-                    d3.event.stopPropagation();
-                }
-                else {
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        //single_click();
+        activity.enter().append('svg:path')
+                .attr('class', 'link')
+                .on('mouseover', function (d) {
+                    //d3.select(this).style('stroke-width', '6px');
+                })
+                .on('mouseout', function (d) {
+                    //d3.select(this).style('stroke-width', '4px');
+                })
+                .on('click', function (d) {
+                    if (clicked) {
+                        //double_click();
                         clicked = false;
-                    }, 200);
-                    clicked = true;
-                }
-            });
-    activity.exit().remove();
-
+                        clicked_link = d;
+                        cretae_interaction_container(d);
+                        clearTimeout(timer);
+                        d3.event.stopPropagation();
+                    }
+                    else {
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            //single_click();
+                            clicked = false;
+                        }, 200);
+                        clicked = true;
+                    }
+                });
+        activity.exit().remove();
+    }
     //nodes
-    stakeholder = stakeholder.data(nodes, function (d) { return d.id; });
+    if (nodes.length > 0) {
+        stakeholder = stakeholder.data(nodes);
 
-    var g = stakeholder.enter().append('svg:g').call(force.drag);
+        var g = stakeholder.enter().append('svg:g').call(force.drag);
 
-    g.append('svg:rect')
-      .attr('class', 'node')
-      .attr('width', 30)
-      .attr('height', 30)
-      .attr('x', -15)
-      .attr('y', -15)
-      .style('fill', function (d, i) {
-          var color_index = i % colors.length;
-          return colors[color_index];
-      })
-      .on('mouseover', function (d) {
-          on_node = true;
-          d3.select(this).attr('transform', 'scale(1.1)')
-                         .style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')).darker(1); })
-                         .style('stroke-width', '2px');
-      })
-      .on('mouseout', function (d) {
-          on_node = false;
-          d3.select(this).attr('transform', '')
-                         .style('stroke-width', '0px');
-      })
-      .on('click', function (d) {
-         // if (d3.event.defaultPrevented) return;
-          if (clicked) {
-              //double_click();
-              clicked = false;
-              clicked_node = d;
-              add_stakeholder(d.id, d.x, d.y, 'edit');
-              clearTimeout(timer);
-              d3.event.stopPropagation();
-          }
-          else {
-              if (timer) clearTimeout(timer);
-              timer = setTimeout(function () {
-                  //single_click();
+        g.append('svg:rect')
+          .attr('class', 'node')
+          .attr('width', 30)
+          .attr('height', 30)
+          .attr('x', -15)
+          .attr('y', -15)
+          .style('fill', function (d, i) {
+              var color_index = i % colors.length;
+              return colors[color_index];
+          })
+          .on('mouseover', function (d) {
+              on_node = true;
+              d3.select(this).attr('transform', 'scale(1.1)')
+                             .style('stroke', function (d, i) { return d3.rgb(d3.select(this).style('fill')).darker(1); })
+                             .style('stroke-width', '2px');
+          })
+          .on('mouseout', function (d) {
+              on_node = false;
+              d3.select(this).attr('transform', '')
+                             .style('stroke-width', '0px');
+          })
+          .on('click', function (d) {
+              // if (d3.event.defaultPrevented) return;
+              if (clicked) {
+                  //double_click();
                   clicked = false;
-                  //new line handle
                   clicked_node = d;
-                  if (start_node == null) {
-                      start_node = clicked_node;
-                      //show draw line
-                      draw_line.classed('draw_line_hidden', false)
-                               .attr('d', 'M' + start_node.x + ',' + start_node.y + 'L' + start_node.x + ',' + start_node.y);
-                      draw_line.on('click', function () {
-                          if (!on_node) {
-                              reset_node();
-                          }
-                      });
-                      svg.on('mousemove', mousemove);
-                  }
-                  else if (start_node == clicked_node) {
-                      reset_node();
-                  }
-                  else {
-                      end_node = clicked_node;
-                      var link = { source: start_node.id, target: end_node.id, interaction: [] };
-                      links.push(link);
-                      draw_line.classed('draw_line_hidden', true);
-                      clicked_link = link;
-                      cretae_interaction_container(link);
-                      do_changes();
-                  }
-              }, 200);
-              clicked = true;
-          }
-      });
+                  add_stakeholder(d.id, d.x, d.y, 'edit');
+                  clearTimeout(timer);
+                  d3.event.stopPropagation();
+              }
+              else {
+                  if (timer) clearTimeout(timer);
+                  timer = setTimeout(function () {
+                      //single_click();
+                      clicked = false;
+                      //new line handle
+                      clicked_node = d;
+                      if (start_node == null) {
+                          start_node = clicked_node;
+                          //show draw line
+                          draw_line.classed('draw_line_hidden', false)
+                                   .attr('d', 'M' + start_node.x + ',' + start_node.y + 'L' + start_node.x + ',' + start_node.y);
+                          draw_line.on('click', function () {
+                              if (!on_node) {
+                                  reset_node();
+                              }
+                          });
+                          svg.on('mousemove', mousemove);
+                      }
+                      else if (start_node == clicked_node) {
+                          reset_node();
+                      }
+                      else {
+                          end_node = clicked_node;
+                          var link = { source: start_node, target: end_node, interaction: [] };
+                          links.push(link);
+                          draw_line.classed('draw_line_hidden', true);
+                          clicked_link = link;
+                          cretae_interaction_container(link);
+                          do_changes();
+                      }
+                  }, 200);
+                  clicked = true;
+              }
+          });
 
-    g.append('svg:text')
-        .attr("id", function (d) { return "text_" + d.id; })
-        .attr("x", ".2em")
-        .attr("y", ".600em")
-        .attr("text-anchor", "middle")
-        .attr('class', 'id')
-        .style('fill', '#404040')
-        .text(function (d) { return d.name; })
-        .call(wrap, 100);
+        g.append('svg:text')
+            .attr("id", function (d) { return "text_" + d.id; })
+            .attr("x", ".2em")
+            .attr("y", ".600em")
+            .attr("text-anchor", "middle")
+            .attr('class', 'id')
+            .style('fill', '#404040')
+            .text(function (d) { return d.name; })
+            .call(wrap, 100);
 
-    stakeholder.exit().remove();
-    countLink();
+        stakeholder.exit().remove();
+    }
+    //countLink();
 
     force.start();
 }
@@ -569,7 +629,7 @@ cretae_interaction_container = function (link) {
     var container = d3.select('div.interaction_container');
     container.html('');
     container.classed('interaction_container_hidden', false);
-
+    var t = link;
     var table = container.append('table')
                          .attr('id', 'interaction_table')
                          .attr('class', 'interaction_container');
@@ -591,49 +651,30 @@ cretae_interaction_container = function (link) {
                          .attr('type', 'button')
                          .attr('value', 'ADD')
                          .attr('class', 'green_btn')
-                         .attr('onclick', 'add_interaction()');
+                         .attr('onclick', 'add_interaction("' + link.source.id + '", "' + link.target.id + '");');
 
-    thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');;
-    thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');;
+    thead.append('td').text(link.source.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.source.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.target.name + "'s PROPERTY").style('width', '25%').attr('class', 'configuration_font_white');
+    thead.append('td').text(link.target.name + "'s AFFECT").style('width', '10%').attr('class', 'configuration_font_white');
 
     var tbody = table.append('tbody').attr('id', 'item');
 
     for (i = 0; i < link.interaction.length; i++) {
-        var tr = tbody.append('tr');
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'interaction' + (i + 1))
-                          .attr('value', link.interaction[i].name);
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'give' + (i + 1))
-                          .attr('value', link.interaction[i].give);
-        tr.append('td').append('input')
-                       .attr('type', 'text')
-                       .attr('class', 'line_input')
-                       .attr('id', 'source_affect' + (i + 1))
-                       .attr('value', link.interaction[i].source_affect)
-                       .attr('size', '2');
-        tr.append('td').append('input')
-                          .attr('type', 'text')
-                          .attr('class', 'line_input')
-                          .attr('id', 'receive' + (i + 1))
-                          .attr('value', link.interaction[i].receive);
-        tr.append('td').append('input')
-                       .attr('type', 'text')
-                       .attr('class', 'line_input')
-                       .attr('id', 'target_affect' + (i + 1))
-                       .attr('value', link.interaction[i].target_affect)
-                       .attr('size', '2');
+        add_interaction(link.source.id, link.target.id);
+        $('#interaction' + (i + 1)).val(link.interaction[i].name);
+        $('#give' + (i + 1) + ' option[value=' + link.interaction[i].give + ']').attr('selected', 'selected');
+        $('#source_affect' + (i + 1)).val(link.interaction[i].source_affect);
+        $('#label_source_affect' + (i + 1)).text(link.interaction[i].source_affect);
+        $('#interaction' + (i + 1)).val(link.interaction[i].name);
+        $('#receive' + (i + 1) + ' option[value=' + link.interaction[i].receive + ']').attr('selected', 'selected');
+        $('#target_affect' + (i + 1)).val(link.interaction[i].target_affect);
+        $('#label_target_affect' + (i + 1)).text(link.interaction[i].target_affect);
     }
     interaction_control();
 }
 
-add_interaction = function () {
+add_interaction = function (_source, _target) {
     var tbody = d3.select('div.interaction_container')
                   .select('#item');
 
@@ -645,28 +686,68 @@ add_interaction = function () {
           .attr('id', 'interaction' + (i + 1))
           .attr('class', 'line_input')
           .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'give' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'source_affect' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '')
-                      .attr('size', 2);
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'receive' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '');
-    tr.append('td').append('input')
-                      .attr('type', 'text')
-                      .attr('id', 'target_affect' + (i + 1))
-                      .attr('class', 'line_input')
-                      .attr('value', '')
-                      .attr('size', '2');
+    tr.append('td').append('select')
+                      .attr('id', 'give' + (i + 1));
+    var give_select = $('#give' + (i + 1));
+    give_select.append($('<option>', {
+        value: "-1",
+        text: ""
+    }));
+
+    for (property_count = 0; property_count < property.length; property_count++) {
+        if (property[property_count].owner == _source) {
+            give_select.append($('<option>', {
+                value: property[property_count].id,
+                text: property[property_count].name
+            }));
+        }
+    }
+    var td = tr.append('td').style('text-align', 'center');
+    td.append('input')
+        .attr('type', 'range')
+        .attr('id', 'source_affect' + (i + 1))
+        .attr('max', 10)
+        .attr('min', -10)
+        .attr('step', 1)
+        .attr('value', 0)
+        .on('change', function (d) {
+            $('#label_source_affect' + (i + 1)).text($('#source_affect' + (i + 1)).val());
+        });
+    td.append('label')
+        .attr('id', 'label_source_affect' + (i + 1))
+        .text(0)
+        .attr('class', 'configuration_font_white');
+
+    tr.append('td').append('select')
+                  .attr('id', 'receive' + (i + 1));
+    var receive_select = $('#receive' + (i + 1));
+    receive_select.append($('<option>', {
+        value: "-1",
+        text: ""
+    }));
+    for (property_count = 0; property_count < property.length; property_count++) {
+        if (property[property_count].owner == _target) {
+            receive_select.append($('<option>', {
+                value: property[property_count].id,
+                text: property[property_count].name
+            }));
+        }
+    }
+    var td = tr.append('td').style('text-align', 'center');
+    td.append('input')
+        .attr('type', 'range')
+        .attr('id', 'target_affect' + (i + 1))
+        .attr('max', 10)
+        .attr('min', -10)
+        .attr('step', 1)
+        .attr('value', 0)
+        .on('change', function (d) {
+            $('#label_target_affect' + (i + 1)).text($('#target_affect' + (i + 1)).val());
+        });
+    td.append('label')
+        .attr('id', 'label_target_affect' + (i + 1))
+        .text(0)
+        .attr('class', 'configuration_font_white');
 }
 
 interaction_control = function () {
@@ -713,7 +794,7 @@ save_interaction = function (order) {
                 d = clicked_link;
             }
         });
-        //benefit_update();
+        benefit_update();
     }
     container.html('')
              .classed('interaction_container_hidden', true);
@@ -762,7 +843,7 @@ set_trend = function () {
                   .style('width', window.innerWidth - width - 50 + 'px')
                   .style('height', 600 + 'px')
                   .style('margin-top', 0 + 'px')
-                  .style('margin-left', 520 + 'px');
+                  .style('margin-left', 720 + 'px');
 
     trend.append('input')
          .attr('type', 'text')
@@ -775,8 +856,6 @@ set_trend = function () {
          .attr('class', 'trend_button green_btn')
          .style('margin-left', '5px')
          .attr('id', 'get_trend');
-
-
 
     trend.append('input')
          .attr('type', 'button')
@@ -792,6 +871,7 @@ set_trend = function () {
 
 Template.configuration.events({
     'click #svg': function (event) {
+        console.log(event)
         if (event.target.nodeName == 'svg') {
             if (svg_clicked) {
                 //double_click();
@@ -814,49 +894,6 @@ Template.configuration.events({
                 svg_clicked = true;
             }
         }
-    },
-
-    'click #test': function () {
-        //var _nodes = [
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 1, name: 'bb', benefit: 3 },
-        //    { id: 2, name: 'ccc', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 },
-        //    { id: 0, name: 'a', benefit: 3 }
-        //];
-
-        //var _links = [
-        //    {
-        //        source: 0, target: 1, interaction:
-        //        [
-        //            { name: 'a=b', give: 'money', source_affect: 5, receive: 'ticket', target_affect: -1 },
-        //            { name: 'a=b2', give: 'gname', source_affect: -2, receive: 'credit', target_affect: 2 }
-        //        ]
-        //    },
-        //    {
-        //        source: 1, target: 2, interaction:
-        //        [
-        //            { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-        //        ]
-        //    },
-        //                {
-        //                    source: 3, target: 4, interaction:
-        //                    [
-        //                        { name: 'b=c', give: 'ttt', source_affect: -2, receive: 'rrr', target_affect: 3 }
-        //                    ]
-        //                }
-        //];
-
-        //var _property = [
-        //    { id: 0, name: "aaa", rating: [], owner: 1, averageImportance: 0 },
-        //    { id: 1, name: "bbb", rating: [], owner: 1, averageImportance: 0 },
-        //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0 }
-        //];
-        //set_configuration_data(_nodes, _links, _property);
-        do_changes();
     },
 
     'click .trend_button ': function (e) {
