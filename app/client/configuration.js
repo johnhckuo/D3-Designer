@@ -115,29 +115,7 @@ configuration_setting = function () {
     //    { id: 1, name: "credit", rating: [], owner: 1, averageImportance: 0, used: 0 },
     //    { id: 2, name: "ccc", rating: [], owner: 2, averageImportance: 0, used: 0 }
     //];
-countLink = function(){
-    if (linksCount.length != 0){
-        linksCount = [];
-    }
-    for (var i = 0 ; i < links.length ; i++){
-        var tempCounter = 0;
-        var flag = true;
-        for (var j = 0 ; j < links.length ; j++){
-            if (j < i && links[i].source == links[j].source && links[i].target == links[j].target){
-                flag = false;
-                break;
-            }else if(links[i].source == links[j].source && links[i].target == links[j].target){
-                tempCounter++;
-            }
-        }
-        if (flag){
-            linksCount.push({
-                "source": links[i].source,
-                "target": links[i].target,
-                "count": tempCounter
-            });
-        }
-    }
+
 }
 
 configuration_setting = function () {
